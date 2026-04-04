@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can & Like + Infinitive | Super Goal 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .header-left, .header-right {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .header-left div, .header-right div {
+            margin: 4px 0;
+        }
+
+        /* Main Content */
+        .content {
+            padding: 40px;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Title Slide */
+        .title-slide {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+        }
+
+        .unit-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .lesson-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .lesson-subtitle {
+            font-size: 32px;
+            color: #764ba2;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        .page-info {
+            font-size: 16px;
+            color: #666;
+            margin-top: 30px;
+        }
+
+        /* Cards */
+        .card {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .card p {
+            color: #555;
+            line-height: 1.6;
+            margin: 8px 0;
+        }
+
+        /* Grammar Table */
+        .grammar-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        .grammar-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .grammar-table .label {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+            width: 120px;
+        }
+
+        .grammar-table .content {
+            background: #f8f9ff;
+        }
+
+        /* Examples */
+        .example-box {
+            background: #e8f4f8;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: #17a2b8;
+        }
+
+        /* Exercise Section */
+        .exercise {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .exercise h3 {
+            color: #ff9800;
+            margin-bottom: 15px;
+        }
+
+        .exercise-item {
+            margin: 15px 0;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+        }
+
+        .exercise-item input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin: 0 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #667eea;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .slide-counter {
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* MCQ */
+        .mcq-option {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mcq-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .mcq-option.selected {
+            border-color: #667eea;
+            background: #e8edf7;
+        }
+
+        .mcq-option.correct {
+            border-color: #28a745;
+            background: #e8f5e9;
+        }
+
+        .mcq-option.incorrect {
+            border-color: #dc3545;
+            background: #ffebee;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #28a745;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #dc3545;
+        }
+
+        /* Vocabulary */
+        .vocab-item {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vocab-word {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .vocab-def {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .tts-btn {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .tts-btn:hover {
+            background: #138496;
+        }
+
+        /* Footer */
+        .footer {
+            background: #f8f9ff;
+            border-top: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        /* Answer Box */
+        .answer-box {
+            background: #e8f5e9;
+            border: 1px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .answer-box.show {
+            display: block;
+        }
+
+        .answer-box strong {
+            color: #28a745;
+        }
+
+        /* Objectives */
+        .objectives {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #2196F3;
+            margin-bottom: 15px;
+        }
+
+        .objectives ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .objectives li {
+            margin: 8px 0;
+            color: #555;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .objectives li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2196F3;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            .lesson-title {
+                font-size: 32px;
+            }
+
+            .lesson-subtitle {
+                font-size: 24px;
+            }
+
+            .header {
+                flex-direction: column;
+                height: auto;
+                padding: 15px;
+            }
+
+            .header-left, .header-right {
+                text-align: center;
+                width: 100%;
+            }
+
+            .header-right {
+                margin-top: 10px;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .progress-bar {
+                margin: 15px 0;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+
+        .show-answer-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .show-answer-btn:hover {
+            background: #5568d3;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+
+        .challenge-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .challenge-box h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .summary-box {
+            background: #f0f7ff;
+            border: 2px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .summary-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .summary-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .summary-box li {
+            padding: 8px 0;
+            color: #555;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary-box li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <div>Unit 12</div>
+                <div>Pages 104 - 105</div>
+            </div>
+            <div class="header-right">
+                <div>First Intermediate</div>
+                <div>الصف الأول المتوسط</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Slide 1: Title -->
+            <div class="slide active">
+                <div class="title-slide">
+                    <div class="unit-badge">Unit 12 - Grammar</div>
+                    <h1 class="lesson-title">Can & Like + Infinitive</h1>
+                    <h2 class="lesson-subtitle">أفعال الاستطاعة والتفضيل</h2>
+                    <p class="page-info">Pages 104 - 105</p>
+                </div>
+            </div>
+
+            <!-- Slide 2: Objectives -->
+            <div class="slide">
+                <h2 style="color: #333; margin-bottom: 20px;">Learning Objectives</h2>
+                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; padding: 14px; margin-bottom: 20px; border-radius: 6px; font-size: 12px; color: #92400e; line-height: 1.8;">
+                    <p style="margin: 0; font-weight: 600;">في هذا الدرس تتعلم:</p>
+                    <p style="margin: 6px 0;">كيف تستخدم "Can" للتعبير عن قدراتك وإمكانيتك</p>
+                    <p style="margin: 6px 0;">وكيف تستخدم "Like" للتعبير عما تحب تعمله</p>
+                </div>
+                <div class="objectives">
+                    <h3>In this lesson, you will:</h3>
+                    <ul>
+                        <li>Understand the modal verb "can" and its uses</li>
+                        <li>Learn how to express ability and possibility</li>
+                        <li>Master the verb "like" + infinitive</li>
+                        <li>Practice positive, negative, and question forms</li>
+                        <li>Complete exercises with 100% accuracy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 3: Modal Can - Explanation -->
+            <div class="slide">
+                <h2 style="color: #333; margin-bottom: 20px;">Modal Verb: CAN</h2>
+                
+                <div class="card">
+                    <h3>📚 What is "Can"?</h3>
+                    <p>Use <strong>can</strong> to express ability or possibility.</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 12px; border-radius: 6px; color: #92400e; font-size: 13px; line-height: 1.8; border-left: 3px solid #f59e0b; margin: 15px 0;">
+                    <p style="margin: 0; font-weight: 600;">معناه بالعربي:</p>
+                    <p style="margin: 5px 0;">تستخدم "Can" للتعبير عن القدرة أو الإمكانية</p>
+                    <p style="margin: 5px 0;">يعني: تقدر تعمل شي أو ممكن تعمله</p>
+                </div>
+
+                <div class="example-box">
+                    <strong>Examples:</strong><br>
+                    • <strong>Ability:</strong> I can speak English, but I can't speak Chinese.<br>
+                    • <strong>Possibility:</strong> You can play golf at the resort.<br>
+                    • <strong>Prohibition:</strong> I can't play football today. I'm studying for a test.
+                    <br><br>
+                    <div style="background: white; padding: 12px; border-radius: 4px; border-left: 3px solid #f59e0b; color: #92400e; font-size: 12px; line-height: 1.8;">
+                        <p style="margin: 0; font-weight: 600;">الترجمة:</p>
+                        <p style="margin: 6px 0;">أنا أقدر أتكلم إنجليزي لكن ما أقدر أتكلم صيني</p>
+                        <p style="margin: 6px 0;">أنت تقدر تلعب جولف في المنتجع</p>
+                        <p style="margin: 6px 0;">ما قدرت ألعب كورة اليوم، أنا أدرس للاختبار</p>
+                    </div>
+                </div>
+
+                <h3 style="color: #667eea; margin-top: 25px;">Affirmative (+)</h3>
+                <div class="table-container">
+                    <table class="grammar-table">
+                        <tr>
+                            <td class="label">Subject</td>
+                            <td class="content">I / You / He / She / It / We / They</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Modal</td>
+                            <td class="content"><strong>can</strong> speak English</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); padding: 12px; border-radius: 6px; font-size: 12px; color: #166534; margin: 12px 0; border-left: 3px solid #16a34a; line-height: 1.8;">
+                    <p style="margin: 0; font-weight: 600;">⚠️ مهم جداً:</p>
+                    <p style="margin: 6px 0;">استخدم الفعل بشكله الأساسي بدون إضافات</p>
+                    <p style="margin: 6px 0;">✓ I can <strong>speak</strong></p>
+                    <p style="margin: 6px 0; color: #dc2626;">❌ I can <strong>speaks</strong></p>
+                </div>
+
+                <h3 style="color: #667eea;">Negative (-)</h3>
+                <div class="table-container">
+                    <table class="grammar-table">
+                        <tr>
+                            <td class="label">Subject</td>
+                            <td class="content">I / You / He / She / It / We / They</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Modal</td>
+                            <td class="content"><strong>can't</strong> rollerblade</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Note</td>
+                            <td class="content">can't = cannot</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 12px; border-radius: 6px; font-size: 12px; color: #92400e; margin: 12px 0; border-left: 3px solid #f59e0b; line-height: 1.8;">
+                    <p style="margin: 0; font-weight: 600;">can't = cannot:</p>
+                    <p style="margin: 6px 0;">معناها لا تقدر تعمل الشي - ما في قدرة</p>
+                    <p style="margin: 6px 0;">مثال: I can't rollerblade = ما أقدر أتزحلق</p>
+                </div>
+            </div>
+
+            <!-- Slide 4: Can - Questions & Short Answers -->
+            <div class="slide">
+                <h2 style="color: #333; margin-bottom: 20px;">Questions & Short Answers</h2>
+
+                <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); padding: 14px; border-radius: 6px; margin-bottom: 20px; font-size: 12px; color: #1e40af; border-left: 3px solid #3b82f6; line-height: 1.8;">
+                    <p style="margin: 0; font-weight: 600;">القاعدة الأساسية:</p>
+                    <p style="margin: 6px 0;">عندما تسأل، ضع Can في البداية</p>
+                    <p style="margin: 6px 0;">ثم الشخص، ثم الفعل؟</p>
+                    <p style="margin: 6px 0; background: white; padding: 6px; border-radius: 3px; color: #1e40af;">Can + Subject + Verb?</p>
+                </div>
+
+                <h3 style="color: #667eea; margin: 20px 0;">Questions (?)</h3>
+                <div class="table-container">
+                    <table class="grammar-table">
+                        <tr>
+                            <td class="label">Can</td>
+                            <td class="content">I / you / he / she / it / we / they</td>
+                            <td class="content" style="width: 40%;">read?</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3 style="color: #667eea; margin: 20px 0;">Short Answers (+) - الإجابة نعم</h3>
+                <div class="table-container">
+                    <table class="grammar-table">
+                        <tr>
+                            <td class="label">Yes,</td>
+                            <td class="content">I / you / he / she / it / we / they</td>
+                            <td class="content" style="width: 40%;"><strong>can.</strong></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3 style="color: #667eea; margin: 20px 0;">Short Answers (-) - الإجابة لا</h3>
+                <div class="table-container">
+                    <table class="grammar-table">
+                        <tr>
+                            <td class="label">No,</td>
+                            <td class="content">I / you / he / she / it / we / they</td>
+                            <td class="content" style="width: 40%;"><strong>can't.</strong></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="example-box" style="margin-top: 20px;">
+                    <strong>مثال من الكتاب:</strong><br>
+                    A: Can Fred play basketball?<br>
+                    B: Yes, he can.<br><br>
+                    A: Can Fred drive a bus?<br>
+                    B: No, he can't.
+                    <br><br>
+                    <div style="background: white; padding: 12px; border-radius: 4px; border-left: 3px solid #f59e0b; color: #92400e; font-size: 11px; margin-top: 10px; line-height: 1.8;">
+                        <p style="margin: 0; font-weight: 600;">ملاحظة مهمة:</p>
+                        <p style="margin: 6px 0;">الإجابات القصيرة تستخدم can / can't فقط</p>
+                        <p style="margin: 6px 0;">ما تكرر الفعل الأساسي (play, drive)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Like + Infinitive -->
+            <div class="slide">
+                <h2 style="color: #333; margin-bottom: 20px;">Verb: Like + Infinitive</h2>
+
+                <div class="card">
+                    <h3>📚 What is "Like + Infinitive"?</h3>
+                    <p>Use <strong>like</strong> + infinitive to talk about activities you enjoy.</p>
+                    <div style="margin-top: 12px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 12px; border-radius: 6px; color: #92400e; font-size: 12px; line-height: 1.8; border-left: 3px solid #f59e0b;">
+                        <p style="margin: 0; font-weight: 600;">معناه بالعربي:</p>
+                        <p style="margin: 6px 0;">"Like" تستخدم للتعبير عما تحب تعمله</p>
+                        <p style="margin: 6px 0;">مثال: I like to speak English = أنا أحب أتكلم إنجليزي</p>
+                        <p style="margin: 6px 0;"><strong>Infinitive = to + الفعل</strong></p>
+                        <p style="margin: 6px 0;">أمثلة: to read, to play, to swim, to drive</p>
+                    </div>
+                </div>
+
+                <h3 style="color: #667eea; margin: 20px 0;">✓ الإجابة الإيجابية</h3>
+                <div class="example-box">
+                    I / You / We / They <strong>like to read.</strong><br>
+                    He / She <strong>likes to read.</strong>
+                    <br><br>
+                    <div style="background: white; padding: 12px; border-radius: 4px; border-left: 3px solid #f59e0b; color: #92400e; font-size: 11px; line-height: 1.8;">
+                        <p style="margin: 0; font-weight: 600;">ملاحظة:</p>
+                        <p style="margin: 6px 0;">He / She تضيف s على like</p>
+                        <p style="margin: 6px 0;">I / You / We / They بدون s</p>
+                    </div>
+                </div>
+
+                <h3 style="color: #667eea;">✗ النفي</h3>
+                <div class="example-box">
+                    I / You / We / They <strong>don't like to read.</strong><br>
+                    He / She <strong>doesn't like to read.</strong>
+                    <br><br>
+                    <div style="background: white; padding: 12px; border-radius: 4px; border-left: 3px solid #f59e0b; color: #92400e; font-size: 11px; line-height: 1.8;">
+                        <p style="margin: 0; font-weight: 600;">الطريقة الصحيحة:</p>
+                        <p style="margin: 6px 0;">don't / doesn't + like</p>
+                        <p style="margin: 6px 0;">ليس "likes" أو "like" وحده</p>
+                    </div>
+                </div>
+
+                <h3 style="color: #667eea; margin: 20px 0;">❓ السؤال</h3>
+                <div class="example-box">
+                    Do you like to swim?<br>
+                    Does he/she like to swim?
+                    <br><br>
+                    <div style="background: white; padding: 12px; border-radius: 4px; border-left: 3px solid #f59e0b; color: #92400e; font-size: 11px; line-height: 1.8;">
+                        <p style="margin: 0; font-weight: 600;">النمط:</p>
+                        <p style="margin: 6px 0;">Do / Does + Subject + like + to + verb?</p>
+                    </div>
+                </div>
+
+                <h3 style="color: #667eea; margin: 20px 0;">✓✗ الإجابات القصيرة</h3>
+                <div class="example-box">
+                    Yes, I do. / No, I don't.<br>
+                    Yes, he/she does. / No, he/she doesn't.
+                </div>
+            </div>
+
+            <!-- Slide 6: Exercise A -->
+            <div class="slide">
+                <h2 style="color: #333; margin-bottom: 20px;">Exercise A: Complete the Sentences</h2>
+                
+                <div class="exercise">
+                    <h3>Instructions:</h3>
+                    <p>Complete the sentences with <strong>can</strong> or <strong>can't</strong> and the verb in parentheses.</p>
+                    
+                    <div class="exercise-item">
+                        <strong>1. Ahmed _____ _____ (come) tonight. He's finishing an assignment.</strong>
+                        <p style="margin-top: 10px; color: #666;">Type your answer:</p>
+                        <input type="text" id="q1" placeholder="e.g., can come">
+                        <button class="show-answer-btn" onclick="showAnswer('q1', 'can\'t come', 'Ahmed cannot come tonight because he is finishing an assignment.')">Show Answer</button>
+                        <div class="answer-box" id="ans1">
+                            <strong>✓ Correct Answer: can't come</strong><br>
+                            <em>Ahmed can't come tonight. He's finishing an assignment.</em>
+                        </div>
+                    </div>
+
+                    <div class="exercise-item">
+                        <strong>2. _____ Luke _____ (dive) them to the mall in his car?</strong>
+                        <p style="margin-top: 10px; color: #666;">Type your answer:</p>
+                        <input type="text" id="q2" placeholder="e.g., Can drive">
+                        <button class="show-answer-btn" onclick="showAnswer('q2', 'Can drive', 'Luke can drive them to the mall in his car.')">Show Answer</button>
+                        <div class="answer-box" id="ans2">
+                            <strong>✓ Correct Answer: Can drive</strong><br>
+                            <em>Can Luke drive them to the mall in his car?</em>
+                        </div>
+                    </div>
+
+                    <div class="exercise-item">
+                        <strong>3. We _____ _____ (meet) tomorrow afternoon. I'm going to the dentist.</strong>
+                        <p style="margin-top: 10px; color: #666;">Type your answer:</p>
+                        <input type="text" id="q3" placeholder="e.g., can't meet">
+                        <button class="show-answer-btn" onclick="showAnswer('q3', 'can\'t meet', 'We cannot meet tomorrow afternoon.')">Show Answer</button>
+                        <div class="answer-box" id="ans3">
+                            <strong>✓ Correct Answer: can't meet</strong><br>
+                            <em>We can't meet tomorrow afternoon. I'm going to the dentist.</em>
+                        </div>
+                    </div>
+
+                    <div class="exercise-item">
+                        <strong>4. Mr. Sawyer _____ _____ (see) you now. I'm afraid he's very busy.</strong>
+                        <p style="margin-top: 10px; color: #666;">Type your answer:</p>
+                        <input type="text" id="q4" placeholder="e.g., can't see">
+                        <button class="show-answer-btn" onclick="showAnswer('q4', 'can\'t see', 'Mr. Sawyer cannot see you now.')">Show Answer</button>
+                        <div class="answer-box" id="ans4">
+                            <strong>✓ Correct Answer: can't see</strong><br>
+                            <em>Mr. Sawyer can't see you now. I'm afraid he's very busy.</em>
+                        </div>
+                    </div>
+
+                    <div class="exercise-item">
+                        <strong>5. You _____ _____ (speak) in the library, but you _____ _____ (read).</strong>
+                        <p style="margin-top: 10px; color: #666;">Type your answer:</p>
+                        <input type="text" id="q5" placeholder="e.g., can't speak, can read">
+                        <button class="show-answer-btn" onclick="showAnswer('q5', 'can\'t speak, can read', 'You cannot speak in the library but you can read.')">Show Answer</button>
+                        <div class="answer-box" id="ans5">
+                            <strong>✓ Correct Answer: can't speak, can read</strong><br>
+                            <em>You can't speak in the library, but you can read.</em>
+                        </div>
+                    </div>
+
+                    <div class="exercise-item">
+                        <strong>6. Imad _____ _____ (stay) very long. His friends are waiting for him.</strong>
+                        <p style="margin-top: 10px; color: #666;">Type your answer:</p>
+                        <input type="text" id="q6" placeholder="e.g., can't stay">
+                        <button class="show-answer-btn" onclick="showAnswer('q6', 'can\'t stay', 'Imad cannot stay very long.')">Show Answer</button>
+                        <div class="answer-box" id="ans6">
+                            <strong>✓ Correct Answer: can't stay</strong><br>
+                            <em>Imad can't stay very long. His friends are waiting for him.</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Exercise B -->
+            <div class="slide">
+                <h2 style="color: #333; margin-bottom: 20px;">Exercise B: Partner Dialogue Practice</h2>
+                
+                <div class="exercise">
+                    <h3>Instructions:</h3>
+                    <p>Work with a partner. Ask and answer questions about abilities.</p>
+
+                    <div style="background: white; border: 1px solid #ddd; padding: 15px; border-radius: 6px; margin: 15px 0;">
+                        <h4 style="color: #ff9800; margin-bottom: 10px;">Model Dialogue:</h4>
+                        <strong>A:</strong> Can Fred play basketball?<br>
+                        <strong>B:</strong> Yes, he can.<br><br>
+                        <strong>A:</strong> Can Fred drive a bus?<br>
+                        <strong>B:</strong> No, he can't.
+                    </div>
+
+                    <div style="text-align: center; margin: 20px 0;">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 150'%3E%3Crect fill='%234a90e2' width='200' height='150' rx='10'/%3E%3Ctext x='100' y='85' font-size='20' fill='white' text-anchor='middle' dominant-baseline='middle'%3E🏀 Basketball%3C/text%3E%3C/svg%3E" style="width: 150px; height: auto; margin: 10px;">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 150'%3E%3Crect fill='%2352c41a' width='200' height='150' rx='10'/%3E%3Ctext x='100' y='85' font-size='20' fill='white' text-anchor='middle' dominant-baseline='middle'%3E🚌 Bus%3C/text%3E%3C/svg%3E" style="width: 150px; height: auto; margin: 10px;">
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 20px 0;">Ability Pictures:</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+                        <div style="text-align: center; padding: 15px; background: #f8f9ff; border-radius: 6px;">
+                            <div style="font-size: 48px;">🥪</div>
+                            <p style="color: #666; margin-top: 10px;"><strong>make / sandwich</strong></p>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: #f8f9ff; border-radius: 6px;">
+                            <div style="font-size: 48px;">🚴</div>
+                            <p style="color: #666; margin-top: 10px;"><strong>ride / bike</strong></p>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: #f8f9ff; border-radius: 6px;">
+                            <div style="font-size: 48px;">🏍️</div>
+                            <p style="color: #666; margin-top: 10px;"><strong>ride / motorcycle</strong></p>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: #f8f9ff; border-radius: 6px;">
+                            <div style="font-size: 48px;">💻</div>
+                            <p style="color: #666; margin-top: 10px;"><strong>use / laptop</strong></p>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: #f8f9ff; border-radius: 6px;">
+                            <div style="font-size: 48px;">⛸️</div>
+                            <p style="color: #666; margin-top: 10px;"><strong>ice-skate</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Exercise C -->
+            <div class="slide">
+                <h2 style="color: #333; margin-bottom: 20px;">Exercise C: Questions About Activities</h2>
+                
+                <div class="exercise">
+                    <h3>Part 1: Interview Questions</h3>
+                    <p style="margin-bottom: 15px;"><strong>Ask a partner these questions using the pictures from Exercise B:</strong></p>
+
+                    <div style="background: white; border: 1px solid #ddd; padding: 15px; border-radius: 6px; margin: 15px 0;">
+                        <p><strong>Question 1:</strong> Which activities can you do? Which can't you do?</p>
+                        <p style="margin-top: 10px; color: #666;"><em>Example: I can ride a bike, but I can't ice-skate.</em></p>
+                    </div>
+
+                    <div style="background: white; border: 1px solid #ddd; padding: 15px; border-radius: 6px; margin: 15px 0;">
+                        <p><strong>Question 2:</strong> Which activities do you like to do? Write them in order of preference.</p>
+                        <p style="margin-top: 10px; color: #666;"><em>Example: I like to ride a bike. I like to use a laptop. I don't like to ice-skate.</em></p>
+                    </div>
+
+                    <h3 style="color: #ff9800; margin: 20px 0;">Part 2: Class Survey Chart</h3>
+                    <p style="margin-bottom: 15px;"><strong>Ask classmates what they can and can't do. Write their names in the chart. Tick Can or Can't.</strong></p>
+
+                    <div class="table-container">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Ability</th>
+                                    <th>Name</th>
+                                    <th>Can</th>
+                                    <th>Can't</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>drive</strong></td>
+                                    <td style="background: #fff3cd;">___________</td>
+                                    <td>☐</td>
+                                    <td>☐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>play basketball</strong></td>
+                                    <td style="background: #fff3cd;">___________</td>
+                                    <td>☐</td>
+                                    <td>☐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>cook</strong></td>
+                                    <td style="background: #fff3cd;">___________</td>
+                                    <td>☐</td>
+                                    <td>☐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ride a motorcycle</strong></td>
+                                    <td style="background: #fff3cd;">___________</td>
+                                    <td>☐</td>
+                                    <td>☐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>use a laptop</strong></td>
+                                    <td style="background: #fff3cd;">___________</td>
+                                    <td>☐</td>
+                                    <td>☐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>swim</strong></td>
+                                    <td style="background: #fff3cd;">___________</td>
+                                    <td>☐</td>
+                                    <td>☐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ice-skate</strong></td>
+                                    <td style="background: #fff3cd;">___________</td>
+                                    <td>☐</td>
+                                    <td>☐</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="background: #e8f4f8; border-left: 4px solid #17a2b8; padding: 15px; margin: 20px 0; border-radius: 8px;">
+                        <strong>Example Dialogue:</strong><br>
+                        <strong>A:</strong> Can you drive?<br>
+                        <strong>B:</strong> Yes, I can. / No, I can't.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Interactive Quiz -->
+            <div class="slide">
+                <h2 style="color: #333; margin-bottom: 20px;">Quick Quiz</h2>
+                
+                <div class="exercise">
+                    <h3 style="margin-bottom: 20px;">Test your knowledge! Choose the correct answer.</h3>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8f9ff; border-radius: 8px;">
+                        <p style="font-weight: 600; margin-bottom: 15px; color: #333;">Question 1: Which sentence is CORRECT?</p>
+                        <div onclick="selectQuiz(1, 'a')" class="mcq-option" id="q1a">
+                            <input type="radio" name="quiz1"> I can speaks English.
+                        </div>
+                        <div onclick="selectQuiz(1, 'b')" class="mcq-option" id="q1b">
+                            <input type="radio" name="quiz1"> I can speak English.
+                        </div>
+                        <div onclick="selectQuiz(1, 'c')" class="mcq-option" id="q1c">
+                            <input type="radio" name="quiz1"> I can to speak English.
+                        </div>
+                        <button class="btn btn-primary" style="margin-top: 15px; width: 100%;" onclick="checkQuiz(1, 'b', 'Correct! Use can + base verb (no -s)')">Check Answer</button>
+                        <div class="feedback" id="feedback1"></div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8f9ff; border-radius: 8px;">
+                        <p style="font-weight: 600; margin-bottom: 15px; color: #333;">Question 2: Choose the negative form:</p>
+                        <div onclick="selectQuiz(2, 'a')" class="mcq-option" id="q2a">
+                            <input type="radio" name="quiz2"> I cans't play football.
+                        </div>
+                        <div onclick="selectQuiz(2, 'b')" class="mcq-option" id="q2b">
+                            <input type="radio" name="quiz2"> I can't play football.
+                        </div>
+                        <div onclick="selectQuiz(2, 'c')" class="mcq-option" id="q2c">
+                            <input type="radio" name="quiz2"> I cannot play football. (both b and c are correct)
+                        </div>
+                        <button class="btn btn-primary" style="margin-top: 15px; width: 100%;" onclick="checkQuiz(2, 'b', 'Correct! can\'t = cannot')">Check Answer</button>
+                        <div class="feedback" id="feedback2"></div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8f9ff; border-radius: 8px;">
+                        <p style="font-weight: 600; margin-bottom: 15px; color: #333;">Question 3: Complete: "He _____ like to read."</p>
+                        <div onclick="selectQuiz(3, 'a')" class="mcq-option" id="q3a">
+                            <input type="radio" name="quiz3"> like
+                        </div>
+                        <div onclick="selectQuiz(3, 'b')" class="mcq-option" id="q3b">
+                            <input type="radio" name="quiz3"> likes
+                        </div>
+                        <div onclick="selectQuiz(3, 'c')" class="mcq-option" id="q3c">
+                            <input type="radio" name="quiz3"> liking
+                        </div>
+                        <button class="btn btn-primary" style="margin-top: 15px; width: 100%;" onclick="checkQuiz(3, 'b', 'Correct! He/She likes (verb + s)')">Check Answer</button>
+                        <div class="feedback" id="feedback3"></div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8f9ff; border-radius: 8px;">
+                        <p style="font-weight: 600; margin-bottom: 15px; color: #333;">Question 4: What's the correct question form?</p>
+                        <div onclick="selectQuiz(4, 'a')" class="mcq-option" id="q4a">
+                            <input type="radio" name="quiz4"> Can you play basketball?
+                        </div>
+                        <div onclick="selectQuiz(4, 'b')" class="mcq-option" id="q4b">
+                            <input type="radio" name="quiz4"> You can play basketball?
+                        </div>
+                        <div onclick="selectQuiz(4, 'c')" class="mcq-option" id="q4c">
+                            <input type="radio" name="quiz4"> Can plays you basketball?
+                        </div>
+                        <button class="btn btn-primary" style="margin-top: 15px; width: 100%;" onclick="checkQuiz(4, 'a', 'Correct! Question form: Can + subject + verb')">Check Answer</button>
+                        <div class="feedback" id="feedback4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 10: Summary -->
+            <div class="slide">
+                <h2 style="color: #333; margin-bottom: 20px;">Lesson Summary</h2>
+
+                <div class="summary-box">
+                    <h3>Key Points to Remember:</h3>
+                    <ul>
+                        <li><strong>CAN:</strong> للتعبير عن القدرة أو الإمكانية
+                            <br><span style="color: #666; font-size: 12px;">الصيغة: Subject + can + الفعل | I can speak English</span>
+                        </li>
+                        <li><strong>CAN'T:</strong> النفي - ما تقدر تعمل الشي
+                            <br><span style="color: #666; font-size: 12px;">مثال: I can't swim = ما أقدر أسبح</span>
+                        </li>
+                        <li><strong>السؤال:</strong> ضع can في البداية
+                            <br><span style="color: #666; font-size: 12px;">Can you speak English? | Can he play football?</span>
+                        </li>
+                        <li><strong>الإجابات القصيرة:</strong> استخدم can/can't فقط
+                            <br><span style="color: #666; font-size: 12px;">Yes, I can. | No, he can't.</span>
+                        </li>
+                        <li><strong>LIKE + INFINITIVE:</strong> للتعبير عما تحب تعمله
+                            <br><span style="color: #666; font-size: 12px;">I like to read = أنا أحب القراءة</span>
+                        </li>
+                        <li><strong>He/She مع Like:</strong> ضيف s على الفعل
+                            <br><span style="color: #666; font-size: 12px;">He likes to read | She likes to play</span>
+                        </li>
+                        <li><strong>النفي مع Like:</strong> استخدم don't/doesn't
+                            <br><span style="color: #666; font-size: 12px;">I don't like to read | He doesn't like to play</span>
+                        </li>
+                        <li><strong>Infinitive:</strong> معناها to + الفعل الأساسي
+                            <br><span style="color: #666; font-size: 12px;">to read, to play, to swim, to drive</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div style="background: #e8f5e9; border-left: 4px solid #28a745; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h3 style="color: #28a745; margin-bottom: 15px;">✓ What You've Learned:</h3>
+                    <p style="color: #555;">You have successfully completed this grammar lesson on Modal Verb "Can" and "Like + Infinitive". You can now use these structures to talk about abilities, possibilities, and preferences in English!</p>
+                </div>
+            </div>
+
+            <!-- Slide 11: Challenge Question -->
+            <div class="slide">
+                <h2 style="color: #333; margin-bottom: 20px;">Challenge Question</h2>
+
+                <div class="challenge-box">
+                    <h3>⭐ Can YOU answer this?</h3>
+                    <p style="margin: 15px 0; font-size: 16px;">Write 5 sentences about yourself using "can" and "like + infinitive":</p>
+                </div>
+
+                <div class="exercise">
+                    <div style="background: white; border: 1px solid #ddd; padding: 15px; border-radius: 6px; margin: 15px 0;">
+                        <p style="color: #666; margin-bottom: 10px;">Example:</p>
+                        <em>1. I can speak English and Arabic.<br>
+                        2. I can't drive a car because I'm too young.<br>
+                        3. I like to read books.<br>
+                        4. I don't like to do homework.<br>
+                        5. My brother likes to play football.</em>
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 20px 0;">Your Turn:</h4>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <textarea style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial; font-size: 14px; height: 150px;" placeholder="Write your 5 sentences here..."></textarea>
+                        <button class="btn btn-success">✓ Submit Answer</button>
+                    </div>
+
+                    <div style="background: #e3f2fd; border-left: 4px solid #2196F3; padding: 15px; margin: 20px 0; border-radius: 6px; line-height: 1.8;">
+                        <p style="margin: 0; font-weight: 600;">نصائح للنجاح:</p>
+                        <ul style="list-style: none; padding-left: 0; margin-top: 10px;">
+                            <li style="margin: 6px 0;">✓ تأكد من تهجئة الكلمات</li>
+                            <li style="margin: 6px 0;">✓ استخدم الضمائر الصحيحة (I, he, she)</li>
+                            <li style="margin: 6px 0;">✓ تذكر: can + الفعل بدون s</li>
+                            <li style="margin: 6px 0;">✓ تذكر: like + to + الفعل</li>
+                            <li style="margin: 6px 0;">✓ استخدم أحرف كبيرة في بداية الجمل</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 12: Vocabulary -->
+            <div class="slide">
+                <h2 style="color: #333; margin-bottom: 20px;">Vocabulary & Pronunciation</h2>
+
+                <div class="vocab-item">
+                    <div>
+                        <p class="vocab-word">ability</p>
+                        <p class="vocab-def">The power or skill to do something</p>
+                    </div>
+                    <button class="tts-btn" onclick="speak('ability')">🔊 Pronounce</button>
+                </div>
+
+                <div class="vocab-item">
+                    <div>
+                        <p class="vocab-word">possibility</p>
+                        <p class="vocab-def">Something that might happen or be true</p>
+                    </div>
+                    <button class="tts-btn" onclick="speak('possibility')">🔊 Pronounce</button>
+                </div>
+
+                <div class="vocab-item">
+                    <div>
+                        <p class="vocab-word">infinitive</p>
+                        <p class="vocab-def">The base form of a verb with "to" (e.g., to read, to play)</p>
+                    </div>
+                    <button class="tts-btn" onclick="speak('infinitive')">🔊 Pronounce</button>
+                </div>
+
+                <div class="vocab-item">
+                    <div>
+                        <p class="vocab-word">modal verb</p>
+                        <p class="vocab-def">A verb that shows ability, possibility, or permission (can, could, may)</p>
+                    </div>
+                    <button class="tts-btn" onclick="speak('modal verb')">🔊 Pronounce</button>
+                </div>
+
+                <div class="vocab-item">
+                    <div>
+                        <p class="vocab-word">affirmative</p>
+                        <p class="vocab-def">A positive statement or form</p>
+                    </div>
+                    <button class="tts-btn" onclick="speak('affirmative')">🔊 Pronounce</button>
+                </div>
+
+                <div class="vocab-item">
+                    <div>
+                        <p class="vocab-word">negative</p>
+                        <p class="vocab-def">A negative statement or form (using "not" or "n't")</p>
+                    </div>
+                    <button class="tts-btn" onclick="speak('negative')">🔊 Pronounce</button>
+                </div>
+
+                <div class="vocab-item">
+                    <div>
+                        <p class="vocab-word">preference</p>
+                        <p class="vocab-def">What you like better than something else</p>
+                    </div>
+                    <button class="tts-btn" onclick="speak('preference')">🔊 Pronounce</button>
+                </div>
+            </div>
+
+            <!-- Slide 13: Footer -->
+            <div class="slide">
+                <div style="height: 500px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <h2 style="color: #667eea; margin-bottom: 30px; font-size: 32px;">Thank You for Learning!</h2>
+                    <p style="color: #666; font-size: 18px; margin: 10px 0;">You have completed the Grammar Lesson</p>
+                    <p style="color: #666; font-size: 18px; margin: 10px 0;"><strong>Can & Like + Infinitive</strong></p>
+                    <div style="margin-top: 40px; text-align: center; color: #999; font-size: 14px;">
+                        <p>عُمِل بحب في بريدة</p>
+                        <p style="margin-top: 5px;">By: عبدالحكيم صالح الحسون</p>
+                        <p style="margin-top: 5px;">Platform: eduvorra</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="prevSlide()">← Previous</button>
+            
+            <div style="flex: 1; display: flex; align-items: center; gap: 15px;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">13</span></span>
+            </div>
+
+            <button class="btn btn-primary" onclick="nextSlide()">Next →</button>
+            
+            <button class="btn btn-secondary" onclick="goHome()" style="background: #f59e0b; color: white; margin-left: 10px;">⌂ Home</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            
+            if (n > totalSlides) {
+                currentSlide = totalSlides;
+            }
+            if (n < 1) {
+                currentSlide = 1;
+            }
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+            
+            document.getElementById('currentSlide').textContent = currentSlide;
+            
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            window.scrollTo(0, 0);
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        function goHome() {
+            currentSlide = 1;
+            showSlide(currentSlide);
+        }
+
+        function showAnswer(id, answer, explanation) {
+            const ansBox = document.getElementById('ans' + id.slice(-1));
+            ansBox.classList.toggle('show');
+        }
+
+        function selectQuiz(questionNum, option) {
+            document.querySelectorAll(`[id^="q${questionNum}"]`).forEach(el => {
+                el.classList.remove('selected');
+            });
+            document.getElementById('q' + questionNum + option).classList.add('selected');
+        }
+
+        function checkQuiz(questionNum, correct, message) {
+            const selected = document.querySelector(`input[name="quiz${questionNum}"]:checked`);
+            const feedback = document.getElementById('feedback' + questionNum);
+            
+            if (!selected) {
+                feedback.textContent = 'Please select an answer first!';
+                feedback.className = 'feedback incorrect';
+                return;
+            }
+
+            const options = document.querySelectorAll(`[id^="q${questionNum}"]`);
+            const selectedOption = Array.from(options).find(opt => opt.querySelector('input').checked);
+            
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                const optLetter = opt.id[opt.id.length - 1];
+                if (optLetter === correct) {
+                    opt.classList.add('correct');
+                } else if (opt === selectedOption) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            feedback.innerHTML = '<strong>' + (selectedOption.id[selectedOption.id.length - 1] === correct ? '✓ ' : '✗ ') + message + '</strong>';
+            feedback.className = 'feedback ' + (selectedOption.id[selectedOption.id.length - 1] === correct ? 'correct' : 'incorrect');
+        }
+
+        function speak(word) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.rate = 0.9;
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>

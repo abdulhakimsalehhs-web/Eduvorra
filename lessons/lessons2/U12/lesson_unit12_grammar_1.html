@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 12 – Grammar | Super Goal 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green-dark: #2d6a4f;
+    --green-mid: #40916c;
+    --green-light: #74c69d;
+    --green-pale: #d8f3dc;
+    --green-xpale: #f0faf3;
+    --accent: #f4a261;
+    --accent2: #e76f51;
+    --white: #ffffff;
+    --gray-soft: #f8f9fa;
+    --gray-mid: #6c757d;
+    --text-dark: #1b2d27;
+    --shadow: 0 4px 24px rgba(45,106,79,0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; font-family: 'Nunito', sans-serif; background: var(--green-xpale); color: var(--text-dark); overflow: hidden; }
+
+  /* ── TOP BAR ── */
+  #topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 56px;
+    background: var(--green-dark);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  #topbar .left { display: flex; align-items: center; gap: 14px; }
+  #topbar .badge {
+    background: var(--green-light); color: var(--green-dark);
+    font-weight: 800; font-size: 0.78rem; padding: 4px 12px; border-radius: 20px;
+  }
+  #topbar .right {
+    font-family: 'Tajawal', sans-serif; font-size: 0.92rem; font-weight: 700;
+    color: var(--green-pale); letter-spacing: 0.02em;
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress-wrap {
+    position: fixed; top: 56px; left: 0; right: 0; z-index: 99;
+    height: 5px; background: rgba(255,255,255,0.2);
+  }
+  #progress-bar {
+    height: 100%; background: var(--accent);
+    transition: width 0.4s ease;
+  }
+
+  /* ── SLIDES CONTAINER ── */
+  #slides-container {
+    position: fixed; top: 61px; left: 0; right: 0; bottom: 70px;
+    overflow: hidden;
+  }
+  .slide {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    overflow-y: auto;
+    padding: 28px 20px 20px;
+    opacity: 0; transform: translateX(60px);
+    transition: all 0.45s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1; transform: translateX(0);
+    pointer-events: all;
+  }
+  .slide.exit-left {
+    opacity: 0; transform: translateX(-60px);
+  }
+
+  /* ── BOTTOM NAV ── */
+  #nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    height: 70px;
+    background: var(--white);
+    border-top: 1px solid var(--green-pale);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 -2px 12px rgba(45,106,79,0.09);
+  }
+  .nav-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--green-mid); color: #fff;
+    border: none; border-radius: 12px;
+    padding: 10px 22px; font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem; font-weight: 700; cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .nav-btn:hover { background: var(--green-dark); transform: scale(1.04); }
+  .nav-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+  #slide-counter { font-weight: 800; color: var(--green-dark); font-size: 0.9rem; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 22px 24px; margin-bottom: 18px;
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+  .card-green {
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+    color: #fff;
+  }
+  .card-pale { background: var(--green-xpale); border: 1.5px solid var(--green-pale); }
+  .card h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 10px; }
+  .card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; color: var(--green-dark); }
+  .card p { font-size: 0.95rem; line-height: 1.7; }
+
+  /* ── OPENING SLIDE ── */
+  .opening-slide {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100%;
+    background: linear-gradient(160deg, var(--green-dark) 0%, var(--green-mid) 60%, var(--green-light) 100%);
+    border-radius: 0; padding: 40px 24px; text-align: center;
+  }
+  .opening-slide .unit-badge {
+    background: rgba(255,255,255,0.18); border: 2px solid rgba(255,255,255,0.35);
+    color: #fff; font-size: 0.85rem; font-weight: 700;
+    padding: 6px 18px; border-radius: 30px; margin-bottom: 20px;
+    letter-spacing: 0.06em;
+  }
+  .opening-slide .main-title {
+    font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900; color: #fff;
+    line-height: 1.15; margin-bottom: 10px;
+  }
+  .opening-slide .arabic-title {
+    font-family: 'Tajawal', sans-serif; font-size: 1.4rem; font-weight: 700;
+    color: var(--green-pale); margin-bottom: 24px;
+  }
+  .opening-slide .meta-row {
+    display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  }
+  .opening-slide .meta-pill {
+    background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.3);
+    color: #fff; padding: 8px 20px; border-radius: 30px;
+    font-size: 0.88rem; font-weight: 700;
+  }
+  .opening-slide .emoji-big { font-size: 4rem; margin-bottom: 20px; display: block; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 1.4rem; font-weight: 900; color: var(--green-dark);
+    margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-title span { font-size: 1.5rem; }
+
+  /* ── GRAMMAR TABLE ── */
+  .grammar-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .grammar-table th {
+    background: var(--green-dark); color: #fff; padding: 10px 12px;
+    text-align: left; font-weight: 700;
+  }
+  .grammar-table td { padding: 9px 12px; border-bottom: 1px solid var(--green-pale); }
+  .grammar-table tr:nth-child(even) td { background: var(--green-xpale); }
+  .grammar-table .label { font-weight: 800; color: var(--green-dark); }
+  .grammar-table .pos { color: var(--accent2); font-weight: 700; }
+  .grammar-table .neg { color: #c0392b; font-weight: 700; }
+
+  /* ── VOCAB WORD ── */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 10px; }
+  .vocab-chip {
+    background: var(--green-xpale); border: 1.5px solid var(--green-light);
+    border-radius: var(--radius-sm); padding: 10px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-weight: 700; font-size: 0.88rem; color: var(--green-dark);
+  }
+  .tts-btn {
+    background: none; border: none; cursor: pointer; font-size: 1.1rem;
+    transition: transform 0.2s;
+  }
+  .tts-btn:hover { transform: scale(1.3); }
+
+  /* ── INFO QUESTIONS TABLE ── */
+  .iq-table { width: 100%; font-size: 0.88rem; border-collapse: collapse; }
+  .iq-table td { padding: 7px 10px; border-bottom: 1px solid var(--green-pale); vertical-align: top; }
+  .iq-table .q-col { color: var(--green-dark); font-weight: 700; width: 50%; }
+  .iq-table .wh { color: var(--accent2); font-weight: 900; }
+
+  /* ── EXERCISE ── */
+  .exercise-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid var(--green-pale);
+  }
+  .exercise-item:last-child { border-bottom: none; }
+  .ex-num {
+    min-width: 26px; height: 26px; border-radius: 50%;
+    background: var(--green-mid); color: #fff; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; font-size: 0.82rem;
+    margin-top: 2px;
+  }
+  .ex-text { font-size: 0.92rem; line-height: 1.6; flex: 1; }
+  .ans-pill {
+    display: inline-block; background: var(--green-pale); border: 1.5px solid var(--green-light);
+    color: var(--green-dark); font-weight: 700; border-radius: 20px;
+    padding: 2px 12px; font-size: 0.85rem; margin-left: 4px;
+  }
+
+  /* ── SHOW/HIDE BUTTON ── */
+  .show-btn {
+    background: var(--green-mid); color: #fff; border: none; border-radius: 10px;
+    padding: 9px 20px; font-family: 'Nunito', sans-serif; font-weight: 700;
+    font-size: 0.88rem; cursor: pointer; transition: background 0.2s; margin-top: 12px;
+  }
+  .show-btn:hover { background: var(--green-dark); }
+  .answer-box {
+    background: var(--green-xpale); border-left: 4px solid var(--green-mid);
+    border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 10px;
+    font-size: 0.9rem; line-height: 1.8;
+  }
+
+  /* ── QUIZ ── */
+  .quiz-question { margin-bottom: 22px; }
+  .quiz-question p { font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; }
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .opt-btn {
+    background: var(--green-xpale); border: 2px solid var(--green-light);
+    border-radius: var(--radius-sm); padding: 10px 14px;
+    font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; text-align: left; transition: all 0.18s;
+  }
+  .opt-btn:hover { background: var(--green-pale); border-color: var(--green-mid); }
+  .opt-btn.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+  .opt-btn.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+  .feedback { font-size: 0.88rem; font-weight: 700; margin-top: 6px; }
+  .feedback.ok { color: #28a745; }
+  .feedback.no { color: #dc3545; }
+
+  /* ── INPUT EXERCISE ── */
+  .fill-input {
+    border: 2px solid var(--green-light); border-radius: 8px;
+    padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 0.9rem;
+    outline: none; width: 140px; transition: border 0.2s;
+  }
+  .fill-input:focus { border-color: var(--green-mid); }
+  .fill-input.correct-input { border-color: #28a745; background: #d4edda; }
+  .fill-input.wrong-input { border-color: #dc3545; background: #f8d7da; }
+  .check-btn {
+    background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    padding: 7px 16px; font-family: 'Nunito', sans-serif; font-weight: 700;
+    font-size: 0.85rem; cursor: pointer; transition: background 0.2s;
+  }
+  .check-btn:hover { background: var(--accent2); }
+
+  /* ── SUMMARY CHIPS ── */
+  .summary-list { display: flex; flex-direction: column; gap: 10px; }
+  .summary-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--green-xpale); border-radius: var(--radius-sm);
+    padding: 12px 14px;
+  }
+  .summary-icon { font-size: 1.3rem; }
+  .summary-text { font-size: 0.9rem; line-height: 1.6; }
+
+  /* ── CHALLENGE ── */
+  .challenge-box {
+    background: linear-gradient(135deg, #fff8f0, #fff3e8);
+    border: 2px solid var(--accent); border-radius: var(--radius);
+    padding: 22px; margin-bottom: 18px;
+  }
+  .challenge-box h3 { color: var(--accent2); font-size: 1.1rem; margin-bottom: 10px; }
+  textarea.challenge-input {
+    width: 100%; border: 2px solid var(--accent); border-radius: 10px;
+    padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 0.9rem;
+    resize: vertical; min-height: 100px; outline: none;
+    transition: border 0.2s;
+  }
+  textarea.challenge-input:focus { border-color: var(--accent2); }
+  .submit-challenge {
+    background: var(--accent2); color: #fff; border: none; border-radius: 10px;
+    padding: 10px 24px; font-family: 'Nunito', sans-serif; font-weight: 700;
+    font-size: 0.9rem; cursor: pointer; margin-top: 10px; transition: background 0.2s;
+  }
+  .submit-challenge:hover { background: #c0392b; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center; padding: 26px 0 10px;
+    border-top: 1.5px solid var(--green-pale); margin-top: 10px;
+  }
+  .footer .brand { font-size: 1.1rem; font-weight: 900; color: var(--green-dark); }
+  .footer .sub { font-family: 'Tajawal', sans-serif; font-size: 0.88rem; color: var(--gray-mid); margin-top: 4px; }
+
+  /* ── OBJECTIVES ── */
+  .obj-list { display: flex; flex-direction: column; gap: 10px; }
+  .obj-item {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--green-xpale); border-radius: var(--radius-sm);
+    padding: 12px 16px; border-left: 4px solid var(--green-mid);
+  }
+  .obj-icon { font-size: 1.2rem; }
+  .obj-text { font-size: 0.92rem; font-weight: 600; }
+
+  /* Matching exercise */
+  .match-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .match-label { font-weight: 700; font-size: 0.9rem; min-width: 32px; color: var(--green-dark); }
+  .match-q { font-size: 0.88rem; flex: 1; }
+  select.match-sel {
+    border: 2px solid var(--green-light); border-radius: 8px;
+    padding: 5px 8px; font-family: 'Nunito', sans-serif; font-size: 0.85rem;
+    background: #fff; outline: none; cursor: pointer;
+  }
+  select.match-sel.correct-sel { border-color: #28a745; background: #d4edda; }
+  select.match-sel.wrong-sel { border-color: #dc3545; background: #f8d7da; }
+
+  @media (max-width: 480px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .vocab-grid { grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="left">
+    <span class="badge">Unit 12</span>
+    <span class="badge">Pages 104–105</span>
+  </div>
+  <div class="right">ثاني متوسط &nbsp;|&nbsp; Second Intermediate</div>
+</div>
+
+<!-- PROGRESS -->
+<div id="progress-wrap"><div id="progress-bar" style="width:11.1%"></div></div>
+
+<!-- SLIDES -->
+<div id="slides-container">
+
+  <!-- ===== SLIDE 1: OPENING ===== -->
+  <div class="slide active" id="slide-1">
+    <div class="opening-slide">
+      <span class="emoji-big">📚</span>
+      <div class="unit-badge">UNIT 12 &nbsp;·&nbsp; PAGES 104–105 &nbsp;·&nbsp; الفصل الدراسي الثاني</div>
+      <div class="main-title">It's Going to Be Fun!</div>
+      <div class="arabic-title">القواعد النحوية</div>
+      <div style="color:var(--green-pale);font-size:1rem;font-weight:600;margin-bottom:20px;">3 · Grammar</div>
+      <div class="meta-row">
+        <div class="meta-pill">📖 Super Goal 2</div>
+        <div class="meta-pill">🏫 Second Intermediate</div>
+        <div class="meta-pill">✏️ Grammar Lesson</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 2: OBJECTIVES ===== -->
+  <div class="slide" id="slide-2">
+    <div class="section-title"><span>🎯</span> Learning Objectives</div>
+    <div class="card" style="margin-bottom:14px;">
+      <p style="font-size:0.9rem;color:var(--gray-mid);">By the end of this lesson, students will be able to:</p>
+    </div>
+    <div class="obj-list">
+      <div class="obj-item"><span class="obj-icon">✅</span><span class="obj-text">Use <strong>be going to</strong> to talk about future plans (affirmative, negative, questions).</span></div>
+      <div class="obj-item"><span class="obj-icon">✅</span><span class="obj-text">Form <strong>Yes/No questions</strong> and give short answers with <em>be going to</em>.</span></div>
+      <div class="obj-item"><span class="obj-icon">✅</span><span class="obj-text">Form <strong>information (Wh-) questions</strong> using question words with <em>be going to</em>.</span></div>
+      <div class="obj-item"><span class="obj-icon">✅</span><span class="obj-text">Understand the <strong>position of adjectives</strong> (before nouns / after the verb <em>be</em>).</span></div>
+      <div class="obj-item"><span class="obj-icon">✅</span><span class="obj-text">Complete exercises and write sentences about vacation plans.</span></div>
+    </div>
+    <div class="card card-pale" style="margin-top:16px;">
+      <p style="font-family:'Tajawal',sans-serif;font-size:0.95rem;direction:rtl;text-align:right;">
+        🌟 سنتعلم اليوم كيف نتحدث عن المستقبل باستخدام <strong>be going to</strong>، وكيف نضع الصفات في الجملة الإنجليزية.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 3: GRAMMAR EXPLANATION – BE GOING TO ===== -->
+  <div class="slide" id="slide-3">
+    <div class="section-title"><span>📖</span> Future with <em>Be Going To</em></div>
+    <div class="card" style="margin-bottom:14px;">
+      <p style="font-size:0.88rem;color:var(--gray-mid);">Use <em>be going to</em> for the future, to talk about plans. <br><span style="font-family:'Tajawal',sans-serif;font-size:0.88rem;">استخدم <strong>be going to</strong> للحديث عن خطط المستقبل.</span></p>
+    </div>
+    <div class="card" style="overflow-x:auto;">
+      <table class="grammar-table">
+        <thead><tr><th>Type</th><th>Structure</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="label pos">Affirmative (+)</td>
+            <td>Subject + <em>am/is/are</em> + going to + verb</td>
+            <td class="pos">I'm going to travel to Jordan.</td>
+          </tr>
+          <tr>
+            <td class="label neg">Negative (–)</td>
+            <td>Subject + <em>am/is/are not</em> + going to + verb</td>
+            <td class="neg">I'm not going to visit Petra.</td>
+          </tr>
+          <tr>
+            <td class="label" style="color:#0077b6;">Yes/No Question (?)</td>
+            <td><em>Am/Is/Are</em> + subject + going to + verb?</td>
+            <td style="color:#0077b6;">Are you going to travel to Jordan?</td>
+          </tr>
+          <tr>
+            <td class="label pos">Short Answer (+)</td>
+            <td colspan="2" class="pos">Yes, I am.</td>
+          </tr>
+          <tr>
+            <td class="label neg">Short Answer (–)</td>
+            <td colspan="2" class="neg">No, I'm not.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card card-pale" style="margin-top:6px;">
+      <p style="font-family:'Tajawal',sans-serif;font-size:0.92rem;direction:rtl;text-align:right;line-height:1.9;">
+        📌 <strong>ملاحظة:</strong> نستخدم <strong>am</strong> مع I، و<strong>is</strong> مع he/she/it، و<strong>are</strong> مع you/we/they.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 4: INFORMATION QUESTIONS ===== -->
+  <div class="slide" id="slide-4">
+    <div class="section-title"><span>❓</span> Information Questions</div>
+    <div class="card" style="overflow-x:auto;">
+      <table class="iq-table">
+        <tbody>
+          <tr><td class="q-col"><span class="wh">What</span> are you going to do on your vacation?</td><td>I'm going to travel to Africa.</td></tr>
+          <tr><td class="q-col"><span class="wh">When</span> is he going to leave?</td><td>He's going to leave next week.</td></tr>
+          <tr><td class="q-col"><span class="wh">Which</span> countries is he going to visit?</td><td>He's going to visit Tunisia and Morocco.</td></tr>
+          <tr><td class="q-col"><span class="wh">How</span> are we going to go?</td><td>We're going to go by plane.</td></tr>
+          <tr><td class="q-col"><span class="wh">Where</span> am I going to stay?</td><td>You're going to stay in a four-star hotel.</td></tr>
+          <tr><td class="q-col"><span class="wh">Who</span> is going to travel with them?</td><td>They're going to travel with friends.</td></tr>
+          <tr><td class="q-col"><span class="wh">How long</span> are they going to stay?</td><td>They're going to stay for a month.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card card-pale" style="margin-top:10px;">
+      <h3>💡 Structure</h3>
+      <p style="font-size:0.9rem;"><strong style="color:var(--accent2);">Wh-word</strong> + <em>am/is/are</em> + subject + <strong>going to</strong> + base verb + ?</p>
+      <p style="font-family:'Tajawal',sans-serif;font-size:0.88rem;margin-top:8px;direction:rtl;text-align:right;">
+        🔑 كلمات الاستفهام: What – When – Which – How – Where – Who – How long
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 5: POSITION OF ADJECTIVES ===== -->
+  <div class="slide" id="slide-5">
+    <div class="section-title"><span>🎨</span> Position of Adjectives</div>
+    <div class="card card-green" style="margin-bottom:14px;">
+      <h2 style="color:#fff;">Two Positions for Adjectives</h2>
+      <p style="font-size:0.92rem;opacity:0.9;">الصفة في اللغة الإنجليزية لها موضعان في الجملة.</p>
+    </div>
+    <div class="card" style="margin-bottom:12px;">
+      <h3>1️⃣ Before a noun (قبل الاسم)</h3>
+      <p style="font-size:0.95rem;">Antarctica is an <strong style="color:var(--accent2);">exotic</strong> place.</p>
+      <p style="font-size:0.85rem;color:var(--gray-mid);margin-top:4px;">→ Adjective comes <em>before</em> the noun it describes.</p>
+    </div>
+    <div class="card" style="margin-bottom:12px;">
+      <h3>2️⃣ After the verb <em>be</em> (بعد فعل الكون)</h3>
+      <p style="font-size:0.95rem;">Antarctica is <strong style="color:var(--accent2);">exotic</strong>.</p>
+      <p style="font-size:0.85rem;color:var(--gray-mid);margin-top:4px;">→ Adjective comes <em>after</em> the verb be.</p>
+    </div>
+    <div class="card card-pale">
+      <h3>📚 Key Adjectives from the Lesson</h3>
+      <div class="vocab-grid" id="vocab-grid">
+        <!-- built by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 6: EXERCISE A ===== -->
+  <div class="slide" id="slide-6">
+    <div class="section-title"><span>✏️</span> Exercise A – Match Questions &amp; Answers</div>
+    <div class="card card-pale" style="margin-bottom:12px;">
+      <p style="font-size:0.88rem;">Add the question words. Match the questions (1–6) with the answers (a–f).</p>
+    </div>
+
+    <!-- Matching selects -->
+    <div class="card" id="match-card">
+      <div id="match-rows">
+        <!-- built by JS -->
+      </div>
+      <button class="check-btn" style="margin-top:14px;" onclick="checkMatching()">Check Answers ✔</button>
+      <div id="match-feedback" style="margin-top:10px;"></div>
+    </div>
+
+    <button class="show-btn" onclick="toggleAnswer('ans-A')">Show Correct Answers 👁</button>
+    <div class="answer-box" id="ans-A" style="display:none;">
+      <ol style="padding-left:18px;line-height:2;">
+        <li><strong>Which</strong> suitcase are you going to take? → <strong>e</strong> (The red one. It's new.)</li>
+        <li><strong>Where</strong> are they going to travel? → <strong>a</strong> (In a beautiful hotel.)</li>
+        <li><strong>What</strong> is he going to do when he arrives? → <strong>f</strong> (He's going to rest.)</li>
+        <li><strong>Who</strong> are they going to write to? → <strong>b</strong> (To their parents.)</li>
+        <li><strong>How</strong> are we going to stay? → <strong>c</strong> (They're going to take a bus.)</li>
+        <li><strong>When</strong> are we going to get there? → <strong>d</strong> (You're going to arrive in the morning.)</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 7: EXERCISE B ===== -->
+  <div class="slide" id="slide-7">
+    <div class="section-title"><span>✏️</span> Exercise B – Vacation Plans</div>
+    <div class="card card-pale" style="margin-bottom:12px;">
+      <p style="font-size:0.9rem;line-height:1.7;">Hameed and Fadi are going on vacation. Choose a place, and write <strong>six sentences</strong> about the things they're going to need. Use the words in the box for ideas.</p>
+      <p style="color:var(--green-dark);font-style:italic;margin-top:8px;font-weight:700;">Example: They're going to Bali, Indonesia. They're going to need hats, sunglasses, etc.</p>
+    </div>
+    <div class="card" style="margin-bottom:14px;">
+      <h3>🎒 Word Box</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+        <span id="wb-items"></span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>✍️ Write Your Sentences</h3>
+      <div id="b-sentences">
+        <!-- built by JS -->
+      </div>
+      <button class="check-btn" style="margin-top:12px;" onclick="checkBSentences()">Check ✔</button>
+      <div id="b-feedback" style="margin-top:10px;font-weight:700;color:var(--green-dark);"></div>
+    </div>
+    <button class="show-btn" onclick="toggleAnswer('ans-B')">Show Model Answer 👁</button>
+    <div class="answer-box" id="ans-B" style="display:none;">
+      <p style="font-weight:700;margin-bottom:8px;">Model Answer (Bali, Indonesia):</p>
+      <ol style="padding-left:18px;line-height:2;font-size:0.9rem;">
+        <li>They're going to need sunglasses.</li>
+        <li>They're going to need a camera.</li>
+        <li>They're going to need a map.</li>
+        <li>They're going to need a travel book.</li>
+        <li>They're going to need a hat.</li>
+        <li>They're going to need shorts.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 8: EXERCISE C ===== -->
+  <div class="slide" id="slide-8">
+    <div class="section-title"><span>✏️</span> Exercise C – Fill in Adjectives (Jazan)</div>
+    <div class="card card-pale" style="margin-bottom:12px;">
+      <p style="font-size:0.9rem;">Complete the article about <strong>Jazan</strong>. Use the adjectives in the box.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;" id="adj-box"></div>
+    </div>
+
+    <div class="card" style="font-size:0.9rem;line-height:2.2;" id="jazan-article">
+      <!-- built by JS -->
+    </div>
+
+    <button class="check-btn" style="margin-top:12px;" onclick="checkJazan()">Check Answers ✔</button>
+    <div id="jazan-feedback" style="margin-top:10px;font-weight:700;"></div>
+
+    <button class="show-btn" onclick="toggleAnswer('ans-C')">Show Answers 👁</button>
+    <div class="answer-box" id="ans-C" style="display:none;">
+      <ol style="padding-left:18px;line-height:2;font-size:0.9rem;">
+        <li>coastal</li><li>dense</li><li>fertile</li><li>agricultural</li>
+        <li>tropical</li><li>humid</li><li>ancient</li><li>unique</li>
+        <li>local</li><li>unique</li><li>traditional</li><li>hospitable</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 9: QUIZ ===== -->
+  <div class="slide" id="slide-9">
+    <div class="section-title"><span>🎮</span> Interactive Quiz</div>
+    <div id="quiz-container"><!-- built by JS --></div>
+    <div id="quiz-score" style="display:none;text-align:center;margin-top:16px;">
+      <div style="font-size:2rem;font-weight:900;color:var(--green-dark);" id="score-display"></div>
+      <p style="color:var(--gray-mid);margin-top:4px;">Great job! Keep practising! 🌟</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 10: SUMMARY ===== -->
+  <div class="slide" id="slide-10">
+    <div class="section-title"><span>📝</span> Summary</div>
+    <div class="summary-list">
+      <div class="summary-item"><span class="summary-icon">🚀</span><div class="summary-text"><strong>Be Going To (+):</strong> I <u>am going to</u> travel. / She <u>is going to</u> leave.</div></div>
+      <div class="summary-item"><span class="summary-icon">🚫</span><div class="summary-text"><strong>Be Going To (–):</strong> He <u>is not going to</u> visit. / We <u>are not going to</u> go by plane.</div></div>
+      <div class="summary-item"><span class="summary-icon">❓</span><div class="summary-text"><strong>Yes/No Question:</strong> <u>Are</u> you going to travel? → Yes, I am. / No, I'm not.</div></div>
+      <div class="summary-item"><span class="summary-icon">🔍</span><div class="summary-text"><strong>Wh- Questions:</strong> <u>What/When/Where/How/Who/Which/How long</u> + is/are + subject + going to + verb?</div></div>
+      <div class="summary-item"><span class="summary-icon">🎨</span><div class="summary-text"><strong>Adjectives position:</strong> Before noun → an <u>exotic</u> place. After be → The place is <u>exotic</u>.</div></div>
+    </div>
+    <div class="card card-pale" style="margin-top:14px;">
+      <p style="font-family:'Tajawal',sans-serif;font-size:0.95rem;direction:rtl;text-align:right;line-height:2;">
+        ✅ تذكّر: <strong>be going to</strong> تُستخدم للحديث عن خطط وعزم المستقبل. <br>
+        ✅ الصفة تأتي قبل الاسم أو بعد فعل الكون <strong>be</strong>.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 11: CHALLENGE ===== -->
+  <div class="slide" id="slide-11">
+    <div class="section-title"><span>🏆</span> Challenge Question</div>
+    <div class="challenge-box">
+      <h3>🌍 Your Dream Vacation!</h3>
+      <p style="font-size:0.9rem;margin-bottom:14px;line-height:1.7;">Write <strong>6 sentences</strong> about your dream vacation using <em>be going to</em>. Include: <strong>where, when, how, what, who</strong> and one adjective to describe the place!</p>
+      <textarea class="challenge-input" id="challenge-text" placeholder="I'm going to travel to...&#10;I'm going to go by...&#10;I'm going to stay in a ... hotel...&#10;"></textarea>
+      <button class="submit-challenge" onclick="submitChallenge()">Submit My Answer 🚀</button>
+      <div id="challenge-result" style="margin-top:12px;font-weight:700;color:var(--green-dark);"></div>
+    </div>
+    <div class="card card-pale">
+      <h3>💡 Useful Phrases</h3>
+      <ul style="padding-left:18px;font-size:0.88rem;line-height:2;">
+        <li>I'm going to travel to ...</li>
+        <li>I'm going to go by plane / bus / car.</li>
+        <li>I'm going to stay in a ... hotel.</li>
+        <li>I'm going to visit ... with ...</li>
+        <li>It's a ... (adjective) place.</li>
+        <li>I'm going to need ...</li>
+      </ul>
+    </div>
+
+    <!-- FOOTER – last slide only -->
+    <div class="footer">
+      <div class="brand">eduvorra</div>
+      <div class="sub">عبدالحكيم صالح الحسون</div>
+      <div class="sub">صُنع بحب في بريدة ❤️</div>
+    </div>
+  </div>
+
+</div><!-- end slides-container -->
+
+<!-- BOTTOM NAV -->
+<div id="nav-bar">
+  <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)" disabled>◀ Prev</button>
+  <span id="slide-counter">1 / 11</span>
+  <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">Next ▶</button>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────
+const TOTAL = 11;
+let current = 1;
+
+const vocabWords = [
+  {word:'exotic',ar:'غريب / فريد'},{word:'humid',ar:'رطب'},{word:'dense',ar:'كثيف'},
+  {word:'tropical',ar:'استوائي'},{word:'ancient',ar:'قديم'},{word:'agricultural',ar:'زراعي'},
+  {word:'coastal',ar:'ساحلي'},{word:'unique',ar:'فريد من نوعه'},{word:'local',ar:'محلي'},
+  {word:'fertile',ar:'خصيب'},{word:'hospitable',ar:'كريم / مضياف'},{word:'traditional',ar:'تقليدي'},
+  {word:'interesting',ar:'مثير للاهتمام'}
+];
+
+const wordBox = ['backpack','jacket','sneakers','bathing suit','jeans','suit and tie',
+  'calculator','map','sunglasses','camera','medicine','travel books','coat','money',
+  'T-shirt','credit card','passport','visa','hat','shirt','wallet','hiking boots',
+  'shorts','watch'];
+
+const matchData = [
+  {num:1, q:'<span style="text-decoration:underline;color:var(--accent2);">Which</span> suitcase are you going to take?', ans:'e'},
+  {num:2, q:'_______ are they going to travel?', ans:'a'},
+  {num:3, q:'_______ is he going to do when he arrives?', ans:'f'},
+  {num:4, q:'_______ are they going to write to?', ans:'b'},
+  {num:5, q:'_______ are we going to stay?', ans:'c'},
+  {num:6, q:'_______ are we going to get there?', ans:'d'},
+];
+const matchAnswerLabels = {
+  a:'In a beautiful hotel.',
+  b:'To their parents.',
+  c:"They're going to take a bus.",
+  d:"You're going to arrive in the morning.",
+  e:"The red one. It's new.",
+  f:"He's going to rest."
+};
+
+const jazanAnswers = ['coastal','dense','fertile','agricultural','tropical','humid','ancient','unique','local','unique','traditional','hospitable'];
+const jazanAdjectiveBox = ['humid','dense','traditional','tropical','ancient','agricultural','coastal','unique','hospitable','local','fertile','interesting'];
+
+const quizData = [
+  {q:"_____ you going to visit London next year?",opts:["Is","Are","Am","Were"],ans:1},
+  {q:"She _____ going to travel by plane.",opts:["are","is","am","be"],ans:1},
+  {q:"They _____ going to stay in a hotel. (negative)",opts:["isn't","aren't","not","weren't"],ans:1},
+  {q:"Which position is correct? 'It is an _____ place.'",opts:["exotic","exoticly","exotics","exoticed"],ans:0},
+  {q:"_____ are they going to travel? — To Africa.",opts:["When","Who","Where","How long"],ans:2},
+  {q:"_____ is he going to leave? — Next week.",opts:["Where","When","Which","How"],ans:1},
+  {q:"'Antarctica is exotic.' Here, exotic is placed ...",opts:["before a noun","after a noun","before the verb be","after the verb be"],ans:3},
+  {q:"Complete: _____ long are they going to stay? — For a month.",opts:["What","How","Where","Who"],ans:1},
+];
+
+// ─── BUILD VOCAB ───────────────────────────────────────
+function buildVocab(){
+  const grid = document.getElementById('vocab-grid');
+  if(!grid) return;
+  grid.innerHTML = vocabWords.map(v=>`
+    <div class="vocab-chip">
+      <span>${v.word}<br><small style="color:var(--gray-mid);font-weight:600;">${v.ar}</small></span>
+      <button class="tts-btn" title="Hear pronunciation" onclick="speak('${v.word}')">🔊</button>
+    </div>`).join('');
+}
+
+function speak(word){
+  if('speechSynthesis' in window){
+    const u = new SpeechSynthesisUtterance(word);
+    u.lang='en-US'; u.rate=0.85;
+    speechSynthesis.speak(u);
+  }
+}
+
+// ─── BUILD WORD BOX ───────────────────────────────────
+function buildWordBox(){
+  const el = document.getElementById('wb-items');
+  if(!el) return;
+  el.innerHTML = wordBox.map(w=>`<span style="background:var(--green-pale);border-radius:20px;padding:4px 12px;font-size:0.82rem;font-weight:700;color:var(--green-dark);">${w}</span>`).join(' ');
+}
+
+// ─── BUILD EXERCISE B INPUTS ──────────────────────────
+function buildBSentences(){
+  const c = document.getElementById('b-sentences');
+  if(!c) return;
+  c.innerHTML = Array.from({length:6},(_,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="font-weight:800;color:var(--green-dark);min-width:20px;">${i+1}.</span>
+      <input type="text" class="fill-input" style="width:100%;" id="bs-${i}" placeholder="They're going to need ...">
+    </div>`).join('');
+}
+
+function checkBSentences(){
+  let filled=0;
+  for(let i=0;i<6;i++){
+    const v=document.getElementById('bs-'+i).value.trim();
+    if(v.length>5) filled++;
+  }
+  const fb=document.getElementById('b-feedback');
+  if(filled===6){ fb.style.color='#28a745'; fb.textContent='✅ Great! 6 sentences written! Check the model answer below.'; }
+  else { fb.style.color='#dc3545'; fb.textContent=`✏️ Please write all 6 sentences. (${filled}/6 done)`; }
+}
+
+// ─── BUILD MATCHING ───────────────────────────────────
+function buildMatching(){
+  const c=document.getElementById('match-rows');
+  if(!c) return;
+  const opts=Object.entries(matchAnswerLabels);
+  c.innerHTML = matchData.map(m=>`
+    <div class="match-row">
+      <span class="match-label">${m.num}.</span>
+      <span class="match-q">${m.q}</span>
+      <select class="match-sel" id="ms-${m.num}">
+        <option value="">—</option>
+        ${opts.map(([k,v])=>`<option value="${k}">${k}: ${v}</option>`).join('')}
+      </select>
+    </div>`).join('');
+}
+
+function checkMatching(){
+  let score=0;
+  matchData.forEach(m=>{
+    const sel=document.getElementById('ms-'+m.num);
+    if(!sel) return;
+    sel.classList.remove('correct-sel','wrong-sel');
+    if(sel.value===m.ans){ sel.classList.add('correct-sel'); score++; }
+    else { sel.classList.add('wrong-sel'); }
+  });
+  const fb=document.getElementById('match-feedback');
+  fb.style.color= score===6?'#28a745':'#dc3545';
+  fb.textContent = score===6 ? '✅ Perfect! All correct!' : `Score: ${score}/6 — Try again!`;
+}
+
+// ─── BUILD JAZAN ARTICLE ─────────────────────────────
+function buildJazan(){
+  const adjBox=document.getElementById('adj-box');
+  if(adjBox){
+    adjBox.innerHTML=jazanAdjectiveBox.map(a=>`
+      <span style="background:var(--green-pale);border:1.5px solid var(--green-light);border-radius:20px;padding:4px 14px;font-size:0.85rem;font-weight:700;color:var(--green-dark);">${a}</span>`).join('');
+  }
+  const art=document.getElementById('jazan-article');
+  if(!art) return;
+
+  const articleHtml = `
+  <p>Jazan, in southwestern Saudi Arabia, is a 
+  <strong>(1)</strong> <input type="text" class="fill-input" id="j1" style="width:110px;"> city on the Red Sea. 
+  It is the capital city of Jazan Province. Although it is a small province, it has a 
+  <strong>(2)</strong> <input type="text" class="fill-input" id="j2" style="width:110px;"> population of about 1.4 million inhabitants. 
+  The terrain of the region is varied, consisting of mountains, 
+  <strong>(3)</strong> <input type="text" class="fill-input" id="j3" style="width:110px;"> plains, coasts, and islands. 
+  Jazan is famous for its <strong>(4)</strong> <input type="text" class="fill-input" id="j4" style="width:130px;"> products, especially its 
+  <strong>(5)</strong> <input type="text" class="fill-input" id="j5" style="width:110px;"> fruits like mango, figs, and papaya. 
+  The climate in the city of Jazan is very hot and 
+  <strong>(6)</strong> <input type="text" class="fill-input" id="j6" style="width:110px;"> in the summer, while temperatures in the mountains to the northeast are much cooler.</p>
+  <br>
+  <p>Jazan is one of the oldest regions in the country, dating back some 8,000 years, and is rich in heritage and 
+  <strong>(7)</strong> <input type="text" class="fill-input" id="j7" style="width:110px;"> monuments. 
+  There is an <strong>(8)</strong> <input type="text" class="fill-input" id="j8" style="width:110px;"> mix of architectural styles throughout the region. 
+  The buildings are in harmony with their environment and make use of 
+  <strong>(9)</strong> <input type="text" class="fill-input" id="j9" style="width:110px;"> materials, such as stone, mud, bricks, wood, and plants. 
+  One style that is <strong>(10)</strong> <input type="text" class="fill-input" id="j10" style="width:110px;"> to the Tihama coast is the Jazani hut. 
+  The region is also known for its <strong>(11)</strong> <input type="text" class="fill-input" id="j11" style="width:130px;"> handicrafts and its generous and 
+  <strong>(12)</strong> <input type="text" class="fill-input" id="j12" style="width:130px;"> people.</p>`;
+  art.innerHTML = articleHtml;
+}
+
+function checkJazan(){
+  let score=0;
+  jazanAnswers.forEach((ans,i)=>{
+    const el=document.getElementById('j'+(i+1));
+    if(!el) return;
+    el.classList.remove('correct-input','wrong-input');
+    if(el.value.trim().toLowerCase()===ans.toLowerCase()){ el.classList.add('correct-input'); score++; }
+    else { el.classList.add('wrong-input'); }
+  });
+  const fb=document.getElementById('jazan-feedback');
+  fb.style.color= score===12?'#28a745':'#dc3545';
+  fb.textContent = score===12? `✅ Perfect score! ${score}/12 correct!` : `Score: ${score}/12 — Review wrong answers and try again!`;
+}
+
+// ─── BUILD QUIZ ───────────────────────────────────────
+let quizAnswered=[];
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');
+  if(!c) return;
+  quizAnswered=new Array(quizData.length).fill(false);
+  c.innerHTML = quizData.map((q,i)=>`
+    <div class="quiz-question card" style="animation-delay:${i*0.07}s">
+      <p>${i+1}. ${q.q}</p>
+      <div class="options-grid">
+        ${q.opts.map((o,j)=>`<button class="opt-btn" id="qb-${i}-${j}" onclick="answerQuiz(${i},${j})">${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="qfb-${i}"></div>
+    </div>`).join('');
+}
+
+function answerQuiz(qi,oi){
+  if(quizAnswered[qi]) return;
+  quizAnswered[qi]=true;
+  const q=quizData[qi];
+  const fb=document.getElementById('qfb-'+qi);
+  // disable all buttons for this question
+  q.opts.forEach((_,j)=>{ document.getElementById(`qb-${qi}-${j}`).disabled=true; });
+  if(oi===q.ans){
+    document.getElementById(`qb-${qi}-${oi}`).classList.add('correct');
+    fb.classList.add('ok'); fb.textContent='✅ Correct!';
+  } else {
+    document.getElementById(`qb-${qi}-${oi}`).classList.add('wrong');
+    document.getElementById(`qb-${qi}-${q.ans}`).classList.add('correct');
+    fb.classList.add('no'); fb.textContent=`❌ Wrong! Correct: "${q.opts[q.ans]}"`;
+  }
+  if(quizAnswered.every(Boolean)){
+    const score=quizAnswered.reduce((s,_,i)=>{
+      return s+(document.getElementById(`qfb-${i}`).classList.contains('ok')?1:0);
+    },0);
+    document.getElementById('quiz-score').style.display='block';
+    document.getElementById('score-display').textContent=`🏆 ${score} / ${quizData.length}`;
+  }
+}
+
+// ─── TOGGLE ANSWER ────────────────────────────────────
+function toggleAnswer(id){
+  const el=document.getElementById(id);
+  el.style.display = el.style.display==='none'?'block':'none';
+}
+
+// ─── CHALLENGE ───────────────────────────────────────
+function submitChallenge(){
+  const txt=document.getElementById('challenge-text').value.trim();
+  const res=document.getElementById('challenge-result');
+  if(txt.length<20){ res.style.color='#dc3545'; res.textContent='✏️ Please write at least 6 sentences!'; return; }
+  res.style.color='#28a745';
+  res.textContent='🌟 Excellent work! Your answer has been submitted. Keep practising!';
+}
+
+// ─── NAVIGATION ──────────────────────────────────────
+function changeSlide(dir){
+  const next = current + dir;
+  if(next < 1 || next > TOTAL) return;
+
+  const curSlide = document.getElementById('slide-' + current);
+  const nextSlide = document.getElementById('slide-' + next);
+
+  // Prepare next slide off-screen (right for forward, left for backward)
+  nextSlide.style.transition = 'none';
+  nextSlide.style.opacity = '0';
+  nextSlide.style.transform = dir > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+  nextSlide.style.pointerEvents = 'none';
+  nextSlide.classList.add('active');
+
+  // Force reflow so transition fires
+  nextSlide.offsetHeight;
+
+  // Animate current slide out
+  curSlide.style.transition = 'all 0.35s cubic-bezier(.4,0,.2,1)';
+  curSlide.style.opacity = '0';
+  curSlide.style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+
+  // Animate next slide in
+  nextSlide.style.transition = 'all 0.35s cubic-bezier(.4,0,.2,1)';
+  nextSlide.style.opacity = '1';
+  nextSlide.style.transform = 'translateX(0)';
+  nextSlide.style.pointerEvents = 'all';
+  nextSlide.scrollTop = 0;
+
+  // Clean up old slide after animation
+  setTimeout(()=>{
+    curSlide.classList.remove('active');
+    curSlide.style.transition = '';
+    curSlide.style.opacity = '';
+    curSlide.style.transform = '';
+    curSlide.style.pointerEvents = '';
+    nextSlide.style.transition = '';
+  }, 370);
+
+  current = next;
+  document.getElementById('slide-counter').textContent = `${current} / ${TOTAL}`;
+  document.getElementById('prev-btn').disabled = current === 1;
+  document.getElementById('next-btn').disabled = current === TOTAL;
+  document.getElementById('progress-bar').style.width = (current / TOTAL * 100).toFixed(1) + '%';
+}
+
+// ─── INIT ────────────────────────────────────────────
+window.onload=()=>{
+  buildVocab();
+  buildWordBox();
+  buildMatching();
+  buildBSentences();
+  buildJazan();
+  buildQuiz();
+};
+</script>
+</body>
+</html>

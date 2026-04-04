@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Writing – Vision 2030 | Unit 9 | Super Goal 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #1a7a4a;
+    --green-light: #25a865;
+    --green-pale: #e8f7f0;
+    --gold: #c8a84b;
+    --gold-light: #f0d98a;
+    --dark: #1a1f2e;
+    --mid: #3d4460;
+    --text: #2d3245;
+    --muted: #7a8099;
+    --white: #ffffff;
+    --bg: #f4f7f5;
+    --card: #ffffff;
+    --radius: 16px;
+    --shadow: 0 8px 32px rgba(26,122,74,0.10);
+    --shadow-lg: 0 16px 48px rgba(26,122,74,0.16);
+    --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 54px;
+    background: linear-gradient(90deg, var(--dark) 0%, var(--mid) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    z-index: 1000;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  }
+  .topbar-left { display: flex; gap: 18px; align-items: center; }
+  .topbar-badge {
+    background: var(--green);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+  .topbar-badge.gold {
+    background: var(--gold);
+    color: var(--dark);
+  }
+  .topbar-right {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold-light);
+    font-family: 'Tajawal', sans-serif;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-bar {
+    position: fixed;
+    top: 54px; left: 0; right: 0;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    z-index: 999;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green-light), var(--gold));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* ── SLIDE WRAPPER ── */
+  .slides-container {
+    position: fixed;
+    top: 58px; left: 0; right: 0; bottom: 70px;
+    overflow: hidden;
+  }
+  .slide {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    overflow-y: auto;
+    padding: 32px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: translateX(60px);
+    pointer-events: none;
+    transition: opacity var(--transition), transform var(--transition);
+    scrollbar-width: thin;
+    scrollbar-color: var(--green) transparent;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+  }
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px;
+    width: 100%;
+    max-width: 780px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .card:nth-child(2) { animation-delay: 0.07s; }
+  .card:nth-child(3) { animation-delay: 0.14s; }
+  .card:nth-child(4) { animation-delay: 0.21s; }
+  .card:nth-child(5) { animation-delay: 0.28s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── OPENING SLIDE ── */
+  .opening-slide {
+    background: linear-gradient(145deg, var(--dark) 0%, #263050 60%, #1a3a28 100%);
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+  .vision-logo {
+    width: min(340px, 90%);
+    background: rgba(255,255,255,0.07);
+    border: 2px solid rgba(200,168,75,0.35);
+    border-radius: 20px;
+    padding: 28px 32px;
+    text-align: center;
+    margin-bottom: 36px;
+    backdrop-filter: blur(6px);
+  }
+  .vision-title-en {
+    font-size: clamp(2.2rem, 6vw, 3.6rem);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: 2px;
+  }
+  .vision-year {
+    font-size: clamp(3rem, 9vw, 5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin: 4px 0;
+  }
+  .vision-title-ar {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    margin-top: 4px;
+  }
+  .ksa-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: 3px;
+    margin-top: 2px;
+  }
+  .opening-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  .meta-chip {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(200,168,75,0.3);
+    color: var(--gold-light);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 20px;
+    border-radius: 30px;
+    backdrop-filter: blur(4px);
+  }
+  .opening-title-main {
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .opening-title-main h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+  .opening-title-main p {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.3rem;
+    color: var(--gold-light);
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  .semester-tag {
+    margin-top: 18px;
+    background: rgba(37,168,101,0.2);
+    border: 1px solid var(--green-light);
+    color: #7eedb5;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 18px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(37,168,101,0.3);
+  }
+  .section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark);
+  }
+  .section-header p {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ── OBJECTIVES ── */
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .obj-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: var(--green-pale);
+    border-left: 4px solid var(--green);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text);
+    animation: fadeUp 0.4s ease both;
+  }
+  .obj-item:nth-child(2) { animation-delay: 0.1s; }
+  .obj-item:nth-child(3) { animation-delay: 0.2s; }
+  .obj-item:nth-child(4) { animation-delay: 0.3s; }
+  .obj-num {
+    width: 28px; height: 28px;
+    background: var(--green);
+    color: white;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── TEXT READING ── */
+  .reading-box {
+    background: linear-gradient(135deg, #f9fffe 0%, #f0f9f4 100%);
+    border: 1.5px solid #c5e8d5;
+    border-radius: 14px;
+    padding: 22px 24px;
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: var(--text);
+  }
+  .reading-box p { margin-bottom: 14px; }
+  .reading-box p:last-child { margin-bottom: 0; }
+  .reading-source {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #c5e8d5;
+  }
+
+  /* ── VOCAB WORD ── */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .vocab-card {
+    background: linear-gradient(135deg, var(--green-pale), #fff);
+    border: 1.5px solid #b8e0c9;
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .vocab-word {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .vocab-meaning {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .tts-btn {
+    background: none;
+    border: 1.5px solid var(--green);
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+    width: fit-content;
+  }
+  .tts-btn:hover {
+    background: var(--green);
+    color: white;
+  }
+
+  /* ── CHART TABLE ── */
+  .chart-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    font-size: 0.88rem;
+  }
+  .chart-table thead th {
+    background: var(--green);
+    color: white;
+    font-weight: 700;
+    padding: 14px 16px;
+    text-align: left;
+    letter-spacing: 0.3px;
+  }
+  .chart-table thead th:nth-child(2) { background: #1e8a56; }
+  .chart-table thead th:nth-child(3) { background: #188050; }
+  .chart-table thead th:nth-child(4) { background: #14744a; }
+  .chart-table tbody td {
+    padding: 16px;
+    border-bottom: 1px solid #e8f2ec;
+    vertical-align: top;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .chart-table tbody tr:last-child td { border-bottom: none; }
+  .chart-table tbody tr:hover td { background: var(--green-pale); }
+
+  /* ── ANSWER REVEAL ── */
+  .answer-block {
+    margin-top: 14px;
+    background: linear-gradient(135deg, #e3f9ee, #f0fff7);
+    border: 1.5px solid var(--green-light);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: none;
+    animation: fadeUp 0.3s ease;
+  }
+  .answer-block.visible { display: block; }
+  .answer-block h4 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .reveal-btn {
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(37,168,101,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .reveal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(37,168,101,0.4);
+  }
+
+  /* ── MCQ ── */
+  .mcq-question {
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .mcq-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .mcq-option {
+    background: #f8fafc;
+    border: 2px solid #e0e8ef;
+    border-radius: 10px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .mcq-option:hover { border-color: var(--green-light); background: var(--green-pale); }
+  .mcq-option.correct { border-color: var(--green); background: #e3f9ee; color: var(--green); }
+  .mcq-option.wrong { border-color: #e84646; background: #fff0f0; color: #c03030; }
+  .option-letter {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #e0e8ef;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .mcq-feedback {
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 8px;
+    display: none;
+  }
+  .mcq-feedback.show-correct {
+    display: block;
+    background: #e3f9ee;
+    color: var(--green);
+    border: 1px solid var(--green-light);
+  }
+  .mcq-feedback.show-wrong {
+    display: block;
+    background: #fff0f0;
+    color: #c03030;
+    border: 1px solid #f5a5a5;
+  }
+  .quiz-number {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  /* ── INPUT PRACTICE ── */
+  .input-field {
+    width: 100%;
+    border: 2px solid #d5e5df;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.92rem;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text);
+    outline: none;
+    transition: border 0.2s;
+    resize: vertical;
+    min-height: 80px;
+  }
+  .input-field:focus { border-color: var(--green-light); }
+
+  /* ── VERB FORMS ── */
+  .verb-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--dark), var(--mid));
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin: 4px;
+  }
+  .verb-tag.future {
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+  }
+  .verb-tag.passive {
+    background: linear-gradient(135deg, var(--gold), #d4a832);
+    color: var(--dark);
+  }
+
+  /* ── SUMMARY POINTS ── */
+  .summary-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid #eaf3ee;
+  }
+  .summary-point:last-child { border-bottom: none; }
+  .sum-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+  .sum-text strong { font-weight: 700; color: var(--dark); display: block; margin-bottom: 3px; }
+  .sum-text span { font-size: 0.88rem; color: var(--muted); }
+
+  /* ── CHALLENGE ── */
+  .challenge-card {
+    background: linear-gradient(135deg, var(--dark) 0%, #223850 100%);
+    border-radius: var(--radius);
+    padding: 28px;
+    color: white;
+    text-align: center;
+    width: 100%;
+    max-width: 780px;
+    margin-bottom: 20px;
+  }
+  .challenge-icon { font-size: 40px; margin-bottom: 14px; }
+  .challenge-card h3 { font-size: 1.3rem; font-weight: 800; color: var(--gold-light); margin-bottom: 12px; }
+  .challenge-card p { font-size: 0.95rem; line-height: 1.7; color: rgba(255,255,255,0.85); margin-bottom: 18px; }
+  .challenge-textarea {
+    width: 100%;
+    min-height: 120px;
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(200,168,75,0.4);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    resize: vertical;
+    outline: none;
+  }
+  .challenge-textarea::placeholder { color: rgba(255,255,255,0.4); }
+  .challenge-textarea:focus { border-color: var(--gold); }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 28px 20px 16px;
+    border-top: 1px dashed #c5e8d5;
+    margin-top: 12px;
+    width: 100%;
+    max-width: 780px;
+  }
+  .footer-brand {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--green);
+    letter-spacing: 1px;
+  }
+  .footer-name {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--mid);
+    margin: 4px 0;
+  }
+  .footer-love {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* ── NAV ── */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 70px;
+    background: white;
+    border-top: 1px solid #e0ece6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.07);
+  }
+  .nav-btn {
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 28px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(37,168,101,0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,168,101,0.4); }
+  .nav-btn:disabled {
+    background: #e0e8ef;
+    color: #aab;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+  .slide-counter {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .slide-counter span { color: var(--green); font-weight: 800; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c5e8d5, transparent);
+    margin: 18px 0;
+    width: 100%;
+  }
+
+  /* ── HIGHLIGHT ── */
+  .highlight { color: var(--green); font-weight: 700; }
+  .ar { font-family: 'Tajawal', sans-serif; direction: rtl; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .topbar { padding: 0 14px; }
+    .slide { padding: 20px 12px 16px; }
+    .card { padding: 18px; }
+    .nav-btn { padding: 10px 20px; font-size: 13px; }
+    .vocab-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-badge">Unit 9</div>
+    <div class="topbar-badge gold">Page 102</div>
+  </div>
+  <div class="topbar-right">Third Intermediate &nbsp;|&nbsp; ثالث متوسط</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar">
+  <div class="progress-fill" id="progressFill" style="width:11.1%"></div>
+</div>
+
+<!-- SLIDES -->
+<div class="slides-container">
+
+  <!-- ══════════════════════════════════
+       SLIDE 1: OPENING
+  ══════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="opening-slide" style="width:100%;max-width:780px;border-radius:20px;margin:auto;">
+      <div style="width:90px;height:90px;background:linear-gradient(135deg,#1a7a4a,#25a865);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:42px;margin:0 auto 28px;box-shadow:0 8px 32px rgba(37,168,101,0.4);">✍️</div>
+      <div class="opening-title-main">
+        <h1 style="font-size:clamp(2rem,6vw,3rem);">Writing</h1>
+        <p style="font-size:1.6rem;margin-top:8px;">كتابة</p>
+      </div>
+      <div style="width:60px;height:3px;background:linear-gradient(90deg,#1a7a4a,#c8a84b);border-radius:2px;margin:20px auto;"></div>
+      <div class="opening-meta" style="margin-top:0;">
+        <div class="meta-chip">📚 Super Goal 3</div>
+        <div class="meta-chip">📖 Unit 9 — All Kinds of People</div>
+        <div class="meta-chip">📄 Page 102</div>
+      </div>
+      <div class="semester-tag">Second Term &nbsp;•&nbsp; الفصل الدراسي الثاني</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 2: OBJECTIVES
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="card">
+      <div class="section-header">
+        <div class="section-icon">🎯</div>
+        <div>
+          <h2>Learning Objectives</h2>
+          <p class="ar">أهداف الدرس</p>
+        </div>
+      </div>
+      <ul class="obj-list">
+        <li class="obj-item">
+          <div class="obj-num">1</div>
+          <div>Read and understand a text about Saudi Arabia's <strong>Vision 2030</strong>.<br><span class="ar" style="font-size:0.85rem;color:var(--muted);">قراءة وفهم نص حول رؤية المملكة 2030</span></div>
+        </li>
+        <li class="obj-item">
+          <div class="obj-num">2</div>
+          <div>Identify key changes in <strong>Families, Culture, Economy, and Government</strong>.<br><span class="ar" style="font-size:0.85rem;color:var(--muted);">تحديد التغييرات الرئيسية في كل مجال</span></div>
+        </li>
+        <li class="obj-item">
+          <div class="obj-num">3</div>
+          <div>Recognise which <strong>verb forms</strong> are used and why (will / will be + past participle).<br><span class="ar" style="font-size:0.85rem;color:var(--muted);">التعرف على صيغ الفعل المستخدمة</span></div>
+        </li>
+        <li class="obj-item">
+          <div class="obj-num">4</div>
+          <div>Write about <strong>your vision</strong> for the future (school / city / town).<br><span class="ar" style="font-size:0.85rem;color:var(--muted);">كتابة رؤية خاصة للمستقبل</span></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 3: VOCABULARY
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="card">
+      <div class="section-header">
+        <div class="section-icon">📝</div>
+        <div>
+          <h2>Key Vocabulary</h2>
+          <p class="ar">المفردات الأساسية</p>
+        </div>
+      </div>
+      <div class="vocab-grid">
+        <div class="vocab-card">
+          <div class="vocab-word">resources</div>
+          <div class="vocab-meaning">الموارد / الثروات</div>
+          <button class="tts-btn" onclick="speak('resources')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">opportunities</div>
+          <div class="vocab-meaning">الفرص</div>
+          <button class="tts-btn" onclick="speak('opportunities')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">orientation</div>
+          <div class="vocab-meaning">التوجه / الاتجاه</div>
+          <button class="tts-btn" onclick="speak('orientation')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">entrepreneur</div>
+          <div class="vocab-meaning">رجل أعمال / مقاول</div>
+          <button class="tts-btn" onclick="speak('entrepreneur')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">broadband</div>
+          <div class="vocab-meaning">الإنترنت عالي السرعة</div>
+          <button class="tts-btn" onclick="speak('broadband')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">transparent</div>
+          <div class="vocab-meaning">شفاف / واضح</div>
+          <button class="tts-btn" onclick="speak('transparent')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">privatized</div>
+          <div class="vocab-meaning">تم تخصيصه للقطاع الخاص</div>
+          <button class="tts-btn" onclick="speak('privatized')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">facilitate</div>
+          <div class="vocab-meaning">يُسهّل / يُيسّر</div>
+          <button class="tts-btn" onclick="speak('facilitate')">🔊 Listen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 4: READING TEXT
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="card">
+      <div class="section-header">
+        <div class="section-icon">📖</div>
+        <div>
+          <h2>Reading: Vision 2030</h2>
+          <p class="ar">القراءة: رؤية 2030</p>
+        </div>
+      </div>
+      <div class="reading-box">
+        <p>The Kingdom of Saudi Arabia is blessed with a wealth of natural resources and opportunities. The nation's real wealth, however, is the Saudi society, whose members will continue to enjoy a healthy, happy, and secure life in an attractive and safe environment. The Saudi society is defined by its Islamic values and its family orientation. Families will receive the necessary support to raise their children and develop their abilities and character. Culture and entertainment projects will be launched to create libraries, galleries, and museums and provide different types of events and activities.</p>
+
+        <p>The Kingdom's fast growing economy will offer equal opportunities for all citizens through a high quality educational system that meets the needs of the job market. The business environment will be renewed in order to attract entrepreneurs, as well as large or small businesses. Improved facilities and services will attract international trade and make Saudi Arabia the transportation center for Europe, Africa, and Asia. Telecommunications and information technology, including high-speed broadband, will be developed in and around cities and urban areas.</p>
+
+        <p>Government services will be effective and transparent to facilitate the growth and development of private and non-profit sectors. Many government services and assets will be privatized and monitored by the state, to ensure a better profit and a successful performance.</p>
+
+        <div class="reading-source">* Adapted from the text of the Vision Programs at https://vision2030.gov.sa/en and from the text that was drafted by the Council of Economic and Development Affairs as instructed by the Custodian of the Two Holy Mosques King Salman bin Abdulaziz Al Saud.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 5: EXERCISE A1 — CHART
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="card">
+      <div class="section-header">
+        <div class="section-icon">✏️</div>
+        <div>
+          <h2>Exercise A – Part 1</h2>
+          <p class="ar">تمرين أ – الجزء الأول</p>
+        </div>
+      </div>
+      <p style="margin-bottom:14px;font-size:0.93rem;color:var(--text);">
+        <strong>Read the text about Saudi Arabia's 2030 Vision.</strong><br>
+        <span style="color:var(--muted);">Underline and make notes about key changes and events in the chart below.</span>
+      </p>
+      <table class="chart-table">
+        <thead>
+          <tr>
+            <th>Families</th>
+            <th>Culture &amp; Entertainment</th>
+            <th>Economy</th>
+            <th>Government</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:#aab;font-style:italic;font-size:0.85rem;">Your notes here…</td>
+            <td style="color:#aab;font-style:italic;font-size:0.85rem;">Your notes here…</td>
+            <td style="color:#aab;font-style:italic;font-size:0.85rem;">Your notes here…</td>
+            <td style="color:#aab;font-style:italic;font-size:0.85rem;">Your notes here…</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:16px;">
+        <button class="reveal-btn" onclick="toggleAnswer('chart-answer')">👁 Show Model Answers</button>
+        <div class="answer-block" id="chart-answer">
+          <h4>✅ Model Answers</h4>
+          <table class="chart-table">
+            <thead>
+              <tr>
+                <th>Families</th>
+                <th>Culture &amp; Entertainment</th>
+                <th>Economy</th>
+                <th>Government</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  • Will receive support to raise children<br>
+                  • Develop abilities &amp; character<br>
+                  • Enjoy healthy, happy &amp; secure life<br>
+                  • Defined by Islamic values &amp; family orientation
+                </td>
+                <td>
+                  • Libraries, galleries &amp; museums will be created<br>
+                  • Different types of events &amp; activities will be provided<br>
+                  • Culture &amp; entertainment projects will be launched
+                </td>
+                <td>
+                  • Equal opportunities for all citizens<br>
+                  • High quality educational system<br>
+                  • Business environment will be renewed<br>
+                  • Attract entrepreneurs &amp; businesses<br>
+                  • International trade hub<br>
+                  • High-speed broadband developed
+                </td>
+                <td>
+                  • Services will be effective &amp; transparent<br>
+                  • Government assets will be privatized<br>
+                  • Monitored by the state<br>
+                  • Better profit &amp; successful performance
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 6: EXERCISE A2 — VERB FORMS
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="card">
+      <div class="section-header">
+        <div class="section-icon">🔤</div>
+        <div>
+          <h2>Exercise A – Part 2</h2>
+          <p class="ar">صيغ الفعل في النص</p>
+        </div>
+      </div>
+      <p style="margin-bottom:18px;font-size:0.95rem;font-weight:600;color:var(--dark);">
+        Which verb forms are more frequent in the text? Why?
+      </p>
+      <textarea class="input-field" placeholder="Write your answer here…" rows="4"></textarea>
+      <div style="margin-top:14px;">
+        <button class="reveal-btn" onclick="toggleAnswer('verb-answer')">👁 Show Answer</button>
+        <div class="answer-block" id="verb-answer">
+          <h4>✅ Model Answer</h4>
+          <p style="margin-bottom:12px;font-size:0.92rem;line-height:1.7;">
+            The most frequent verb forms in the text are <strong>Future Simple</strong> (<em>will + infinitive</em>) and <strong>Future Passive</strong> (<em>will be + past participle</em>). These forms are used because the text describes <span class="highlight">plans and changes that will happen in the future</span> as part of Saudi Arabia's Vision 2030.
+          </p>
+          <div style="margin-bottom:10px;">
+            <p style="font-size:0.85rem;font-weight:700;color:var(--muted);margin-bottom:8px;">EXAMPLES FROM TEXT:</p>
+            <span class="verb-tag future">will continue</span>
+            <span class="verb-tag future">will receive</span>
+            <span class="verb-tag future">will offer</span>
+            <span class="verb-tag passive">will be launched</span>
+            <span class="verb-tag passive">will be renewed</span>
+            <span class="verb-tag passive">will be developed</span>
+            <span class="verb-tag passive">will be privatized</span>
+          </div>
+          <p style="font-size:0.88rem;color:var(--muted);font-style:italic;">
+            <span class="ar">السبب: النص يصف مشاريع وخطط مستقبلية، لذا يُستخدم المضارع المستقبلي والمبني للمجهول المستقبلي.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grammar Explanation Card -->
+    <div class="card">
+      <div class="section-header">
+        <div class="section-icon" style="background:linear-gradient(135deg,var(--gold),#d4a832);">📌</div>
+        <div>
+          <h2>Grammar Focus</h2>
+          <p class="ar">قاعدة نحوية مهمة</p>
+        </div>
+      </div>
+      <div style="display:grid;gap:14px;">
+        <div style="background:var(--green-pale);border-left:4px solid var(--green);border-radius:10px;padding:14px 16px;">
+          <p style="font-size:0.88rem;font-weight:700;color:var(--green);margin-bottom:6px;">Future Simple (المستقبل البسيط)</p>
+          <p style="font-size:0.92rem;color:var(--text);">Subject + <strong>will</strong> + base verb</p>
+          <p style="font-size:0.85rem;color:var(--muted);margin-top:4px;">→ Families <strong>will receive</strong> support. / The economy <strong>will offer</strong> equal opportunities.</p>
+        </div>
+        <div style="background:#fff8e8;border-left:4px solid var(--gold);border-radius:10px;padding:14px 16px;">
+          <p style="font-size:0.88rem;font-weight:700;color:#b8860b;margin-bottom:6px;">Future Passive (المبني للمجهول المستقبلي)</p>
+          <p style="font-size:0.92rem;color:var(--text);">Subject + <strong>will be</strong> + past participle</p>
+          <p style="font-size:0.85rem;color:var(--muted);margin-top:4px;">→ Projects <strong>will be launched</strong>. / Services <strong>will be privatized</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 7: EXERCISE B — WRITING
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="card">
+      <div class="section-header">
+        <div class="section-icon">✍️</div>
+        <div>
+          <h2>Exercise B – Your Vision</h2>
+          <p class="ar">رؤيتك للمستقبل</p>
+        </div>
+      </div>
+      <p style="font-size:0.93rem;color:var(--text);margin-bottom:16px;line-height:1.7;">
+        <strong>With a partner, choose a topic and write about your vision of:</strong>
+      </p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;">
+        <div style="background:var(--green-pale);border:2px solid var(--green);border-radius:10px;padding:12px 20px;font-weight:700;color:var(--green);font-size:0.9rem;">🏫 Schools in the future</div>
+        <div style="background:#f0f4ff;border:2px solid #7890d4;border-radius:10px;padding:12px 20px;font-weight:700;color:#4060b8;font-size:0.9rem;">🏙️ My city / town / village in the future</div>
+      </div>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:14px;font-style:italic;">Use your imagination. Draw one or more pictures, if you wish.</p>
+      <!-- Sentence starters -->
+      <div style="background:#f0f9f4;border:1.5px dashed #25a865;border-radius:12px;padding:16px 18px;margin-bottom:14px;">
+        <p style="font-size:0.82rem;font-weight:700;color:#1a7a4a;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;">💡 Use these sentence starters:</p>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:0.9rem;color:#2d3245;">
+          <div>1. In the future, schools <strong>will</strong> ___________</div>
+          <div>2. Students <strong>will</strong> ___________</div>
+          <div>3. Technology <strong>will be used</strong> to ___________</div>
+          <div>4. Books <strong>will be replaced</strong> by ___________</div>
+          <div>5. My city <strong>will</strong> ___________</div>
+        </div>
+      </div>
+      <textarea class="input-field" placeholder="Write your sentences here…" rows="5" style="min-height:110px;"></textarea>
+    </div>
+
+    <!-- Writing Tips -->
+    <div class="card" style="background:linear-gradient(135deg,#f8faff,#fff);">
+      <p style="font-size:0.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">✏️ Writing Tips</p>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.88rem;color:var(--text);">
+        <div>✅ Use <strong>will + verb</strong> for active sentences → <em>"Schools will use AI technology."</em></div>
+        <div>✅ Use <strong>will be + past participle</strong> for passive → <em>"Books will be replaced by tablets."</em></div>
+        <div>✅ Organise your ideas into paragraphs</div>
+        <div>✅ Start with a topic sentence, add details, end with a conclusion</div>
+      </div>
+
+      <div class="divider"></div>
+      <button class="reveal-btn" onclick="toggleAnswer('model-writing')">📄 Show Model Writing Sample</button>
+      <div class="answer-block" id="model-writing">
+        <h4>✅ Model Writing – Schools in the Future</h4>
+        <p style="font-size:0.9rem;line-height:1.8;color:var(--text);">
+          In the future, schools will be very different from today. Technology will play a major role in education. Students will use tablets and laptops instead of textbooks. Lessons will be taught online, and classrooms will be equipped with smart boards. Teachers will use artificial intelligence to help students learn at their own pace. All students will be given equal opportunities to succeed. I believe that schools in the future will be more exciting, modern, and connected to the real world.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 8: INTERACTIVE QUIZ
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="card">
+      <div class="section-header">
+        <div class="section-icon">❓</div>
+        <div>
+          <h2>Quiz Time!</h2>
+          <p class="ar">اختبر نفسك</p>
+        </div>
+      </div>
+
+      <!-- Q1 -->
+      <div style="margin-bottom:24px;">
+        <div class="quiz-number">Question 1 of 5</div>
+        <div class="mcq-question">What is described as Saudi Arabia's "real wealth"?</div>
+        <div class="mcq-options">
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q1')"><div class="option-letter">A</div>Natural resources</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'correct','q1')"><div class="option-letter">B</div>The Saudi society</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q1')"><div class="option-letter">C</div>Oil and gas</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q1')"><div class="option-letter">D</div>The economy</div>
+        </div>
+        <div class="mcq-feedback" id="q1-fb"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div style="margin-bottom:24px;">
+        <div class="quiz-number">Question 2 of 5</div>
+        <div class="mcq-question">Which verb form is most frequently used in the Vision 2030 text?</div>
+        <div class="mcq-options">
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q2')"><div class="option-letter">A</div>Past simple</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q2')"><div class="option-letter">B</div>Present continuous</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'correct','q2')"><div class="option-letter">C</div>Future simple & future passive</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q2')"><div class="option-letter">D</div>Present perfect</div>
+        </div>
+        <div class="mcq-feedback" id="q2-fb"></div>
+      </div>
+
+      <!-- Q3 -->
+      <div style="margin-bottom:24px;">
+        <div class="quiz-number">Question 3 of 5</div>
+        <div class="mcq-question">According to the text, what will attract international trade to Saudi Arabia?</div>
+        <div class="mcq-options">
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q3')"><div class="option-letter">A</div>New schools and universities</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'correct','q3')"><div class="option-letter">B</div>Improved facilities and services</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q3')"><div class="option-letter">C</div>Oil exports</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q3')"><div class="option-letter">D</div>Tourism campaigns</div>
+        </div>
+        <div class="mcq-feedback" id="q3-fb"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div style="margin-bottom:24px;">
+        <div class="quiz-number">Question 4 of 5</div>
+        <div class="mcq-question">Choose the correct sentence using Future Passive:</div>
+        <div class="mcq-options">
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q4')"><div class="option-letter">A</div>Libraries will launching soon.</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q4')"><div class="option-letter">B</div>Libraries will launched soon.</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'correct','q4')"><div class="option-letter">C</div>Libraries will be launched soon.</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q4')"><div class="option-letter">D</div>Libraries are launched soon.</div>
+        </div>
+        <div class="mcq-feedback" id="q4-fb"></div>
+      </div>
+
+      <!-- Q5 -->
+      <div style="margin-bottom:8px;">
+        <div class="quiz-number">Question 5 of 5</div>
+        <div class="mcq-question">Why does the text use future verb forms so frequently?</div>
+        <div class="mcq-options">
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q5')"><div class="option-letter">A</div>Because the events happened in the past</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q5')"><div class="option-letter">B</div>Because the writer is not sure about the ideas</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'correct','q5')"><div class="option-letter">C</div>Because the text describes plans and goals for the future</div>
+          <div class="mcq-option" onclick="checkMCQ(this,'wrong','q5')"><div class="option-letter">D</div>Because it is a story</div>
+        </div>
+        <div class="mcq-feedback" id="q5-fb"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 9: SUMMARY
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="card">
+      <div class="section-header">
+        <div class="section-icon">📋</div>
+        <div>
+          <h2>Lesson Summary</h2>
+          <p class="ar">ملخص الدرس</p>
+        </div>
+      </div>
+      <div class="summary-point">
+        <div class="sum-icon">🇸🇦</div>
+        <div class="sum-text">
+          <strong>Vision 2030</strong>
+          <span>Saudi Arabia's plan to build a healthy society, a thriving economy, and an ambitious nation.</span>
+        </div>
+      </div>
+      <div class="summary-point">
+        <div class="sum-icon">👨‍👩‍👧</div>
+        <div class="sum-text">
+          <strong>Families</strong>
+          <span>Families will receive support; children's abilities and character will be developed.</span>
+        </div>
+      </div>
+      <div class="summary-point">
+        <div class="sum-icon">🎭</div>
+        <div class="sum-text">
+          <strong>Culture &amp; Entertainment</strong>
+          <span>Libraries, galleries, museums, events and activities will be created and launched.</span>
+        </div>
+      </div>
+      <div class="summary-point">
+        <div class="sum-icon">💼</div>
+        <div class="sum-text">
+          <strong>Economy</strong>
+          <span>Equal opportunities, high-quality education, international trade, and high-speed broadband will be developed.</span>
+        </div>
+      </div>
+      <div class="summary-point">
+        <div class="sum-icon">🏛️</div>
+        <div class="sum-text">
+          <strong>Government</strong>
+          <span>Services will be transparent and effective; assets will be privatized and monitored.</span>
+        </div>
+      </div>
+      <div class="summary-point">
+        <div class="sum-icon">🔤</div>
+        <div class="sum-text">
+          <strong>Verb Forms</strong>
+          <span><em>will + verb</em> (active future) &amp; <em>will be + past participle</em> (future passive) — used to describe future plans.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 10: CHALLENGE + FOOTER
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <div class="challenge-card">
+      <div class="challenge-icon">🚀</div>
+      <h3>Challenge Question</h3>
+      <p>
+        Write <strong>3 sentences</strong> about your school or city in the future.<br>
+        Use <em style="color:#f0d98a;">will</em> or <em style="color:#f0d98a;">will be + past participle</em>.
+        <br><br>
+        <span style="font-family:'Tajawal',sans-serif;color:rgba(255,255,255,0.75);font-size:0.88rem;">اكتب 3 جمل فقط عن مدرستك أو مدينتك في المستقبل</span>
+      </p>
+      <div style="background:rgba(255,255,255,0.08);border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:0.88rem;color:rgba(255,255,255,0.8);line-height:2;">
+        1. In the future, _______ will _______.<br>
+        2. _______ will be _______ by _______.<br>
+        3. My _______ will _______.
+      </div>
+      <textarea class="challenge-textarea" placeholder="Write your 3 sentences here…" rows="4"></textarea>
+    </div>
+
+    <!-- Footer — LAST SLIDE ONLY -->
+    <div class="footer">
+      <div class="footer-brand">eduvorra</div>
+      <div class="footer-name">عبدالحكيم صالح الحسون</div>
+      <div class="footer-love">صُنع بحب في بريدة ❤️</div>
+    </div>
+  </div>
+
+</div><!-- /slides-container -->
+
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>← Previous</button>
+  <div class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">10</span></div>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+  // ── TTS ──
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    }
+  }
+
+  // ── SLIDES ──
+  const totalSlides = 10;
+  let current = 1;
+  let isAnimating = false;
+
+  // Initialize: hide all slides except slide-1
+  function initSlides() {
+    for (let i = 1; i <= totalSlides; i++) {
+      const el = document.getElementById('slide-' + i);
+      if (i === 1) {
+        el.style.opacity = '1';
+        el.style.transform = 'translateX(0)';
+        el.style.pointerEvents = 'all';
+      } else {
+        el.style.opacity = '0';
+        el.style.transform = 'translateX(80px)';
+        el.style.pointerEvents = 'none';
+      }
+    }
+  }
+  initSlides();
+
+  function changeSlide(dir) {
+    if (isAnimating) return;
+    const newSlide = current + dir;
+    if (newSlide < 1 || newSlide > totalSlides) return;
+    isAnimating = true;
+
+    const prevEl = document.getElementById('slide-' + current);
+    const nextEl = document.getElementById('slide-' + newSlide);
+
+    nextEl.style.transition = 'none';
+    nextEl.style.transform = dir === 1 ? 'translateX(80px)' : 'translateX(-80px)';
+    nextEl.style.opacity = '0';
+    nextEl.style.pointerEvents = 'none';
+
+    nextEl.offsetHeight;
+
+    prevEl.style.transition = 'opacity 0.32s ease, transform 0.32s ease';
+    prevEl.style.transform = dir === 1 ? 'translateX(-80px)' : 'translateX(80px)';
+    prevEl.style.opacity = '0';
+    prevEl.style.pointerEvents = 'none';
+
+    nextEl.style.transition = 'opacity 0.32s ease, transform 0.32s ease';
+    nextEl.style.transform = 'translateX(0)';
+    nextEl.style.opacity = '1';
+    nextEl.style.pointerEvents = 'all';
+
+    current = newSlide;
+    nextEl.scrollTop = 0;
+
+    document.getElementById('currentSlide').textContent = current;
+    document.getElementById('progressFill').style.width = ((current / totalSlides) * 100) + '%';
+    document.getElementById('prevBtn').disabled = current === 1;
+    document.getElementById('nextBtn').disabled = current === totalSlides;
+
+    setTimeout(() => { isAnimating = false; }, 380);
+  }
+
+  // ── ANSWER TOGGLE ──
+  function toggleAnswer(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('visible');
+  }
+
+  // ── MCQ ──
+  function checkMCQ(el, result, qId) {
+    const opts = el.parentElement.querySelectorAll('.mcq-option');
+    opts.forEach(o => {
+      o.style.pointerEvents = 'none';
+      if (o.dataset.result === 'correct') o.classList.add('correct');
+    });
+    el.classList.add(result);
+    el.dataset.result = result;
+    const fb = document.getElementById(qId + '-fb');
+    if (result === 'correct') {
+      fb.textContent = '✅ Correct! Well done!';
+      fb.className = 'mcq-feedback show-correct';
+    } else {
+      // find correct and highlight
+      opts.forEach(o => {
+        if (o.onclick.toString().includes("'correct'")) o.classList.add('correct');
+      });
+      fb.textContent = '❌ Not quite. Check the highlighted answer.';
+      fb.className = 'mcq-feedback show-wrong';
+    }
+  }
+</script>
+</body>
+</html>
