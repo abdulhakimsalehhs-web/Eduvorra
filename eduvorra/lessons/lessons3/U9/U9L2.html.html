@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 9 – Grammar | Super Goal 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #2d9e6b;
+    --green-light: #e6f7f0;
+    --green-mid: #a8dfc5;
+    --amber: #f5a623;
+    --amber-light: #fff8ec;
+    --navy: #1a2e4a;
+    --slate: #4a5568;
+    --bg: #f4f7fb;
+    --white: #ffffff;
+    --card: #ffffff;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(45,158,107,0.10);
+    --shadow-lg: 0 8px 40px rgba(45,158,107,0.16);
+    --correct: #2d9e6b;
+    --wrong: #e53e3e;
+    --progress-h: 6px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── SLIDE WRAPPER ── */
+  #app {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── TOP BAR ── */
+  #topbar {
+    background: var(--navy);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 54px;
+    flex-shrink: 0;
+    z-index: 100;
+  }
+  #topbar .tb-left { display: flex; gap: 18px; align-items: center; }
+  #topbar .tb-badge {
+    background: var(--green);
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .3px;
+  }
+  #topbar .tb-right {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green-mid);
+    letter-spacing: .2px;
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress-wrap {
+    height: var(--progress-h);
+    background: #e2e8f0;
+    flex-shrink: 0;
+  }
+  #progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--amber));
+    transition: width .4s ease;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* ── SLIDE AREA ── */
+  #slides-wrap {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 24px 16px 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 820px;
+    animation: fadeUp .45s ease both;
+  }
+  .slide.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(22px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  /* ── BOTTOM NAV ── */
+  #bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--white);
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    z-index: 200;
+  }
+  .nav-btn {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-btn:hover { background: var(--green); transform: translateY(-1px); }
+  .nav-btn:disabled { background: #cbd5e0; cursor: not-allowed; transform: none; }
+  #slide-counter { font-size: 13px; font-weight: 700; color: var(--slate); }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 28px 24px;
+    margin-bottom: 18px;
+  }
+  .card-green {
+    background: var(--green-light);
+    border-left: 5px solid var(--green);
+  }
+  .card-amber {
+    background: var(--amber-light);
+    border-left: 5px solid var(--amber);
+  }
+
+  /* ── OPENING SLIDE ── */
+  .opening-slide {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 18px;
+  }
+  .opening-emoji { font-size: 64px; line-height: 1; }
+  .opening-unit {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--green);
+    text-transform: uppercase;
+  }
+  .opening-title-en {
+    font-size: clamp(26px, 5vw, 42px);
+    font-weight: 900;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+  .opening-title-ar {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 700;
+    color: var(--green);
+  }
+  .opening-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .meta-chip {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 50px;
+    padding: 6px 18px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .meta-chip.green { background: var(--green); }
+
+  /* ── SECTION TITLES ── */
+  .slide-title {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--navy);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .slide-title .icon { font-size: 26px; }
+  .slide-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--slate);
+    margin-bottom: 14px;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  /* ── GRAMMAR BOX ── */
+  .grammar-rule {
+    background: var(--green-light);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+    border-left: 4px solid var(--green);
+  }
+  .grammar-rule h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--green);
+    margin-bottom: 10px;
+  }
+  .grammar-rule p, .grammar-rule li {
+    font-size: 14.5px;
+    color: var(--navy);
+    margin-bottom: 6px;
+    line-height: 1.65;
+  }
+  .grammar-rule ul { padding-left: 18px; }
+  .grammar-rule .ar {
+    font-family: 'Tajawal', sans-serif;
+    color: var(--slate);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  .example-sentence {
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-size: 14.5px;
+    border: 1px solid var(--green-mid);
+  }
+  .example-sentence em { color: var(--green); font-style: normal; font-weight: 800; }
+  .example-sentence .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--slate);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* ── VOCAB / PRONOUN PILLS ── */
+  .pronoun-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 14px 0;
+  }
+  .pronoun-pill {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-size: 15px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pronoun-pill .tts-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+  }
+  .pronoun-pill .tts-btn:hover { background: rgba(255,255,255,0.4); }
+
+  /* ── OBJECTIVES ── */
+  .obj-list { list-style: none; padding: 0; }
+  .obj-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f4f8;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .obj-list li:last-child { border-bottom: none; }
+  .obj-list li .obj-icon { font-size: 20px; margin-top: 1px; }
+
+  /* ── EXERCISE STYLES ── */
+  .ex-header {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--green-light);
+  }
+  .ex-item {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .ex-item.matching {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .match-num { font-weight: 800; color: var(--green); min-width: 22px; }
+
+  /* MCQ */
+  .mcq-options { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .mcq-btn {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 16px;
+    text-align: left;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    color: var(--navy);
+  }
+  .mcq-btn:hover { border-color: var(--green); background: var(--green-light); }
+  .mcq-btn.correct { background: #d4edda; border-color: var(--correct); color: var(--correct); }
+  .mcq-btn.wrong   { background: #fde8e8; border-color: var(--wrong);   color: var(--wrong); }
+  .mcq-btn:disabled { cursor: not-allowed; }
+
+  /* Dropdown match */
+  .match-select {
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--navy);
+    cursor: pointer;
+    transition: border-color .2s;
+    background: #fff;
+  }
+  .match-select:focus { outline: none; border-color: var(--green); }
+  .match-select.correct { border-color: var(--correct); background: #d4edda; }
+  .match-select.wrong   { border-color: var(--wrong);   background: #fde8e8; }
+
+  /* Text inputs */
+  .fill-input {
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--navy);
+    width: 100%;
+    margin-top: 6px;
+    transition: border-color .2s;
+  }
+  .fill-input:focus { outline: none; border-color: var(--green); }
+  .fill-input.correct { border-color: var(--correct); background: #d4edda; }
+  .fill-input.wrong   { border-color: var(--wrong);   background: #fde8e8; }
+
+  /* feedback */
+  .feedback {
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+  .feedback.correct { background: #d4edda; color: var(--correct); }
+  .feedback.wrong   { background: #fde8e8; color: var(--wrong); }
+
+  /* show/hide answer */
+  .show-ans-btn {
+    background: transparent;
+    border: 2px solid var(--green);
+    color: var(--green);
+    border-radius: 8px;
+    padding: 7px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all .2s;
+  }
+  .show-ans-btn:hover { background: var(--green); color: #fff; }
+  .answer-box {
+    display: none;
+    background: var(--green-light);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .answer-box.visible { display: block; }
+
+  /* check btn */
+  .check-btn {
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 14px;
+    transition: all .2s;
+  }
+  .check-btn:hover { background: #1f7a52; transform: translateY(-1px); }
+
+  /* ── SUMMARY TABLE ── */
+  .sum-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .sum-table th {
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .sum-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+  .sum-table tr:nth-child(even) td { background: var(--green-light); }
+  .sum-table .em { font-weight: 800; color: var(--green); }
+
+  /* ── CHALLENGE ── */
+  .challenge-box {
+    background: linear-gradient(135deg, var(--navy) 0%, #2d4a6b 100%);
+    border-radius: var(--radius);
+    padding: 28px;
+    color: #fff;
+    text-align: center;
+  }
+  .challenge-box h2 { font-size: 22px; font-weight: 900; margin-bottom: 10px; }
+  .challenge-box p { font-size: 15px; opacity: .85; margin-bottom: 20px; }
+  .challenge-input {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .challenge-input:focus { outline: 2px solid var(--amber); }
+  .challenge-submit {
+    background: var(--amber);
+    color: var(--navy);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 28px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .challenge-submit:hover { background: #e0931a; transform: translateY(-1px); }
+
+  /* ── FOOTER ── */
+  #footer {
+    text-align: center;
+    padding: 22px 16px 8px;
+    font-size: 13px;
+    color: var(--slate);
+    display: none;
+  }
+  #footer.visible { display: block; }
+  #footer .brand { font-weight: 800; color: var(--green); font-size: 16px; }
+  #footer .ar {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  /* ── QUIZ SCORE ── */
+  .quiz-score {
+    background: linear-gradient(135deg, var(--green) 0%, #1f7a52 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 18px 22px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 900;
+    margin-top: 16px;
+    display: none;
+  }
+  .quiz-score.visible { display: block; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    #topbar { padding: 0 12px; }
+    .card { padding: 18px 14px; }
+    .pronoun-pill { font-size: 13px; padding: 7px 14px; }
+    .opening-emoji { font-size: 48px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <div class="tb-left">
+      <span class="tb-badge">Unit 9</span>
+      <span class="tb-badge" style="background:#f5a623;color:#1a2e4a;">Pages 96–97</span>
+    </div>
+    <div class="tb-right">Third Intermediate &nbsp;|&nbsp; ثالث متوسط</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div id="progress-wrap"><div id="progress-bar" style="width:10%"></div></div>
+
+  <!-- SLIDES -->
+  <div id="slides-wrap">
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 1 — OPENING
+    ══════════════════════════════════════════════ -->
+    <div class="slide active" id="slide-1">
+      <div class="opening-slide">
+        <div class="opening-emoji">📖</div>
+        <div class="opening-unit">Unit 9 · All Kinds of People · Section 3</div>
+        <div class="opening-title-en">Grammar</div>
+        <div class="opening-title-ar">القواعد النحوية</div>
+        <div class="opening-meta">
+          <span class="meta-chip green">Super Goal 3</span>
+          <span class="meta-chip">Third Intermediate</span>
+          <span class="meta-chip">Pages 96 – 97</span>
+          <span class="meta-chip" style="background:var(--amber);color:#1a2e4a;font-family:'Tajawal',sans-serif;">الفصل الدراسي الثاني</span>
+        </div>
+        <p style="font-size:15px;color:var(--slate);max-width:460px;line-height:1.7;">
+          Relative Pronouns <strong>Who, That, Which</strong><br>
+          Past Progressive with <strong>When</strong> &amp; <strong>While</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 2 — OBJECTIVES
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-2">
+      <div class="slide-title"><span class="icon">🎯</span> Learning Objectives</div>
+      <div class="slide-subtitle">بنهاية الدرس ستتمكن من…</div>
+      <div class="card">
+        <ul class="obj-list">
+          <li><span class="obj-icon">🔗</span> Use <strong>relative pronouns</strong> (who, that, which) to add information about nouns. <span style="font-family:Tajawal;font-size:13px;color:var(--slate)"> — استخدام الضمائر الوصلية</span></li>
+          <li><span class="obj-icon">⏳</span> Understand when to use <strong>who / that</strong> for people and <strong>that / which</strong> for things &amp; animals. <span style="font-family:Tajawal;font-size:13px;color:var(--slate)"> — التمييز بين الضمائر</span></li>
+          <li><span class="obj-icon">🔄</span> Use the <strong>Past Progressive</strong> with <em>when</em> and <em>while</em> to talk about two past actions. <span style="font-family:Tajawal;font-size:13px;color:var(--slate)"> — الماضي المستمر مع when و while</span></li>
+          <li><span class="obj-icon">✍️</span> Complete exercises using relative clauses and past progressive correctly. <span style="font-family:Tajawal;font-size:13px;color:var(--slate)"> — حل تمارين الكتاب</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 3 — GRAMMAR EXPLANATION 1: RELATIVE PRONOUNS
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-3">
+      <div class="slide-title"><span class="icon">📚</span> Relative Pronouns</div>
+      <div class="slide-subtitle">الضمائر الوصلية — تُضاف لتعطي معلومات إضافية عن الاسم</div>
+
+      <div class="grammar-rule">
+        <h3>What is a Relative Clause? — ما هي الجملة الوصلية؟</h3>
+        <p>Relative clauses <strong>add information about a noun</strong> in the main clause.</p>
+        <p class="ar">الجملة الوصلية تُضيف معلومات عن اسم في الجملة الرئيسية.</p>
+      </div>
+
+      <div class="card">
+        <p style="font-size:15px;font-weight:800;margin-bottom:14px;">Which pronoun to use? — أي ضمير نستخدم؟</p>
+        <div class="pronoun-row">
+          <div class="pronoun-pill" style="background:#2d9e6b;">
+            WHO / THAT
+            <button class="tts-btn" onclick="speak('who or that')">🔊</button>
+          </div>
+          <div style="font-size:13px;font-weight:700;color:var(--slate);align-self:center;">→ For <strong>People</strong> (أشخاص)</div>
+        </div>
+        <div class="pronoun-row">
+          <div class="pronoun-pill" style="background:#1a2e4a;">
+            THAT / WHICH
+            <button class="tts-btn" onclick="speak('that or which')">🔊</button>
+          </div>
+          <div style="font-size:13px;font-weight:700;color:var(--slate);align-self:center;">→ For <strong>Things &amp; Animals</strong> (أشياء وحيوانات)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 4 — EXAMPLES: RELATIVE PRONOUNS
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-4">
+      <div class="slide-title"><span class="icon">💡</span> Examples — Relative Pronouns</div>
+      <div class="slide-subtitle">أمثلة — الضمائر الوصلية</div>
+
+      <div class="card card-green">
+        <p style="font-size:13px;font-weight:700;color:var(--slate);margin-bottom:10px;">FOR PEOPLE (أشخاص) — use <strong>who</strong> or <strong>that</strong></p>
+        <div class="example-sentence">
+          <div class="label">Without relative clause</div>
+          The man was talking to the tourists. He was friendly.
+        </div>
+        <div class="example-sentence">
+          <div class="label">With relative clause</div>
+          The man <em>who/that</em> was talking to the tourists was friendly.
+        </div>
+      </div>
+
+      <div class="card card-amber" style="margin-top:14px;">
+        <p style="font-size:13px;font-weight:700;color:var(--slate);margin-bottom:10px;">FOR THINGS &amp; ANIMALS (أشياء/حيوانات) — use <strong>that</strong> or <strong>which</strong></p>
+        <div class="example-sentence">
+          <div class="label">Without relative clause</div>
+          The horse pulled the carriage. It was black.
+        </div>
+        <div class="example-sentence">
+          <div class="label">With relative clause</div>
+          The horse <em>that/which</em> pulled the carriage was black.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 5 — GRAMMAR EXPLANATION 2: PAST PROGRESSIVE
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-5">
+      <div class="slide-title"><span class="icon">⏳</span> Past Progressive with <em>When</em> &amp; <em>While</em></div>
+      <div class="slide-subtitle">الماضي المستمر مع when و while</div>
+
+      <div class="grammar-rule">
+        <h3>Formation — التكوين</h3>
+        <p><strong>was / were + verb-ing</strong></p>
+        <p class="ar">نستخدم was مع المفرد وwere مع الجمع.</p>
+      </div>
+
+      <div class="card">
+        <p style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:12px;">Use 1 — Event happening WHEN another event interrupted it</p>
+        <p style="font-size:13px;color:var(--slate);margin-bottom:10px;">حدث كان يقع عندما قاطعه حدث آخر</p>
+        <div class="example-sentence">
+          I <em>was looking</em> in the store window <em>when</em> the thief <em>grabbed</em> my bag.
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <p style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:12px;">Use 2 — Two actions happening at the SAME TIME</p>
+        <p style="font-size:13px;color:var(--slate);margin-bottom:10px;">حدثان وقعا في نفس الوقت</p>
+        <div class="example-sentence">
+          He <em>was driving</em> <em>while</em> he <em>was talking</em> on his cell phone.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 6 — EXERCISE A: MATCHING
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-6">
+      <div class="slide-title"><span class="icon">🔗</span> Exercise A — Matching Definitions</div>
+      <div class="slide-subtitle">Complete the definitions by matching the two parts — طابق التعريف بنهايته الصحيحة</div>
+
+      <div class="card">
+        <div class="ex-header">Match each sentence with the correct ending using the dropdown.</div>
+        <p style="font-size:13px;color:var(--slate);margin-bottom:16px;">Choose the correct ending for each sentence. You can also check the answers below.</p>
+
+        <div id="ex-a-items"></div>
+
+        <button class="check-btn" onclick="checkExA()">✅ Check Answers</button>
+        <button class="show-ans-btn" onclick="toggleAns('ans-a')">👁 Show All Answers</button>
+        <div class="answer-box" id="ans-a">
+          1-h · 2-d · 3-f · 4-g · 5-b · 6-c · 7-a · 8-e
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 7 — EXERCISE B: PAST PROGRESSIVE FILL-IN
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-7">
+      <div class="slide-title"><span class="icon">✍️</span> Exercise B — Complete the Sentences</div>
+      <div class="slide-subtitle">أكمل الجمل بصيغة الماضي المستمر المناسبة</div>
+
+      <div class="card">
+        <div class="ex-header">Complete the sentences with your own ideas using Past Progressive + when.</div>
+        <p style="font-size:13px;color:var(--slate);margin-bottom:16px;">Write a logical completion for each sentence. Sample answers are provided.</p>
+
+        <div id="ex-b-items"></div>
+
+        <button class="show-ans-btn" onclick="toggleAns('ans-b')">👁 Show Sample Answers</button>
+        <div class="answer-box" id="ans-b">
+          <strong>Sample answers:</strong><br>
+          1. …the bus arrived suddenly.<br>
+          2. …a car splashed water on me.<br>
+          3. …the fire alarm went off.<br>
+          4. …it started to rain.<br>
+          5. …your phone rang loudly.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 8 — EXERCISE C: PICTURE DESCRIPTION
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-8">
+      <div class="slide-title"><span class="icon">🖼️</span> Exercise C — Describe the Pictures</div>
+      <div class="slide-subtitle">صف الصور باستخدام الماضي المستمر مع while</div>
+
+      <div class="card">
+        <div class="ex-header">Work with a partner. Make sentences to describe the actions in the pictures.</div>
+        <p style="font-size:13px;color:var(--slate);margin-bottom:6px;"><strong>Example:</strong> It was raining <em>while</em> Yahya was washing the car.</p>
+
+        <div id="ex-c-items"></div>
+
+        <button class="show-ans-btn" onclick="toggleAns('ans-c')">👁 Show Sample Answers</button>
+        <div class="answer-box" id="ans-c">
+          <strong>Sample answers:</strong><br>
+          1. Faisal was studying while he was thinking about his goals.<br>
+          2. Mr. Lewis was reading the newspaper while he was drinking coffee.<br>
+          3. The people were waiting for the bus while they were standing in line.<br>
+          4. Fatima was shopping while she was talking on the phone.<br>
+          5. The couple was watching TV while the woman was cooking.<br>
+          6. Hameed was riding in a taxi while looking out the window.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 9 — EXERCISE D: WHO OR THAT
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-9">
+      <div class="slide-title"><span class="icon">🔤</span> Exercise D — <em>Who</em> or <em>That</em>?</div>
+      <div class="slide-subtitle">اختر الضمير الصحيح لإكمال كل جملة</div>
+
+      <div class="card">
+        <div class="ex-header">Complete the sentences with <em>who</em> or <em>that</em>.</div>
+        <div id="ex-d-items"></div>
+        <button class="check-btn" onclick="checkExD()">✅ Check Answers</button>
+        <button class="show-ans-btn" onclick="toggleAns('ans-d')">👁 Show All Answers</button>
+        <div class="answer-box" id="ans-d">
+          1. who · 2. that/which · 3. who · 4. that/which · 5. who · 6. that · 7. who · 8. that/which
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 10 — EXERCISE E: OPEN SENTENCES
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-10">
+      <div class="slide-title"><span class="icon">💬</span> Exercise E — Your Ideas</div>
+      <div class="slide-subtitle">أكمل الجمل بأفكارك الخاصة</div>
+
+      <div class="card">
+        <div class="ex-header">Complete the sentences with your own ideas using relative clauses.</div>
+        <p style="font-size:13px;color:var(--slate);margin-bottom:16px;">Use who, that, or which correctly in each sentence.</p>
+        <div id="ex-e-items"></div>
+        <button class="show-ans-btn" onclick="toggleAns('ans-e')">👁 Show Sample Answers</button>
+        <div class="answer-box" id="ans-e">
+          <strong>Sample answers:</strong><br>
+          1. I like cars that are fast and comfortable.<br>
+          2. I like people who are kind and helpful.<br>
+          3. I like books that have exciting stories.<br>
+          4. I like clothes which are comfortable to wear.<br>
+          5. I like weather that is cool and breezy.<br>
+          6. I like games that are exciting and fun.<br>
+          7. I like stores that offer good discounts.<br>
+          8. I like foods that are delicious and healthy.<br>
+          9. I like friends who are honest and loyal.<br>
+          10. I like teachers who are patient and encouraging.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 11 — INTERACTIVE QUIZ
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-11">
+      <div class="slide-title"><span class="icon">🧠</span> Quick Quiz</div>
+      <div class="slide-subtitle">اختبر معلوماتك — Test Your Knowledge</div>
+      <div id="quiz-container"></div>
+      <div class="quiz-score" id="quiz-score"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 12 — SUMMARY
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-12">
+      <div class="slide-title"><span class="icon">📋</span> Summary — ملخص الدرس</div>
+
+      <div class="card">
+        <table class="sum-table">
+          <thead>
+            <tr><th>Grammar Point</th><th>Rule</th><th>Example</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="em">who / that</span></td>
+              <td>For <strong>people</strong> (أشخاص)</td>
+              <td>The man <em>who</em> helped me was nice.</td>
+            </tr>
+            <tr>
+              <td><span class="em">that / which</span></td>
+              <td>For <strong>things &amp; animals</strong></td>
+              <td>The bag <em>that</em> I lost was blue.</td>
+            </tr>
+            <tr>
+              <td><span class="em">Past Prog. + when</span></td>
+              <td>Ongoing action + interruption</td>
+              <td>I was sleeping <em>when</em> he called.</td>
+            </tr>
+            <tr>
+              <td><span class="em">Past Prog. + while</span></td>
+              <td>Two simultaneous actions</td>
+              <td>She was cooking <em>while</em> he was reading.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card card-green" style="margin-top:14px;">
+        <p style="font-size:15px;font-weight:800;margin-bottom:8px;">🌟 Key Tip — نصيحة مهمة</p>
+        <p style="font-size:14px;line-height:1.7;">
+          Use <strong>when</strong> → one long action + one short interrupting action.<br>
+          Use <strong>while</strong> → two long actions happening at the same time.<br>
+          <span style="font-family:Tajawal;color:var(--slate);font-size:13px;">
+          استخدم when عندما تنقطع الحالة بحدث مفاجئ، وwhile عندما يتزامن حدثان.
+          </span>
+        </p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 13 — CHALLENGE
+    ══════════════════════════════════════════════ -->
+    <div class="slide" id="slide-13">
+      <div class="slide-title"><span class="icon">🏆</span> Challenge Question</div>
+
+      <div class="challenge-box">
+        <h2>🌟 Challenge!</h2>
+        <p>Write <strong>two sentences</strong> of your own:<br>
+        One using a <strong>relative pronoun</strong>, and one using the <strong>Past Progressive with while or when</strong>.</p>
+        <textarea class="challenge-input" rows="4" placeholder="Type your sentences here… اكتب جملتيك هنا…"></textarea><br>
+        <button class="challenge-submit" onclick="challengeSubmit()">Submit My Answer ✅</button>
+        <div id="challenge-feedback" style="margin-top:16px;font-size:15px;font-weight:700;"></div>
+      </div>
+
+      <div id="footer">
+        <div class="brand">eduvorra</div>
+        <div class="ar">عبدالحكيم صالح الحسون</div>
+        <div class="ar">صُنع بحب في بريدة 💚</div>
+      </div>
+    </div>
+
+  </div><!-- /slides-wrap -->
+
+  <!-- BOTTOM NAV -->
+  <div id="bottom-nav">
+    <button class="nav-btn" id="btn-prev" onclick="changeSlide(-1)" disabled>← Previous</button>
+    <span id="slide-counter">1 / 13</span>
+    <button class="nav-btn" id="btn-next" onclick="changeSlide(1)">Next →</button>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+// ──────────────────────────────────────────────
+// DATA
+// ──────────────────────────────────────────────
+const TOTAL_SLIDES = 13;
+let current = 1;
+
+// Exercise A data
+const exAItems = [
+  { q: "An athletic person is someone who ___", opts: ["a. makes you laugh.", "b. is intelligent.", "c. dresses well.", "d. speaks a lot.", "e. likes to be with others.", "f. does things well and quickly.", "g. isn't polite.", "h. enjoys sports."], ans: "h" },
+  { q: "A talkative person is someone who ___", opts: ["a. makes you laugh.", "b. is intelligent.", "c. dresses well.", "d. speaks a lot.", "e. likes to be with others.", "f. does things well and quickly.", "g. isn't polite.", "h. enjoys sports."], ans: "d" },
+  { q: "An efficient person is someone who ___", opts: ["a. makes you laugh.", "b. is intelligent.", "c. dresses well.", "d. speaks a lot.", "e. likes to be with others.", "f. does things well and quickly.", "g. isn't polite.", "h. enjoys sports."], ans: "f" },
+  { q: "A rude person is someone who ___", opts: ["a. makes you laugh.", "b. is intelligent.", "c. dresses well.", "d. speaks a lot.", "e. likes to be with others.", "f. does things well and quickly.", "g. isn't polite.", "h. enjoys sports."], ans: "g" },
+  { q: "A clever person is someone who ___", opts: ["a. makes you laugh.", "b. is intelligent.", "c. dresses well.", "d. speaks a lot.", "e. likes to be with others.", "f. does things well and quickly.", "g. isn't polite.", "h. enjoys sports."], ans: "b" },
+  { q: "A fashionable person is someone who ___", opts: ["a. makes you laugh.", "b. is intelligent.", "c. dresses well.", "d. speaks a lot.", "e. likes to be with others.", "f. does things well and quickly.", "g. isn't polite.", "h. enjoys sports."], ans: "c" },
+  { q: "A funny person is someone who ___", opts: ["a. makes you laugh.", "b. is intelligent.", "c. dresses well.", "d. speaks a lot.", "e. likes to be with others.", "f. does things well and quickly.", "g. isn't polite.", "h. enjoys sports."], ans: "a" },
+  { q: "A friendly person is someone who ___", opts: ["a. makes you laugh.", "b. is intelligent.", "c. dresses well.", "d. speaks a lot.", "e. likes to be with others.", "f. does things well and quickly.", "g. isn't polite.", "h. enjoys sports."], ans: "e" },
+];
+
+// Exercise B data
+const exBItems = [
+  "We were waiting for the bus when",
+  "I was crossing the street when",
+  "They were sitting in the café when",
+  "Adnan was buying ice cream when",
+  "You were sleeping when",
+];
+
+// Exercise C data
+const exCItems = [
+  { name: "Faisal", hint: "studying / thinking" },
+  { name: "Mr. Lewis", hint: "reading / drinking coffee" },
+  { name: "the people", hint: "waiting / standing in line" },
+  { name: "Fatima", hint: "shopping / talking on phone" },
+  { name: "the couple", hint: "watching TV / cooking" },
+  { name: "Hameed", hint: "riding a taxi / looking out window" },
+];
+
+// Exercise D data
+const exDItems = [
+  { q: "The neighbor _____ lives downstairs is very quiet.", ans: ["who","that"], people: true },
+  { q: "The flowers _____ grow in the city garden are very colorful.", ans: ["that","which"], people: false },
+  { q: "I'd like to introduce you to the person _____ organized the conference.", ans: ["who","that"], people: true },
+  { q: "That isn't the camera _____ is on sale.", ans: ["that","which"], people: false },
+  { q: "The actor _____ was playing the lead role was very funny.", ans: ["who","that"], people: true },
+  { q: "Isn't that the book _____ you were reading last week?", ans: ["that","which"], people: false },
+  { q: "The clothes designer _____ made this dress was very creative.", ans: ["who","that"], people: true },
+  { q: "Mom, may I eat the mango _____ is in the refrigerator?", ans: ["that","which"], people: false },
+];
+
+// Exercise E data
+const exEItems = [
+  "I like cars that are",
+  "I like people who are",
+  "I like books that have",
+  "I like clothes which are",
+  "I like weather that is",
+  "I like games that are",
+  "I like stores that offer",
+  "I like foods that are",
+  "I like friends who",
+  "I like teachers who",
+];
+
+// Quiz data
+const quizData = [
+  { q: "Which pronoun do we use for PEOPLE in relative clauses?", opts: ["which", "who", "where", "whose"], ans: 1 },
+  { q: "Choose the correct sentence:", opts: [
+    "The book which I read is good.",
+    "The book who I read is good.",
+    "The book where I read is good.",
+    "The book whose I read is good."
+  ], ans: 0 },
+  { q: "I was watching TV _____ the lights went out.", opts: ["while", "when", "because", "although"], ans: 1 },
+  { q: "She was cooking _____ he was cleaning the house.", opts: ["when", "while", "after", "before"], ans: 1 },
+  { q: "An athletic person is someone who ___.", opts: ["enjoys sports", "speaks a lot", "dresses well", "is intelligent"], ans: 0 },
+  { q: "Complete: The horse _____ pulled the carriage was black.", opts: ["who", "whose", "that / which", "where"], ans: 2 },
+  { q: "Which is correct Past Progressive?", opts: ["I was look", "I looked", "I was looking", "I am looking"], ans: 2 },
+];
+
+// ──────────────────────────────────────────────
+// SLIDE NAVIGATION
+// ──────────────────────────────────────────────
+function changeSlide(dir) {
+  const slides = document.querySelectorAll('.slide');
+  slides[current-1].classList.remove('active');
+  current = Math.max(1, Math.min(TOTAL_SLIDES, current + dir));
+  slides[current-1].classList.add('active');
+  document.getElementById('slide-counter').textContent = current + ' / ' + TOTAL_SLIDES;
+  document.getElementById('btn-prev').disabled = (current === 1);
+  document.getElementById('btn-next').disabled = (current === TOTAL_SLIDES);
+  document.getElementById('progress-bar').style.width = (current / TOTAL_SLIDES * 100) + '%';
+  document.getElementById('footer').classList.toggle('visible', current === TOTAL_SLIDES);
+  document.getElementById('slides-wrap').scrollTo({top:0,behavior:'smooth'});
+}
+
+// ──────────────────────────────────────────────
+// TEXT TO SPEECH
+// ──────────────────────────────────────────────
+function speak(text) {
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US'; u.rate = 0.85;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
+// ──────────────────────────────────────────────
+// BUILD EXERCISE A
+// ──────────────────────────────────────────────
+function buildExA() {
+  const wrap = document.getElementById('ex-a-items');
+  exAItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'ex-item matching';
+    div.id = 'a-row-' + i;
+    div.innerHTML = `
+      <span class="match-num">${i+1}.</span>
+      <span style="flex:1;font-size:14px;">${item.q}</span>
+      <select class="match-select" id="a-sel-${i}">
+        <option value="">— choose —</option>
+        ${item.opts.map(o=>`<option value="${o.charAt(0)}">${o}</option>`).join('')}
+      </select>
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+function checkExA() {
+  let score = 0;
+  exAItems.forEach((item, i) => {
+    const sel = document.getElementById('a-sel-'+i);
+    if (sel.value === item.ans) { sel.className='match-select correct'; score++; }
+    else { sel.className='match-select wrong'; }
+  });
+  alert(`Score: ${score} / ${exAItems.length} 🎉`);
+}
+
+// ──────────────────────────────────────────────
+// BUILD EXERCISE B
+// ──────────────────────────────────────────────
+function buildExB() {
+  const wrap = document.getElementById('ex-b-items');
+  exBItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'ex-item';
+    div.innerHTML = `
+      <span style="font-weight:700;">${i+1}.</span> ${item}
+      <input class="fill-input" type="text" id="b-inp-${i}" placeholder="write your completion here…">
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+// ──────────────────────────────────────────────
+// BUILD EXERCISE C
+// ──────────────────────────────────────────────
+function buildExC() {
+  const wrap = document.getElementById('ex-c-items');
+  exCItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'ex-item';
+    div.innerHTML = `
+      <span style="font-weight:700;">${i+1}. ${item.name}</span>
+      <span style="font-size:12px;color:var(--slate);margin-left:8px;">(hint: ${item.hint})</span>
+      <input class="fill-input" type="text" id="c-inp-${i}" placeholder="Write a sentence with while…">
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+// ──────────────────────────────────────────────
+// BUILD EXERCISE D
+// ──────────────────────────────────────────────
+function buildExD() {
+  const wrap = document.getElementById('ex-d-items');
+  exDItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'ex-item';
+    div.innerHTML = `
+      <div style="font-weight:700;margin-bottom:6px;">${i+1}. ${item.q}</div>
+      <div class="mcq-options" id="d-opts-${i}">
+        ${['who','that','which','that / which'].map(opt=>`
+          <button class="mcq-btn" onclick="checkD(${i},'${opt}')">${opt}</button>
+        `).join('')}
+      </div>
+      <div id="d-fb-${i}"></div>
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+function checkD(i, chosen) {
+  const item = exDItems[i];
+  const correct = item.ans.includes(chosen) || (chosen === 'that / which' && !item.people);
+  const fb = document.getElementById('d-fb-'+i);
+  const btns = document.querySelectorAll(`#d-opts-${i} .mcq-btn`);
+  btns.forEach(b => { b.disabled = true; });
+  if (correct) {
+    fb.innerHTML = '<span class="feedback correct">✅ Correct!</span>';
+  } else {
+    fb.innerHTML = `<span class="feedback wrong">❌ Try again — correct: ${item.ans.join(' or ')}</span>`;
+  }
+}
+
+function checkExD() {
+  // trigger if not yet checked — handled individually above
+  document.getElementById('ans-d').classList.add('visible');
+}
+
+// ──────────────────────────────────────────────
+// BUILD EXERCISE E
+// ──────────────────────────────────────────────
+function buildExE() {
+  const wrap = document.getElementById('ex-e-items');
+  exEItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'ex-item';
+    div.innerHTML = `
+      <span style="font-weight:700;">${i+1}.</span> ${item}
+      <input class="fill-input" type="text" id="e-inp-${i}" placeholder="complete the sentence…">
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+// ──────────────────────────────────────────────
+// BUILD QUIZ
+// ──────────────────────────────────────────────
+function buildQuiz() {
+  const wrap = document.getElementById('quiz-container');
+  let correctCount = 0;
+  let answered = 0;
+  quizData.forEach((q, qi) => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.style.marginBottom = '14px';
+    div.innerHTML = `
+      <p style="font-size:15px;font-weight:800;margin-bottom:12px;">Q${qi+1}: ${q.q}</p>
+      <div class="mcq-options" id="quiz-opts-${qi}">
+        ${q.opts.map((o,oi)=>`<button class="mcq-btn" onclick="answerQuiz(${qi},${oi},${q.ans})">${o}</button>`).join('')}
+      </div>
+      <div id="quiz-fb-${qi}"></div>
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+function answerQuiz(qi, chosen, correct) {
+  const btns = document.querySelectorAll(`#quiz-opts-${qi} .mcq-btn`);
+  btns.forEach((b,i) => {
+    b.disabled = true;
+    if (i === correct) b.classList.add('correct');
+    else if (i === chosen) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('quiz-fb-'+qi);
+  if (chosen === correct) {
+    fb.innerHTML = '<span class="feedback correct">✅ Excellent!</span>';
+  } else {
+    fb.innerHTML = `<span class="feedback wrong">❌ The correct answer is: ${quizData[qi].opts[correct]}</span>`;
+  }
+}
+
+// ──────────────────────────────────────────────
+// TOGGLE ANSWER
+// ──────────────────────────────────────────────
+function toggleAns(id) {
+  const box = document.getElementById(id);
+  box.classList.toggle('visible');
+}
+
+// ──────────────────────────────────────────────
+// CHALLENGE
+// ──────────────────────────────────────────────
+function challengeSubmit() {
+  const input = document.querySelector('.challenge-input').value.trim();
+  const fb = document.getElementById('challenge-feedback');
+  if (input.length < 10) {
+    fb.innerHTML = '<span style="color:#f5a623;">⚠️ Please write at least two sentences!</span>';
+    return;
+  }
+  fb.innerHTML = '🌟 Great job! Keep practicing your English every day! <br><span style="font-family:Tajawal;font-size:13px;color:rgba(255,255,255,0.8);">أحسنت! استمر في التدريب يومياً.</span>';
+}
+
+// ──────────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────────
+buildExA();
+buildExB();
+buildExC();
+buildExD();
+buildExE();
+buildQuiz();
+</script>
+</body>
+</html>
