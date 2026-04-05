@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 10 – Grammar | Super Goal 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --primary: #1a73e8;
+    --primary-dark: #1558b0;
+    --secondary: #f9a825;
+    --accent: #00bfa5;
+    --bg: #f0f4ff;
+    --card: #ffffff;
+    --text: #1e2a45;
+    --muted: #6b7a99;
+    --correct: #00c853;
+    --wrong: #f44336;
+    --tag-bg: #e3eaff;
+    --tag-txt: #1a73e8;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(26,115,232,0.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden;}
+  
+  /* ── TOP BAR ── */
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    background:#ffffff;
+    padding:10px 24px;
+    box-shadow:0 2px 12px rgba(26,115,232,0.10);
+    border-bottom:3px solid var(--primary);
+  }
+  .topbar-left{display:flex;gap:10px;align-items:center;}
+  .topbar-badge{
+    background:var(--tag-bg);color:var(--tag-txt);
+    font-weight:800;font-size:13px;
+    padding:5px 12px;border-radius:20px;letter-spacing:.3px;
+  }
+  .topbar-right{
+    font-family:'Tajawal',sans-serif;
+    font-weight:700;font-size:14px;color:var(--muted);
+    background:var(--tag-bg);padding:5px 14px;border-radius:20px;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap{
+    position:fixed;top:54px;left:0;right:0;z-index:99;
+    height:5px;background:#e3eaff;
+  }
+  .progress-bar{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .5s ease;}
+
+  /* ── SLIDES CONTAINER ── */
+  .slides-wrapper{
+    position:fixed;top:59px;left:0;right:0;bottom:64px;
+    overflow:hidden;
+  }
+  .slide{
+    position:absolute;top:0;left:0;right:0;bottom:0;
+    overflow-y:auto;
+    padding:28px 20px 20px;
+    opacity:0;pointer-events:none;
+    transform:translateX(60px);
+    transition:opacity .4s ease,transform .4s ease;
+  }
+  .slide.active{opacity:1;pointer-events:all;transform:translateX(0);}
+  .slide.out{opacity:0;transform:translateX(-60px);}
+
+  /* ── FOOTER NAV ── */
+  .nav-bar{
+    position:fixed;bottom:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    background:#fff;padding:12px 24px;
+    box-shadow:0 -2px 12px rgba(26,115,232,0.08);
+    border-top:2px solid #e3eaff;
+  }
+  .nav-btn{
+    display:flex;align-items:center;gap:7px;
+    padding:10px 22px;border:none;border-radius:30px;
+    font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;
+    cursor:pointer;transition:all .2s;
+  }
+  .nav-prev{background:#e3eaff;color:var(--primary);}
+  .nav-prev:hover{background:var(--primary);color:#fff;}
+  .nav-next{background:var(--primary);color:#fff;}
+  .nav-next:hover{background:var(--primary-dark);}
+  .slide-counter{font-size:13px;color:var(--muted);font-weight:700;}
+
+  /* ── CARDS ── */
+  .card{
+    background:var(--card);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:22px;margin-bottom:18px;
+  }
+  .card-title{
+    font-size:17px;font-weight:900;color:var(--primary);
+    margin-bottom:12px;display:flex;align-items:center;gap:8px;
+  }
+  .card-title .icon{font-size:22px;}
+
+  /* ── OPENING SLIDE ── */
+  .opening{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:100%;text-align:center;padding:20px;
+  }
+  .opening .unit-chip{
+    background:var(--secondary);color:#fff;
+    font-weight:900;font-size:14px;padding:6px 18px;border-radius:20px;
+    margin-bottom:18px;letter-spacing:.5px;
+  }
+  .opening h1{
+    font-size:clamp(26px,6vw,40px);font-weight:900;color:var(--primary);
+    line-height:1.2;margin-bottom:6px;
+  }
+  .opening .ar-title{
+    font-family:'Tajawal',sans-serif;font-size:20px;color:var(--muted);
+    font-weight:700;margin-bottom:24px;
+  }
+  .opening .meta{
+    display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;
+  }
+  .meta-chip{
+    background:var(--tag-bg);color:var(--tag-txt);
+    padding:6px 16px;border-radius:20px;font-weight:700;font-size:13px;
+  }
+  .opening .book-badge{
+    background:linear-gradient(135deg,var(--primary),var(--accent));
+    color:#fff;padding:10px 28px;border-radius:30px;
+    font-size:15px;font-weight:800;margin-top:10px;
+  }
+
+  /* ── OBJECTIVES ── */
+  .obj-list{list-style:none;padding:0;}
+  .obj-list li{
+    display:flex;align-items:flex-start;gap:10px;
+    padding:10px 0;border-bottom:1px solid #f0f4ff;font-size:15px;
+  }
+  .obj-list li:last-child{border-bottom:none;}
+  .obj-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+
+  /* ── GRAMMAR TABLES ── */
+  .g-table{width:100%;border-collapse:collapse;border-radius:12px;overflow:hidden;font-size:14px;}
+  .g-table th{background:var(--primary);color:#fff;padding:10px 14px;text-align:left;font-weight:800;}
+  .g-table td{padding:10px 14px;border-bottom:1px solid #e3eaff;}
+  .g-table tr:last-child td{border-bottom:none;}
+  .g-table tr:nth-child(even) td{background:#f5f8ff;}
+  .highlight{color:var(--primary);font-weight:800;}
+  .highlight-g{color:#00897b;font-weight:800;}
+
+  /* ── VERB BOX ── */
+  .verb-grid{
+    display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;
+  }
+  .verb-chip{
+    background:linear-gradient(135deg,var(--primary),#4285f4);
+    color:#fff;padding:6px 14px;border-radius:20px;
+    font-weight:700;font-size:13px;
+  }
+
+  /* ── TTS BUTTON ── */
+  .tts-btn{
+    background:var(--tag-bg);border:none;color:var(--primary);
+    padding:5px 12px;border-radius:20px;cursor:pointer;
+    font-size:12px;font-weight:700;
+    display:inline-flex;align-items:center;gap:5px;
+    transition:all .2s;margin-left:6px;
+  }
+  .tts-btn:hover{background:var(--primary);color:#fff;}
+
+  /* ── EXAMPLE BOXES ── */
+  .example-box{
+    background:linear-gradient(135deg,#e8f0fe,#f0faf8);
+    border-left:4px solid var(--primary);
+    padding:12px 16px;border-radius:0 10px 10px 0;
+    margin:10px 0;font-size:14px;line-height:1.7;
+  }
+  .example-box .ar{
+    font-family:'Tajawal',sans-serif;color:var(--muted);
+    font-size:13px;margin-top:4px;direction:rtl;
+  }
+
+  /* ── PRACTICE ITEMS ── */
+  .practice-item{
+    background:#f8faff;border:2px solid #e3eaff;border-radius:12px;
+    padding:14px 16px;margin-bottom:12px;
+  }
+  .practice-item .q{font-weight:700;font-size:15px;margin-bottom:10px;}
+  .ans-input{
+    border:2px solid #e3eaff;border-radius:8px;padding:8px 12px;
+    font-size:14px;width:100%;font-family:'Nunito',sans-serif;
+    transition:border .2s;outline:none;
+  }
+  .ans-input:focus{border-color:var(--primary);}
+  .check-btn{
+    background:var(--primary);color:#fff;border:none;
+    padding:8px 18px;border-radius:20px;cursor:pointer;
+    font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;
+    margin-top:8px;transition:all .2s;
+  }
+  .check-btn:hover{background:var(--primary-dark);}
+  .feedback{
+    margin-top:8px;padding:8px 12px;border-radius:8px;
+    font-weight:700;font-size:14px;display:none;
+  }
+  .feedback.correct{background:#e8f5e9;color:var(--correct);}
+  .feedback.wrong{background:#ffeaea;color:var(--wrong);}
+
+  /* ── SHOW/HIDE ── */
+  .show-btn{
+    background:var(--tag-bg);color:var(--primary);border:none;
+    padding:7px 16px;border-radius:20px;cursor:pointer;
+    font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;
+    margin-top:8px;transition:all .2s;
+  }
+  .show-btn:hover{background:var(--primary);color:#fff;}
+  .answer-reveal{
+    display:none;margin-top:10px;
+    background:#e8f5e9;border-left:4px solid var(--correct);
+    padding:10px 14px;border-radius:0 8px 8px 0;
+    color:#1b5e20;font-weight:700;font-size:14px;
+  }
+
+  /* ── MCQ ── */
+  .mcq-option{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 14px;border:2px solid #e3eaff;border-radius:10px;
+    margin-bottom:8px;cursor:pointer;transition:all .2s;font-size:14px;
+  }
+  .mcq-option:hover{border-color:var(--primary);background:#f0f4ff;}
+  .mcq-option.selected-correct{border-color:var(--correct);background:#e8f5e9;color:#1b5e20;}
+  .mcq-option.selected-wrong{border-color:var(--wrong);background:#ffeaea;color:#b71c1c;}
+  .option-dot{
+    width:18px;height:18px;border-radius:50%;border:2px solid #ccc;
+    flex-shrink:0;transition:all .2s;
+  }
+  .mcq-option.selected-correct .option-dot{background:var(--correct);border-color:var(--correct);}
+  .mcq-option.selected-wrong .option-dot{background:var(--wrong);border-color:var(--wrong);}
+
+  /* ── SUMMARY POINTS ── */
+  .summary-point{
+    display:flex;gap:12px;align-items:flex-start;
+    padding:12px;background:#f5f8ff;border-radius:10px;margin-bottom:10px;
+    font-size:14px;line-height:1.6;
+  }
+  .sum-num{
+    background:var(--primary);color:#fff;width:26px;height:26px;
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:13px;flex-shrink:0;
+  }
+
+  /* ── CHALLENGE ── */
+  .challenge-box{
+    background:linear-gradient(135deg,#1a73e8,#00bfa5);
+    color:#fff;border-radius:16px;padding:24px;text-align:center;
+  }
+  .challenge-box h3{font-size:20px;margin-bottom:12px;}
+  .challenge-box p{font-size:15px;opacity:.9;margin-bottom:16px;}
+  .challenge-input{
+    width:100%;padding:12px;border-radius:10px;border:none;
+    font-size:14px;font-family:'Nunito',sans-serif;margin-bottom:10px;
+  }
+  .challenge-submit{
+    background:#fff;color:var(--primary);border:none;
+    padding:10px 28px;border-radius:20px;font-weight:800;
+    cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;
+  }
+  .challenge-feedback{margin-top:10px;font-weight:700;font-size:14px;}
+
+  /* ── FOOTER ── */
+  .lesson-footer{
+    text-align:center;margin-top:24px;padding:20px;
+    border-top:2px solid #e3eaff;
+  }
+  .footer-brand{
+    font-weight:900;font-size:18px;color:var(--primary);letter-spacing:1px;
+  }
+  .footer-ar{
+    font-family:'Tajawal',sans-serif;color:var(--muted);
+    font-size:14px;margin-top:4px;
+  }
+  .footer-love{
+    font-size:13px;color:var(--accent);font-weight:700;margin-top:4px;
+  }
+
+  /* responsive */
+  @media(max-width:500px){
+    .slide{padding:18px 12px 12px;}
+    .topbar{padding:8px 14px;}
+    .nav-btn{padding:8px 16px;font-size:13px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-badge">📖 Unit 10</span>
+    <span class="topbar-badge">📄 Pages 112–113</span>
+  </div>
+  <div class="topbar-right">Third Intermediate | ثالث متوسط</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:11%"></div></div>
+
+<!-- SLIDES WRAPPER -->
+<div class="slides-wrapper">
+
+  <!-- ══════════════ SLIDE 1: OPENING ══════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="opening">
+      <div class="unit-chip">📘 Unit 10 &nbsp;•&nbsp; Pages 112–113</div>
+      <h1>Grammar</h1>
+      <div class="ar-title" style="direction:rtl">قواعد اللغة &nbsp;•&nbsp; 🎯  </div>
+      <div class="meta">
+        <span class="meta-chip">📚 Super Goal 3</span>
+        <span class="meta-chip">🏫 Third Intermediate</span>
+        <span class="meta-chip">📅 Second Term</span>
+      </div>
+      <div class="book-badge">🦷 Who Used My Toothpaste?</div>
+      <p style="margin-top:20px;color:var(--muted);font-size:14px;font-weight:600;">
+        الفصل الدراسي الثاني
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 2: OBJECTIVES ══════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> Learning Objectives</div>
+      <div style="font-family:'Tajawal',sans-serif;color:var(--muted);font-size:13px;margin-bottom:12px;direction:rtl">أهداف الدرس</div>
+      <ul class="obj-list">
+        <li><span class="obj-icon">✅</span> Use <strong>Present Perfect</strong> with <em>already, yet,</em> and <em>just</em> correctly.</li>
+        <li><span class="obj-icon">✅</span> Use <strong>Verb + Gerund</strong> structures (verbs followed by -ing).</li>
+        <li><span class="obj-icon">✅</span> Understand and use <strong>Two-Word Verbs (Phrasal Verbs)</strong> with object pronouns.</li>
+        <li><span class="obj-icon">✅</span> Rewrite sentences using phrasal verbs in two different ways.</li>
+        <li><span class="obj-icon">✅</span> Build sentences using gerund forms after specific verbs.</li>
+      </ul>
+    </div>
+    <div class="card" style="background:linear-gradient(135deg,#fff8e1,#fff3cd);border:none;">
+      <div style="font-family:'Tajawal',sans-serif;font-size:14px;color:#5d4037;direction:rtl;line-height:1.9;">
+        سنتعلم في هذا الدرس ثلاث قواعد مهمة:<br/>
+        ١- المضارع التام مع <strong>already / yet / just</strong><br/>
+        ٢- الأفعال التي تتبعها صيغة الاسم الفعلي (verb + ing)<br/>
+        ٣- الأفعال الثنائية (Phrasal Verbs) وكيفية استخدامها
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 3: PRESENT PERFECT – EXPLANATION ══════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="card">
+      <div class="card-title"><span class="icon">📗</span> Present Perfect with <em>Already, Yet, Just</em></div>
+      <div style="font-family:'Tajawal',sans-serif;color:var(--muted);font-size:13px;margin-bottom:14px;direction:rtl">المضارع التام مع already و yet و just</div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:10px;">
+        We use the <strong>Present Perfect</strong> to talk about events that happened <em>before now</em>. The event may have happened earlier than expected.
+      </p>
+      <div style="font-family:'Tajawal',sans-serif;color:var(--muted);font-size:13px;direction:rtl;margin-bottom:14px;">
+        نستخدم المضارع التام للحديث عن أحداث وقعت قبل الآن، وقد تكون حدثت أبكر مما هو متوقع.
+      </div>
+      <table class="g-table">
+        <thead>
+          <tr>
+            <th>Questions ❓</th>
+            <th>Affirmative ✅</th>
+            <th>Negative ❌</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Have you done the dishes <span class="highlight">yet</span>?</td>
+            <td>Yes, I've <span class="highlight">already</span> done them.</td>
+            <td>No, I haven't done them <span class="highlight">yet</span>.</td>
+          </tr>
+          <tr>
+            <td>Have you <span class="highlight">already</span> washed the clothes?</td>
+            <td>Yes, I've <span class="highlight">just</span> washed them.</td>
+            <td>No, I haven't washed them <span class="highlight">yet</span>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="background:#f0faf8;border:none;">
+      <div class="card-title" style="font-size:15px;"><span class="icon">💡</span> Key Rule</div>
+      <ul style="font-size:14px;line-height:2;list-style:disc;padding-left:18px;">
+        <li><span class="highlight">Already</span> → used in ✅ affirmative sentences <span style="font-family:'Tajawal',sans-serif;color:var(--muted)">(الإيجاب)</span></li>
+        <li><span class="highlight">Yet</span> → used in ❓ questions and ❌ negatives <span style="font-family:'Tajawal',sans-serif;color:var(--muted)">(الأسئلة والنفي)</span></li>
+        <li><span class="highlight">Just</span> → means "very recently" <span style="font-family:'Tajawal',sans-serif;color:var(--muted)">(للتو / منذ قليل)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 4: VERB + GERUND – EXPLANATION ══════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="card">
+      <div class="card-title"><span class="icon">📘</span> Verb + Gerund</div>
+      <div style="font-family:'Tajawal',sans-serif;color:var(--muted);font-size:13px;margin-bottom:12px;direction:rtl">الفعل + الاسم الفعلي (ing)</div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:14px;">
+        Use the <strong>gerund form</strong> (verb + <em>-ing</em>) after these verbs:
+      </p>
+      <div class="verb-grid">
+        <span class="verb-chip">avoid</span>
+        <span class="verb-chip">enjoy</span>
+        <span class="verb-chip">give up</span>
+        <span class="verb-chip">imagine</span>
+        <span class="verb-chip">mind</span>
+        <span class="verb-chip">stop</span>
+        <span class="verb-chip">can't stand</span>
+        <span class="verb-chip">finish</span>
+        <span class="verb-chip">hate</span>
+        <span class="verb-chip">keep</span>
+        <span class="verb-chip">miss</span>
+        <span class="verb-chip">suggest</span>
+      </div>
+      <div style="font-family:'Tajawal',sans-serif;color:var(--muted);font-size:13px;direction:rtl;margin-top:10px;">
+        هذه الأفعال تتبعها دائماً صيغة (فعل + ing) وليس المصدر
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="font-size:15px;"><span class="icon">📝</span> Examples</div>
+      <div class="example-box">
+        He <span class="highlight-g">can't stand <strong>waiting</strong></span> in line.
+        <div class="ar">هو لا يطيق الانتظار في الطابور.</div>
+      </div>
+      <div class="example-box">
+        I <span class="highlight-g">don't enjoy <strong>sitting</strong></span> in the sun.
+        <div class="ar">لا أستمتع بالجلوس في الشمس.</div>
+      </div>
+      <div class="example-box">
+        We <span class="highlight-g">miss <strong>being</strong></span> with our friends.
+        <div class="ar">نحن نفتقد كوننا مع أصدقائنا.</div>
+      </div>
+      <div class="example-box">
+        They <span class="highlight-g">stop <strong>playing</strong></span> tennis in the winter.
+        <div class="ar">يتوقفون عن لعب التنس في الشتاء.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 5: PHRASAL VERBS – EXPLANATION ══════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="card">
+      <div class="card-title"><span class="icon">📙</span> Two-Word Verbs (Phrasal Verbs)</div>
+      <div style="font-family:'Tajawal',sans-serif;color:var(--muted);font-size:13px;margin-bottom:12px;direction:rtl">الأفعال الثنائية (Phrasal Verbs)</div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:12px;">
+        Two-word verbs are common in English. They have a <strong>verb + particle</strong>.<br/>
+        Object pronouns <strong>always</strong> come between the verb and the particle.
+      </p>
+      <div style="font-family:'Tajawal',sans-serif;color:var(--muted);font-size:13px;direction:rtl;margin-bottom:14px;">
+        الأفعال الثنائية تتكون من فعل + جسيم. الضمير دائماً يأتي بين الفعل والجسيم.
+      </div>
+      <table class="g-table">
+        <thead>
+          <tr>
+            <th>Full Noun</th>
+            <th>Noun Separated</th>
+            <th>Pronoun</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="highlight">Turn down</span> the TV.</td>
+            <td><span class="highlight">Turn</span> the TV <span class="highlight">down</span>.</td>
+            <td><span class="highlight">Turn</span> it <span class="highlight">down</span>.</td>
+          </tr>
+          <tr>
+            <td><span class="highlight">Put away</span> your clothes.</td>
+            <td><span class="highlight">Put</span> your clothes <span class="highlight">away</span>.</td>
+            <td><span class="highlight">Put</span> them <span class="highlight">away</span>.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="background:#fff8e1;border-radius:10px;padding:12px;margin-top:12px;font-size:13px;">
+        ⚠️ <strong>Rule:</strong> When using a <em>pronoun</em> (it, them, him, her…), it MUST go between the verb and particle. You cannot say: <del>"Turn down it"</del> ❌ → Correct: <strong>"Turn it down"</strong> ✅
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 6: PRACTICE – Exercise A ══════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="card">
+      <div class="card-title"><span class="icon">🗣️</span> Exercise A – Ask & Answer</div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">
+        Work with a partner. Ask and answer about the pictures using <strong>Present Perfect + yet / already</strong>.
+      </p>
+      <div class="example-box" style="margin-bottom:14px;">
+        <strong>A:</strong> Have you done the dishes <span class="highlight">yet</span>?<br/>
+        <strong>B:</strong> Yes, I've <span class="highlight">already</span> done them.
+      </div>
+
+      <!-- Picture tasks -->
+      <div id="taskA1" class="practice-item">
+        <div class="q">🖼️ Picture 1 – <em>Set the table</em><br/>
+          <span style="font-size:13px;color:var(--muted);">Ask about setting the table (using a glass)</span>
+        </div>
+        <div style="font-size:13px;margin-bottom:6px;font-weight:700;">A (Question):</div>
+        <button class="show-btn" onclick="toggleReveal('rev-a1q')">Show Model Answer</button>
+        <div class="answer-reveal" id="rev-a1q">Have you set the table yet?</div>
+        <div style="font-size:13px;margin-top:10px;font-weight:700;">B (Answer):</div>
+        <button class="show-btn" onclick="toggleReveal('rev-a1a')">Show Model Answer</button>
+        <div class="answer-reveal" id="rev-a1a">Yes, I've already set it.</div>
+      </div>
+
+      <div id="taskA2" class="practice-item">
+        <div class="q">🖼️ Picture 2 – <em>Vacuum the carpet</em></div>
+        <div style="font-size:13px;margin-bottom:6px;font-weight:700;">A (Question):</div>
+        <button class="show-btn" onclick="toggleReveal('rev-a2q')">Show Model Answer</button>
+        <div class="answer-reveal" id="rev-a2q">Have you vacuumed the carpet yet?</div>
+        <div style="font-size:13px;margin-top:10px;font-weight:700;">B (Answer):</div>
+        <button class="show-btn" onclick="toggleReveal('rev-a2a')">Show Model Answer</button>
+        <div class="answer-reveal" id="rev-a2a">Yes, I've already vacuumed it.</div>
+      </div>
+
+      <div id="taskA3" class="practice-item">
+        <div class="q">🖼️ Picture 3 – <em>Take out the garbage</em></div>
+        <button class="show-btn" onclick="toggleReveal('rev-a3q')">Show Question</button>
+        <div class="answer-reveal" id="rev-a3q">Have you taken out the garbage yet?</div>
+        <button class="show-btn" onclick="toggleReveal('rev-a3a')" style="margin-top:8px;">Show Answer</button>
+        <div class="answer-reveal" id="rev-a3a">Yes, I've already taken it out.</div>
+      </div>
+
+      <div id="taskA4" class="practice-item">
+        <div class="q">🖼️ Picture 4 – <em>Lock the door</em></div>
+        <button class="show-btn" onclick="toggleReveal('rev-a4q')">Show Question</button>
+        <div class="answer-reveal" id="rev-a4q">Have you locked the door yet?</div>
+        <button class="show-btn" onclick="toggleReveal('rev-a4a')" style="margin-top:8px;">Show Answer</button>
+        <div class="answer-reveal" id="rev-a4a">Yes, I've already locked it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 7: EXERCISE B – Enjoy / Dislike ══════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="card">
+      <div class="card-title"><span class="icon">💬</span> Exercise B – Enjoy / Dislike Doing</div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">
+        Which of the following do you <strong>enjoy</strong> doing? Which do you <strong>dislike</strong> doing?
+        Use <em>Verb + Gerund</em> in your answers.
+      </p>
+      <div class="example-box">
+        I <span class="highlight-g">enjoy <strong>ironing</strong></span> clothes. / I <span class="highlight-g">can't stand <strong>watching</strong></span> TV all day.
+        <div class="ar">أستمتع بكي الملابس. / لا أطيق مشاهدة التلفاز طوال اليوم.</div>
+      </div>
+      <p style="font-size:13px;font-weight:700;color:var(--muted);margin:10px 0 8px;">Activities from the pictures:</p>
+      <div class="verb-grid">
+        <span class="verb-chip">🔴 ironing</span>
+        <span class="verb-chip">📺 watching TV</span>
+        <span class="verb-chip">🏥 going to the dentist</span>
+        <span class="verb-chip">🏋️ exercising</span>
+        <span class="verb-chip">🥗 cooking</span>
+        <span class="verb-chip">🛒 grocery shopping</span>
+      </div>
+
+      <div class="practice-item" style="margin-top:14px;">
+        <div class="q">Write 2 sentences: one thing you enjoy and one you dislike (use gerunds):</div>
+        <input class="ans-input" id="b-enjoy" placeholder="I enjoy ..." />
+        <input class="ans-input" id="b-dislike" placeholder="I can't stand / hate ..." style="margin-top:8px;"/>
+        <button class="check-btn" onclick="checkB()">Check ✅</button>
+        <div class="feedback" id="fb-b"></div>
+      </div>
+      <div style="background:#f0faf8;border-radius:10px;padding:12px;margin-top:12px;font-size:13px;">
+        <strong>Sample answers:</strong><br/>
+        I <span class="highlight-g">enjoy <strong>cooking</strong></span> for my family.<br/>
+        I <span class="highlight-g">hate <strong>going</strong></span> to the dentist.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 8: EXERCISE C – Phrasal Verbs ══════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="card">
+      <div class="card-title"><span class="icon">✏️</span> Exercise C – Rewrite with Phrasal Verbs</div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:4px;">
+        Rewrite each sentence with a two-word verb <strong>in two ways</strong>.
+      </p>
+      <div class="example-box" style="margin-bottom:14px;">
+        Turn on the TV. → <strong>Turn the TV on.</strong> &nbsp;|&nbsp; <strong>Turn it on.</strong>
+      </div>
+
+      <!-- Item 1 -->
+      <div class="practice-item">
+        <div class="q">1. Put away the toys.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Way 1 (noun separated)</div>
+            <button class="show-btn" onclick="toggleReveal('c1a')">Show Answer</button>
+            <div class="answer-reveal" id="c1a">Put the toys away.</div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Way 2 (pronoun)</div>
+            <button class="show-btn" onclick="toggleReveal('c1b')">Show Answer</button>
+            <div class="answer-reveal" id="c1b">Put them away.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="practice-item">
+        <div class="q">2. Clean up the mess.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div>
+            <button class="show-btn" onclick="toggleReveal('c2a')">Way 1</button>
+            <div class="answer-reveal" id="c2a">Clean the mess up.</div>
+          </div>
+          <div>
+            <button class="show-btn" onclick="toggleReveal('c2b')">Way 2</button>
+            <div class="answer-reveal" id="c2b">Clean it up.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="practice-item">
+        <div class="q">3. Take out the garbage.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div>
+            <button class="show-btn" onclick="toggleReveal('c3a')">Way 1</button>
+            <div class="answer-reveal" id="c3a">Take the garbage out.</div>
+          </div>
+          <div>
+            <button class="show-btn" onclick="toggleReveal('c3b')">Way 2</button>
+            <div class="answer-reveal" id="c3b">Take it out.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="practice-item">
+        <div class="q">4. Turn off the light.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div>
+            <button class="show-btn" onclick="toggleReveal('c4a')">Way 1</button>
+            <div class="answer-reveal" id="c4a">Turn the light off.</div>
+          </div>
+          <div>
+            <button class="show-btn" onclick="toggleReveal('c4b')">Way 2</button>
+            <div class="answer-reveal" id="c4b">Turn it off.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 5 -->
+      <div class="practice-item">
+        <div class="q">5. Throw away these old shoes.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div>
+            <button class="show-btn" onclick="toggleReveal('c5a')">Way 1</button>
+            <div class="answer-reveal" id="c5a">Throw these old shoes away.</div>
+          </div>
+          <div>
+            <button class="show-btn" onclick="toggleReveal('c5b')">Way 2</button>
+            <div class="answer-reveal" id="c5b">Throw them away.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 9: EXERCISE D – Gerund Sentences ══════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="card">
+      <div class="card-title"><span class="icon">✏️</span> Exercise D – Make Sentences (Gerunds)</div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:10px;">
+        Make sentences with the words. Use gerunds.
+      </p>
+      <div class="example-box" style="margin-bottom:14px;">
+        dessert / eat / after meals / can't resist / I →<br/>
+        <strong>I can't resist eating dessert after meals.</strong>
+      </div>
+
+      <div class="practice-item">
+        <div class="q">1. she / clean / can't stand / the house</div>
+        <button class="show-btn" onclick="toggleReveal('d1')">Show Answer</button>
+        <div class="answer-reveal" id="d1">She can't stand cleaning the house.</div>
+      </div>
+
+      <div class="practice-item">
+        <div class="q">2. live / our grandparents / enjoy / in the country</div>
+        <button class="show-btn" onclick="toggleReveal('d2')">Show Answer</button>
+        <div class="answer-reveal" id="d2">Our grandparents enjoy living in the country.</div>
+      </div>
+
+      <div class="practice-item">
+        <div class="q">3. the children / hate / their ice cream / share</div>
+        <button class="show-btn" onclick="toggleReveal('d3')">Show Answer</button>
+        <div class="answer-reveal" id="d3">The children hate sharing their ice cream.</div>
+      </div>
+
+      <div class="practice-item">
+        <div class="q">4. eat / Mom's food / we / miss</div>
+        <button class="show-btn" onclick="toggleReveal('d4')">Show Answer</button>
+        <div class="answer-reveal" id="d4">We miss eating Mom's food.</div>
+      </div>
+
+      <div class="practice-item">
+        <div class="q">5. my sister / my toothpaste / use / stop / have to</div>
+        <button class="show-btn" onclick="toggleReveal('d5')">Show Answer</button>
+        <div class="answer-reveal" id="d5">My sister has to stop using my toothpaste.</div>
+      </div>
+
+      <div class="practice-item">
+        <div class="q">6. the workers / paint / the house / finished</div>
+        <button class="show-btn" onclick="toggleReveal('d6')">Show Answer</button>
+        <div class="answer-reveal" id="d6">The workers finished painting the house.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 10: QUIZ ══════════════ -->
+  <div class="slide" id="slide-10">
+    <div class="card">
+      <div class="card-title"><span class="icon">🧠</span> Quick Quiz</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Choose the best answer for each question.</p>
+
+      <!-- Q1 -->
+      <div style="margin-bottom:18px;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:8px;">1. Have you done your homework ___?</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'wrong')"><div class="option-dot"></div>already</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'correct')"><div class="option-dot"></div>yet</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'wrong')"><div class="option-dot"></div>just</div>
+      </div>
+
+      <!-- Q2 -->
+      <div style="margin-bottom:18px;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:8px;">2. She has ___ finished the report. (it was very recent)</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'wrong')"><div class="option-dot"></div>yet</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'correct')"><div class="option-dot"></div>just</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'wrong')"><div class="option-dot"></div>never</div>
+      </div>
+
+      <!-- Q3 -->
+      <div style="margin-bottom:18px;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:8px;">3. I can't stand ___ in traffic every day.</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'wrong')"><div class="option-dot"></div>wait</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'wrong')"><div class="option-dot"></div>to wait</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'correct')"><div class="option-dot"></div>waiting</div>
+      </div>
+
+      <!-- Q4 -->
+      <div style="margin-bottom:18px;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:8px;">4. Turn off the TV. → Using a pronoun:</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'wrong')"><div class="option-dot"></div>Turn off it.</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'correct')"><div class="option-dot"></div>Turn it off.</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'wrong')"><div class="option-dot"></div>It turn off.</div>
+      </div>
+
+      <!-- Q5 -->
+      <div style="margin-bottom:18px;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:8px;">5. I've ___ eaten dinner. (it happened before you expected)</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'correct')"><div class="option-dot"></div>already</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'wrong')"><div class="option-dot"></div>yet</div>
+        <div class="mcq-option" onclick="checkMCQ(this,'wrong')"><div class="option-dot"></div>never</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 11: SUMMARY ══════════════ -->
+  <div class="slide" id="slide-11">
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span> Summary</div>
+      <div style="font-family:'Tajawal',sans-serif;color:var(--muted);font-size:13px;margin-bottom:14px;direction:rtl">ملخص الدرس</div>
+
+      <div class="summary-point">
+        <div class="sum-num">1</div>
+        <div>
+          <strong>Present Perfect with Already / Yet / Just</strong><br/>
+          <span style="font-size:13px;">Use <em>already</em> in affirmatives, <em>yet</em> in questions & negatives, <em>just</em> for very recent actions.</span><br/>
+          <span style="font-family:'Tajawal',sans-serif;font-size:12px;color:var(--muted);">already للإيجاب • yet للسؤال والنفي • just لما وقع حديثاً</span>
+        </div>
+      </div>
+
+      <div class="summary-point">
+        <div class="sum-num">2</div>
+        <div>
+          <strong>Verb + Gerund (-ing)</strong><br/>
+          <span style="font-size:13px;">Verbs like <em>enjoy, hate, avoid, finish, miss, can't stand</em> are always followed by a gerund.</span><br/>
+          <span style="font-family:'Tajawal',sans-serif;font-size:12px;color:var(--muted);">بعض الأفعال تتبعها دائماً صيغة (فعل + ing)</span>
+        </div>
+      </div>
+
+      <div class="summary-point">
+        <div class="sum-num">3</div>
+        <div>
+          <strong>Phrasal Verbs</strong><br/>
+          <span style="font-size:13px;">Object pronouns go BETWEEN the verb and particle: <em>Turn it off</em> ✅ / <em>Turn off it</em> ❌</span><br/>
+          <span style="font-family:'Tajawal',sans-serif;font-size:12px;color:var(--muted);">الضمير يأتي دائماً بين الفعل والجسيم</span>
+        </div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,#e8f0fe,#f0faf8);border-radius:12px;padding:14px;margin-top:6px;">
+        <div style="font-weight:800;font-size:14px;margin-bottom:8px;">🌟 Key Sentences to Remember:</div>
+        <div style="font-size:13px;line-height:2;">
+          • I've <span class="highlight">already</span> done the dishes.<br/>
+          • Have you cleaned your room <span class="highlight">yet</span>?<br/>
+          • She <span class="highlight">enjoys cooking</span> for her family.<br/>
+          • Put <span class="highlight">them</span> away.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 12: CHALLENGE ══════════════ -->
+  <div class="slide" id="slide-12">
+    <div class="card">
+      <div class="card-title"><span class="icon">🚀</span> Challenge Question</div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">
+        Think carefully and write a complete answer using what you've learned today!
+      </p>
+
+      <div class="challenge-box">
+        <h3>🧩 The Challenge</h3>
+        <p>
+          Write <strong>3 sentences</strong> about household chores:<br/>
+          1️⃣ Use <em>Present Perfect + already or yet</em><br/>
+          2️⃣ Use <em>a phrasal verb with a pronoun</em><br/>
+          3️⃣ Use <em>a gerund after a verb</em>
+        </p>
+        <textarea class="challenge-input" id="chal-input" rows="5"
+          placeholder="1. I have already...&#10;2. I need to... it...&#10;3. I enjoy...ing...">
+        </textarea>
+        <button class="challenge-submit" onclick="checkChallenge()">Submit 🎉</button>
+        <div class="challenge-feedback" id="chal-fb"></div>
+      </div>
+
+      <div style="background:#f0faf8;border-radius:12px;padding:14px;margin-top:16px;">
+        <div style="font-weight:800;font-size:14px;color:var(--accent);margin-bottom:8px;">💡 Sample Answer:</div>
+        <ol style="font-size:14px;line-height:2;padding-left:16px;">
+          <li>I have <strong>already</strong> washed the dishes.</li>
+          <li>My sister left her toys everywhere. I need to put <strong>them</strong> away.</li>
+          <li>I <strong>enjoy cooking</strong> dinner with my mother.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- FOOTER (last slide only) -->
+    <div class="lesson-footer">
+      <div class="footer-brand">eduvorra</div>
+      <div class="footer-ar">عبدالحكيم صالح الحسون</div>
+      <div class="footer-love">❤️ صُنع بحب في بريدة</div>
+    </div>
+  </div>
+
+</div><!-- /slides-wrapper -->
+
+<!-- BOTTOM NAV -->
+<div class="nav-bar">
+  <button class="nav-btn nav-prev" onclick="changeSlide(-1)">&#8592; Previous</button>
+  <span class="slide-counter" id="slideCounter">1 / 12</span>
+  <button class="nav-btn nav-next" onclick="changeSlide(1)">Next &#8594;</button>
+</div>
+
+<script>
+const TOTAL = 12;
+let current = 1;
+
+const slideNames = [
+  'Opening','Objectives','Present Perfect','Verb + Gerund',
+  'Phrasal Verbs','Exercise A','Exercise B','Exercise C',
+  'Exercise D','Quiz','Summary','Challenge'
+];
+
+function changeSlide(dir){
+  const oldSlide = document.getElementById('slide-'+current);
+  const newIdx = current + dir;
+  if(newIdx < 1 || newIdx > TOTAL) return;
+  oldSlide.classList.add('out');
+  setTimeout(()=>oldSlide.classList.remove('active','out'),350);
+  current = newIdx;
+  const newSlide = document.getElementById('slide-'+current);
+  newSlide.classList.add('active');
+  document.getElementById('slideCounter').textContent = current+' / '+TOTAL;
+  document.getElementById('progressBar').style.width = (current/TOTAL*100)+'%';
+  newSlide.scrollTop = 0;
+}
+
+function toggleReveal(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+
+function checkMCQ(el, result){
+  const siblings = el.parentElement.querySelectorAll('.mcq-option');
+  siblings.forEach(s=>{s.classList.remove('selected-correct','selected-wrong');});
+  el.classList.add(result === 'correct' ? 'selected-correct' : 'selected-wrong');
+}
+
+function checkB(){
+  const enjoy = document.getElementById('b-enjoy').value.trim().toLowerCase();
+  const dislike = document.getElementById('b-dislike').value.trim().toLowerCase();
+  const fb = document.getElementById('fb-b');
+  const gerunds = ['ironing','watching','going','exercising','cooking','shopping','cleaning','cooking','reading','swimming'];
+  const hasEnj = gerunds.some(g=>enjoy.includes(g));
+  const hasDis = gerunds.some(g=>dislike.includes(g));
+  if(enjoy.length < 5 || dislike.length < 5){
+    fb.className='feedback wrong';fb.style.display='block';
+    fb.textContent='❌ Please fill in both sentences!';return;
+  }
+  if(hasEnj && hasDis){
+    fb.className='feedback correct';fb.style.display='block';
+    fb.textContent='✅ Great job! You used gerunds correctly!';
+  } else {
+    fb.className='feedback wrong';fb.style.display='block';
+    fb.textContent='⚠️ Make sure you use a gerund (verb + ing) in each sentence!';
+  }
+}
+
+function checkChallenge(){
+  const val = document.getElementById('chal-input').value.trim();
+  const fb = document.getElementById('chal-fb');
+  if(val.length < 30){
+    fb.textContent = '⚠️ Please write more! Try to write 3 sentences.';
+    fb.style.color='#fff8b0';return;
+  }
+  fb.textContent = '🎉 Well done! Keep practicing your grammar every day!';
+  fb.style.color='#b9ffe4';
+}
+
+// TTS
+function speak(text){
+  if('speechSynthesis' in window){
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang='en-US';u.rate=0.85;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }
+}
+</script>
+</body>
+</html>

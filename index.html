@@ -3,24 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eduvorra – Smart Learning Platform BETA V1.0</title>
+  <title>Eduvorra – Smart Learning Platform BETA V1.1</title>
 
   <!-- ============================================================
-       EDUVORRA – Smart Learning Platform 
+       EDUVORRA – Smart Learning Platform  (v1.1 – Units Update)
        ─────────────────────────────────────────────────────────────
-       HOW TO ADD A NEW LESSON (external link):
-       1. Find the LESSONS object in the <script> below.
-       2. Go to the correct grade and subject array.
-       3. Copy this block and paste it inside the array:
-            { title: "Unit X – Your Title", desc: "Short description.", link: "PASTE_YOUR_LESSON_LINK_HERE" },
-       4. Replace the title, desc, and link values.
-       5. Save the file. Done!
+       HOW TO ADD A NEW LESSON:
+         1. Find the correct grade → subject → unit array below.
+         2. Copy this block and paste inside the lessons array:
+              { title: "Lesson Title", desc: "Short description.", link: "YOUR_LESSON_LINK" },
+         3. Replace values. Save. Done!
+
+       HOW TO ADD A NEW UNIT:
+         Inside a subject object, add a new unit key:
+           'Unit 13': {
+             icon: '📗',
+             desc: 'Unit description here.',
+             lessons: [
+               { title: "...", desc: "...", link: "..." },
+             ]
+           },
+
+       HOW TO ADD A NEW SUBJECT:
+         Inside a grade object, add a new subject key (e.g. 'Arabic').
+         Add a matching card in the HTML (search "ADD NEW SUBJECT CARD HERE").
 
        HOW TO ADD A NEW GRADE:
-       1. Copy an existing grade block in LESSONS (e.g. 'Grade 1': { ... })
-       2. Rename it and update lesson entries.
-       3. Add a matching grade card in the HTML (search "ADD NEW GRADE CARD HERE").
-       ============================================================ -->
+         Copy an existing grade block in LESSONS.
+         Add a matching card in the HTML (search "ADD NEW GRADE CARD HERE").
+  ============================================================ -->
 
   <style>
     /* ─── FONTS ─────────────────────────────────────────────── */
@@ -227,21 +238,38 @@
       font-size: 1.6rem;
     }
 
-    /* ─── LESSON CARDS (external link style) ────────────────── */
-    /*
-       Each lesson renders as an <a> tag with class "lesson-card".
-       It opens in a new tab via target="_blank".
+    /* ─── UNIT CARDS ─────────────────────────────────────────── */
+    .unit-card {
+      padding: 26px 24px 36px;
+      background: linear-gradient(140deg, var(--surface) 55%, #f0f7ff);
+    }
+    .unit-card .unit-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(90deg, var(--primary), var(--accent2));
+      color: #fff;
+      font-size: .72rem; font-weight: 700;
+      padding: 4px 12px; border-radius: 50px;
+      margin-bottom: 14px; letter-spacing: .05em;
+    }
+    .unit-card .unit-icon {
+      font-size: 2rem; margin-bottom: 10px; display: block;
+    }
+    .unit-card .card-title { font-size: 1.1rem; }
+    .unit-card .unit-lesson-count {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 10px;
+      font-size: .76rem; font-weight: 600;
+      color: var(--primary);
+      background: var(--surface2);
+      padding: 4px 12px; border-radius: 50px;
+    }
 
-       TO DUPLICATE A LESSON CARD:
-         In the LESSONS data (JS below), copy any lesson object:
-           { title: "...", desc: "...", link: "PASTE_YOUR_LESSON_LINK_HERE" },
-         Paste it inside the correct grade/subject array and update the values.
-    */
+    /* ─── LESSON CARDS (external link style) ────────────────── */
     a.lesson-card {
       display: flex;
       align-items: center;
       gap: 16px;
-      padding: 22px 22px 22px 22px;
+      padding: 22px;
       text-decoration: none;
       color: inherit;
       background: var(--surface);
@@ -286,7 +314,7 @@
       padding: 3px 10px; border-radius: 50px;
     }
 
-    /* ─── NO-LINK PLACEHOLDER (example.com links) ───────────── */
+    /* ─── NO-LINK PLACEHOLDER ────────────────────────────────── */
     a.lesson-card.no-link {
       opacity: .6;
       cursor: not-allowed;
@@ -377,7 +405,7 @@
       </header>
 
       <!-- ══════════════════════════════════════════════════════
-           VIEW: HOME — Grade Selection
+           VIEW 1: HOME — Grade Selection
       ══════════════════════════════════════════════════════ -->
       <section id="view-home" class="edv-view active">
         <p class="hero-tagline">Choose your grade to start learning. High-quality lessons, anytime, anywhere.</p>
@@ -429,17 +457,17 @@
       </section>
 
       <!-- ══════════════════════════════════════════════════════
-           VIEW: SUBJECTS
+           VIEW 2: SUBJECTS
       ══════════════════════════════════════════════════════ -->
       <section id="view-subjects" class="edv-view">
         <div class="breadcrumb" id="breadcrumb-subjects"></div>
         <button class="btn-back" onclick="goHome()">← Back to Grades</button>
         <h2 class="section-title" id="subjects-title">Subjects</h2>
-        <p class="section-desc">Select a subject to explore its lessons.</p>
+        <p class="section-desc">Select a subject to explore its units.</p>
         <div class="cards-grid">
 
           <!-- English Subject Card -->
-          <div class="card subject-card" onclick="showLessons('English')">
+          <div class="card subject-card" onclick="showUnits('English')">
             <div class="subject-icon-wrap" style="background:#e8f0fe;">🇬🇧</div>
             <div>
               <div class="card-title">English</div>
@@ -448,98 +476,223 @@
             <span class="card-arrow">→</span>
           </div>
 
-          <!-- ADD NEW SUBJECT HERE:
-               Copy the subject-card block above, update icon, title,
-               and add matching lessons in the LESSONS data below.
+          <!-- ADD NEW SUBJECT CARD HERE:
+               Copy the subject-card block above.
+               Change the icon, title, desc, and onclick subject name.
+               Add matching data in the LESSONS object below.
           -->
 
         </div>
       </section>
 
       <!-- ══════════════════════════════════════════════════════
-           VIEW: LESSONS — External Link Cards
-           Each card is an <a> that opens in a new tab.
+           VIEW 3: UNITS  ← NEW
+      ══════════════════════════════════════════════════════ -->
+      <section id="view-units" class="edv-view">
+        <div class="breadcrumb" id="breadcrumb-units"></div>
+        <button class="btn-back" onclick="goSubjects()">← Back to Subjects</button>
+        <h2 class="section-title" id="units-title">Units</h2>
+        <p class="section-desc">Select a unit to see its lessons.</p>
+        <!-- Unit cards are injected here by JavaScript -->
+        <div class="cards-grid" id="units-container"></div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════
+           VIEW 4: LESSONS — External Link Cards
       ══════════════════════════════════════════════════════ -->
       <section id="view-lessons" class="edv-view">
         <div class="breadcrumb" id="breadcrumb-lessons"></div>
-        <button class="btn-back" onclick="goSubjects()">← Back to Subjects</button>
+        <button class="btn-back" onclick="goUnits()">← Back to Units</button>
         <h2 class="section-title" id="lessons-title">Lessons</h2>
         <p class="section-desc">Click any lesson card to open it in a new tab.</p>
         <!-- Lesson cards are injected here by JavaScript -->
         <div class="cards-grid" id="lessons-container"></div>
       </section>
 
-      <footer>© 2026 Eduvorra – Smart Learning Platform
-       
-        Beta V1.0 - النسخة التجريبية</footer>
+      <footer>© 2026 Eduvorra – Smart Learning Platform &nbsp;·&nbsp; Beta V1.1 - النسخة التجريبية</footer>
 
     </div><!-- /#eduvorra-app -->
   </div><!-- /#platform -->
 
   <script>
     /* ============================================================
-       EDUVORRA LESSON DATA
+       EDUVORRA LESSON DATA  (v1.1 – with Units layer)
        ─────────────────────────────────────────────────────────────
+       STRUCTURE:
+         LESSONS = {
+           'Grade X': {
+             'Subject': {
+               'Unit Name': {
+                 icon: '📗',          ← emoji shown on unit card
+                 desc: 'Description', ← shown below unit title
+                 lessons: [
+                   { title: "Lesson Title", desc: "Short desc.", link: "URL" },
+                 ]
+               },
+             }
+           }
+         }
+
        HOW TO ADD A LESSON:
-         1. Find the correct grade and subject array below.
-         2. Copy this template and paste it inside the array:
-              { title: "Unit X – Title", desc: "Short description.", link: "PASTE_YOUR_LESSON_LINK_HERE" },
-         3. Replace the values. Save. Done!
+         Find the right grade → subject → unit, then add inside lessons[]:
+           { title: "Listen & Discuss", desc: "Places in town.", link: "lessons/..." },
 
-       HOW TO DUPLICATE A LESSON CARD:
-         Copy any existing lesson object (the whole { ... } block)
-         and paste it on a new line inside the same array.
-         Update title, desc, and link.
+       HOW TO ADD A NEW UNIT:
+         Inside the subject object, add:
+           'Unit 13': {
+             icon: '📗',
+             desc: 'What this unit covers.',
+             lessons: [
+               { title: "...", desc: "...", link: "..." },
+             ]
+           },
 
-       NOTE: If 'link' is still "PASTE_YOUR_LESSON_LINK_HERE" or
-       contains "example.com", the card will show a "Coming Soon"
-       badge and will NOT open a new tab.
+       NOTE: If 'link' is "PASTE_YOUR_LESSON_LINK_HERE" or
+       contains "example.com", the card shows "Coming Soon".
     ============================================================ */
+
     const LESSONS = {
 
       // ── GRADE 1 ──────────────────────────────────────────────────
       'Grade 1': {
-        'English': [
-          // ↓ PASTE YOUR LESSON LINK in the "link" field below
-          { title: "Unit 12 – Listen & Discuss", desc: "Name places in a town.", link: "lessons/lessons1/U12/U12L1.html.html" },
-          { title: "Unit 12 – Grammar",    desc: "Can & Like + Infinitive.",  link: "lessons/lessons1/U12/U12L2.html.html" },
-          { title: "Unit 12 – Listening & Conversation",          desc: "Practice using can & can't.",    link: "lessons/lessons1/U12/U12L3.html.html" },
-          { title: "Unit 12 – Reading",                 desc: "Read and understand simple texts.",      link: "lessons/lessons1/U12/U12L4.html.html" },
-          { title: "Unit 12 – Writing",                 desc: "Write and express opinions.",      link: "lessons/lessons1/U12/U12L5.html.html" },
-          // ADD NEW LESSON HERE (Grade 1 / English) ↑
-        ],
+        'English': {
+
+          'Unit 12': {
+            icon: '📗',
+            desc: 'What Can You Do There?',
+            lessons: [
+              { title: "Listen & Discuss",        desc: "Name places in a town.",             link: "lessons/lessons1/U12/U12L1.html.html" },
+              { title: "Grammar",                  desc: "Can & Like + Infinitive.",            link: "lessons/lessons1/U12/U12L2.html.html" },
+              { title: "Listening & Conversation", desc: "Practice using can & can't.",         link: "lessons/lessons1/U12/U12L3.html.html" },
+              { title: "Reading",                  desc: "Read and understand simple texts.",   link: "lessons/lessons1/U12/U12L4.html.html" },
+              { title: "Writing",                  desc: "Write and express opinions.",         link: "lessons/lessons1/U12/U12L5.html.html" },
+              { title: "Form Meaning and Function",                  desc: "gerund & infinitive",         link: "lessons/lessons1/U12/U12L6.html.html" },
+            ]
+          },
+
+          'Unit 13': {
+  icon: '📙',
+  desc: 'soon.',
+  lessons: [
+    { title: "Listen & Discuss", desc: "Places in town.", link: "YOUR_LINK" },
+    { title: "Grammar", desc: "Prepositions.", link: "YOUR_LINK" },
+  ]
+},
+
+'Unit 14': {
+  icon: '📘',
+  desc: 'soon.',
+  lessons: [
+    { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
+  ]
+},// ADD NEW UNIT HERE (Grade 1 / English) ↓
+          // 'Unit 13': {
+          //   icon: '📘',
+          //   desc: 'test.',
+          //   lessons: [
+          //     { title: "...", desc: "...", link: "PASTE_YOUR_LESSON_LINK_HERE" },
+          //   ]
+          // },
+
+        },
       },
 
       // ── GRADE 2 ──────────────────────────────────────────────────
       'Grade 2': {
-        'English': [
-          // ↓ PASTE YOUR LESSON LINK in the "link" field below
-          { title: "Unit 11 – Reading",  desc: "Form and use the present simple correctly.", link: "lessons/lessons2/U11/U11L4.html.html" },
-          { title: "Unit 11 – Writing",        desc: "Write & passive voice.",            link: "lessons/lessons2/U11/U11L5.html.html" },
-          { title: "Unit 11 – Form meaning and function",     desc: "Use So...That  /  Such...That.",  link: "lessons/lessons2/U11/U11L6.html.html" },
-          { title: "Unit 11 – Reading Comprehension", desc: "Practice reading short passages.",           link: "PASTE_YOUR_LESSON_LINK_HERE" },
-          // ADD NEW LESSON HERE (Grade 2 / English) ↑
-        ],
+        'English': {
+
+          'Unit 11': {
+            icon: '📘',
+            desc: 'There’s No Comparison',
+            lessons: [
+              { title: "Reading",                    desc: "Form and use the present simple correctly.", link: "lessons/lessons2/U11/U11L4.html.html" },
+              { title: "Writing",                    desc: "Write & passive voice.",                     link: "lessons/lessons2/U11/U11L5.html.html" },
+              { title: "Form Meaning and Function",  desc: "Use So...That / Such...That.",               link: "lessons/lessons2/U11/U11L6.html.html" },
+          
+            ]
+          },
+
+          'Unit 12': {
+  icon: '📗',
+  desc: 'It’s Going to Be Fun!',
+  lessons: [
+    { title: "Listen & Discuss", desc: "Read and understand a vacation brochure about global travel destinations.", link: "lessons/lessons2/U12/U12L1.html.html" },
+    { title: "Grammar", desc: "Future going to, information questions and position adjectives.", link: "lessons/lessons2/U12/U12L2.html.html" },
+  ]
+},
+'Unit 13': {
+  icon: '📙',
+  desc: 'soon',
+  lessons: [
+    { title: "Listen & Discuss", desc: "Places in town.", link: "YOUR_LINK" },
+    { title: "Grammar", desc: "Prepositions.", link: "YOUR_LINK" },
+  ]
+},
+
+'Unit 14': {
+  icon: '📘',
+  desc: 'soon.',
+  lessons: [
+    { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
+  ]
+},
+        },
       },
 
       // ── GRADE 3 ──────────────────────────────────────────────────
       'Grade 3': {
-        'English': [
-          // ↓ PASTE YOUR LESSON LINK in the "link" field below
-          { title: "Unit 9 – Grammar", desc: "Relative Clauses (who, that, which) & Past Progressive with when/while·", link: "lessons/lessons3/U9/U9L2.html.html" },
-          { title: "Unit 9 – Conversation", desc: "Practice speaking and listening skills.", link: "lessons/lessons3/U9/U9L3.html.html" },
-          { title: "Unit 9 – Reading", desc: "Read and understand simple texts.", link: "lessons/lessons3/U9/U9L4.html.html" },
-          // ADD NEW LESSON HERE (Grade 3 / English) ↑
-          // Template to copy:
-          // { title: "Unit X – Title", desc: "Description.", link: "PASTE_YOUR_LESSON_LINK_HERE" },
-        ],
+        'English': {
+
+          'Unit 9': {
+            icon: '📙',
+            desc: 'All Kinds of People',
+            lessons: [
+              { title: "Grammar",      desc: "Relative Clauses (who, that, which) & Past Progressive.", link: "lessons/lessons3/U9/U9L2.html.html" },
+              { title: "Conversation", desc: "Practice speaking and listening skills.",                   link: "lessons/lessons3/U9/U9L3.html.html" },
+              { title: "Reading",      desc: "Read and understand simple texts.",                         link: "lessons/lessons3/U9/U9L4.html.html" },
+              { title: "Writing",      desc: "Write about your vision for the future.",                               link: "lessons/lessons3/U9/U9L5.html.html" },
+              { title: "Form, Meaning and Function",      desc: " learn how to use the modal verbs can, may, and could",                               link: "lessons/lessons3/U9/U9L6.html.html" },
+            ]
+          },
+
+         'Unit 10': {
+  icon: '📗',
+  desc: 'Who Used My Toothpaste?',
+  lessons: [
+    { title: "Listen & Discuss", desc: "Recognize and discuss common complaints in families.", link: "lessons/lessons3/U10/U10L1.html.html" },
+    { title: "Grammar", desc: "Present Perfect,Verb + Gerund and Two-Word Verbs ", link: "lessons/lessons3/U10/U10L2.html.html" },
+  ]
+},
+
+'Unit 11': {
+  icon: '📘',
+  desc: 'soon.',
+  lessons: [
+    { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
+  ]
+}, // ADD NEW UNIT HERE (Grade 3 / English) ↓
+          // 'Unit 10': {
+          //   icon: '📗',
+          //   desc: 'Unit description.',
+          //   lessons: [
+          //     { title: "...", desc: "...", link: "PASTE_YOUR_LESSON_LINK_HERE" },
+          //   ]
+          // },
+
+        },
       },
 
-      // ADD NEW GRADE HERE (copy a grade block above):
+      // ADD NEW GRADE HERE ↓
       // 'Grade 4': {
-      //   'English': [
-      //     { title: "...", desc: "...", link: "PASTE_YOUR_LESSON_LINK_HERE" },
-      //   ],
+      //   'English': {
+      //     'Unit 1': {
+      //       icon: '📗',
+      //       desc: 'Unit description.',
+      //       lessons: [
+      //         { title: "...", desc: "...", link: "PASTE_YOUR_LESSON_LINK_HERE" },
+      //       ]
+      //     },
+      //   },
       // },
 
     };
@@ -549,6 +702,7 @@
     let currentGradeLabel = '';
     let currentGradeAr    = '';
     let currentSubject    = '';
+    let currentUnit       = '';
 
     /* ─── VIEW SWITCHER ─────────────────────────────────────── */
     function showEduvorraView(id) {
@@ -558,7 +712,7 @@
       });
       const el = document.getElementById(id);
       el.style.display = 'block';
-      void el.offsetWidth; // force reflow for animation
+      void el.offsetWidth;
       el.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -566,7 +720,9 @@
     /* ─── NAVIGATION ────────────────────────────────────────── */
     function goHome()     { showEduvorraView('view-home'); }
     function goSubjects() { showEduvorraView('view-subjects'); }
+    function goUnits()    { showEduvorraView('view-units'); }
 
+    /* ─── SHOW SUBJECTS ─────────────────────────────────────── */
     function showSubjects(gradeKey, gradeLabel, gradeAr) {
       currentGradeKey   = gradeKey;
       currentGradeLabel = gradeLabel;
@@ -577,18 +733,69 @@
       showEduvorraView('view-subjects');
     }
 
-    function showLessons(subject) {
+    /* ─── SHOW UNITS ────────────────────────────────────────── */
+    function showUnits(subject) {
       currentSubject = subject;
-      document.getElementById('lessons-title').textContent =
+
+      document.getElementById('units-title').textContent =
         subject + ' – ' + currentGradeLabel + ' (' + currentGradeAr + ')';
-      document.getElementById('breadcrumb-lessons').innerHTML =
+      document.getElementById('breadcrumb-units').innerHTML =
         `<a onclick="goHome()">🏠 Home</a><span>›</span>
          <a onclick="goSubjects()">${currentGradeLabel}</a><span>›</span>
          <strong>${subject}</strong>`;
 
+      const container = document.getElementById('units-container');
+      container.innerHTML = '';
+
+      const subjectData = ((LESSONS[currentGradeKey] || {})[subject]) || {};
+      const unitKeys = Object.keys(subjectData);
+
+      if (unitKeys.length === 0) {
+        container.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;padding:24px 0;">No units added yet. Check back soon!</p>';
+        showEduvorraView('view-units');
+        return;
+      }
+
+      unitKeys.forEach((unitKey, idx) => {
+        const unitData = subjectData[unitKey];
+        const lessonCount = (unitData.lessons || []).length;
+
+        const card = document.createElement('div');
+        card.className = 'card unit-card';
+        card.onclick = () => showLessons(unitKey);
+
+        card.innerHTML = `
+          <span class="unit-badge">📂 ${unitKey}</span>
+          <span class="unit-icon">${unitData.icon || '📄'}</span>
+          <div class="card-title">${unitKey}</div>
+          ${unitData.desc ? `<div class="card-sub" style="margin-top:6px;">${unitData.desc}</div>` : ''}
+          <div class="unit-lesson-count">📝 ${lessonCount} Lesson${lessonCount !== 1 ? 's' : ''}</div>
+          <span class="card-arrow">→</span>
+        `;
+
+        container.appendChild(card);
+      });
+
+      showEduvorraView('view-units');
+    }
+
+    /* ─── SHOW LESSONS ──────────────────────────────────────── */
+    function showLessons(unitKey) {
+      currentUnit = unitKey;
+
+      document.getElementById('lessons-title').textContent =
+        unitKey + ' · ' + currentSubject + ' – ' + currentGradeLabel;
+      document.getElementById('breadcrumb-lessons').innerHTML =
+        `<a onclick="goHome()">🏠 Home</a><span>›</span>
+         <a onclick="goSubjects()">${currentGradeLabel}</a><span>›</span>
+         <a onclick="goUnits()">${currentSubject}</a><span>›</span>
+         <strong>${unitKey}</strong>`;
+
       const container = document.getElementById('lessons-container');
       container.innerHTML = '';
-      const lessons = (LESSONS[currentGradeKey] || {})[subject] || [];
+
+      const unitData  = ((LESSONS[currentGradeKey] || {})[currentSubject] || {})[unitKey] || {};
+      const lessons   = unitData.lessons || [];
 
       if (lessons.length === 0) {
         container.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;padding:24px 0;">No lessons added yet. Check back soon!</p>';
@@ -597,24 +804,6 @@
       }
 
       lessons.forEach((lesson, i) => {
-        /*
-          Each lesson becomes an <a class="lesson-card"> element.
-          - href  = the Netlify lesson URL from LESSONS data
-          - target="_blank" opens it in a new tab
-
-          STRUCTURE OF A LESSON CARD:
-          <a href="LESSON_URL" target="_blank" class="lesson-card">
-            <div class="lesson-num">01</div>
-            <div class="lesson-info">
-              <div class="card-title">Lesson Title</div>
-              <div class="card-sub">Short description</div>
-              <span class="lesson-link-badge">🔗 Open Lesson</span>
-            </div>
-            <span class="card-arrow">→</span>
-          </a>
-        */
-
-        // Detect placeholder / missing links
         const hasRealLink = lesson.link &&
           !lesson.link.includes('PASTE_YOUR_LESSON_LINK_HERE') &&
           !lesson.link.includes('example.com');
@@ -622,13 +811,11 @@
         const card = document.createElement('a');
 
         if (hasRealLink) {
-          // ── REAL LINK: opens in new tab ──────────────────────
           card.href   = lesson.link;
           card.target = '_blank';
           card.rel    = 'noopener noreferrer';
           card.className = 'lesson-card';
         } else {
-          // ── PLACEHOLDER: card shown but not clickable ────────
           card.href      = '#';
           card.className = 'lesson-card no-link';
           card.addEventListener('click', e => e.preventDefault());

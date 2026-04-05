@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 11 – Form, Meaning and Function</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --primary-dark: #1e40af;
+    --accent: #f59e0b;
+    --accent-light: #fef3c7;
+    --green: #10b981;
+    --green-light: #d1fae5;
+    --red: #ef4444;
+    --red-light: #fee2e2;
+    --purple: #8b5cf6;
+    --purple-light: #ede9fe;
+    --bg: #f0f4ff;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --header-h: 64px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  .top-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--header-h);
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(37,99,235,.35);
+  }
+  .top-bar .left { display: flex; gap: 16px; align-items: center; }
+  .top-bar .badge {
+    background: rgba(255,255,255,.2);
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .5px;
+  }
+  .top-bar .right {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
+    background: rgba(255,255,255,.15);
+    border-radius: 8px;
+    padding: 4px 14px;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    position: fixed;
+    top: var(--header-h);
+    left: 0; right: 0;
+    height: 5px;
+    background: #cbd5e1;
+    z-index: 99;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #f97316);
+    transition: width .4s ease;
+  }
+
+  /* ── SLIDES ── */
+  .slides-container {
+    margin-top: calc(var(--header-h) + 5px);
+    padding: 28px 16px 100px;
+    max-width: 860px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .slide {
+    display: none;
+    animation: fadeSlide .45s ease;
+  }
+  .slide.active { display: block; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 4px 24px rgba(37,99,235,.08);
+    margin-bottom: 20px;
+  }
+
+  /* ── SLIDE 1 – OPENING ── */
+  .opening-slide {
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+    border-radius: 24px;
+    padding: 60px 32px;
+    text-align: center;
+    color: #fff;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .opening-slide::before {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.07);
+    top: -80px; right: -80px;
+  }
+  .opening-slide::after {
+    content: '';
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.05);
+    bottom: -60px; left: -60px;
+  }
+  .opening-slide .unit-tag {
+    background: rgba(255,255,255,.2);
+    border: 1px solid rgba(255,255,255,.4);
+    border-radius: 30px;
+    padding: 6px 22px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+  }
+  .opening-slide h1 {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .opening-slide .ar-title {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(16px, 3vw, 22px);
+    font-weight: 700;
+    opacity: .9;
+    margin-bottom: 28px;
+  }
+  .opening-slide .meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .opening-slide .meta-pill {
+    background: rgba(255,255,255,.15);
+    border-radius: 12px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  /* ── SECTION LABELS ── */
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border-radius: 10px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    letter-spacing: .4px;
+  }
+
+  h2.slide-title {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 900;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+  }
+
+  /* ── OBJECTIVES ── */
+  .obj-list { list-style: none; }
+  .obj-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .obj-list li:last-child { border-bottom: none; }
+  .obj-icon {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .ar-note {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  /* ── GRAMMAR BOX ── */
+  .grammar-box {
+    border-left: 4px solid var(--primary);
+    background: var(--primary-light);
+    border-radius: 0 16px 16px 0;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.7;
+  }
+  .grammar-box .highlight { color: var(--primary-dark); font-weight: 800; }
+  .grammar-box.green {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  .grammar-box.green .highlight { color: #065f46; }
+  .grammar-box.purple {
+    border-color: var(--purple);
+    background: var(--purple-light);
+  }
+  .grammar-box.purple .highlight { color: #4c1d95; }
+
+  /* ── VERB TABLE ── */
+  .verb-table {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .verb-chip {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    transition: all .25s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .verb-chip:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37,99,235,.15);
+  }
+  .verb-chip .speak-btn {
+    font-size: 18px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  /* ── EXAMPLES ── */
+  .example-box {
+    background: linear-gradient(135deg, #f8faff, #eef2ff);
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    border: 1px solid #c7d2fe;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .example-box .eng { font-weight: 700; color: var(--text); }
+  .example-box .eng span { color: var(--primary-dark); font-weight: 900; text-decoration: underline; }
+  .example-box .ar { font-family: 'Tajawal', sans-serif; font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* ── EXERCISE A ── */
+  .ex-text {
+    font-size: 15px;
+    line-height: 2.2;
+    font-weight: 600;
+    background: #f8faff;
+    border-radius: 16px;
+    padding: 20px 22px;
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .ex-text .blank-wrap {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    vertical-align: bottom;
+    margin: 0 4px;
+  }
+  .ex-input {
+    border: none;
+    border-bottom: 2.5px solid var(--primary);
+    background: transparent;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    width: 130px;
+    text-align: center;
+    outline: none;
+    padding: 2px 4px;
+    transition: border-color .2s;
+  }
+  .ex-input:focus { border-color: var(--accent); }
+  .ex-input.correct { border-color: var(--green); color: var(--green); }
+  .ex-input.wrong   { border-color: var(--red);   color: var(--red);   }
+  .blank-num {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--muted);
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    border: none;
+    transition: all .2s;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(37,99,235,.3);
+  }
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+  .btn-success {
+    background: var(--green);
+    color: #fff;
+  }
+  .btn-success:hover { opacity: .88; }
+  .btn-outline {
+    background: #fff;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+  }
+  .btn-outline:hover { background: var(--primary-light); }
+  .btn-accent {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-sm { padding: 7px 14px; font-size: 13px; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 12px;
+    animation: fadeSlide .3s ease;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok   { background: var(--green-light); color: #065f46; border: 1.5px solid var(--green); }
+  .feedback.fail { background: var(--red-light);   color: #991b1b; border: 1.5px solid var(--red); }
+
+  /* ── ANSWER REVEAL ── */
+  .answer-box {
+    display: none;
+    background: var(--green-light);
+    border: 1.5px solid var(--green);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 2;
+    color: #065f46;
+    animation: fadeSlide .3s ease;
+  }
+  .answer-box.show { display: block; }
+
+  /* ── MCQ ── */
+  .mcq-wrap { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  .mcq-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all .2s;
+    background: #fff;
+  }
+  .mcq-opt:hover { border-color: var(--primary); background: var(--primary-light); }
+  .mcq-opt.correct { border-color: var(--green); background: var(--green-light); color: #065f46; }
+  .mcq-opt.wrong   { border-color: var(--red);   background: var(--red-light);   color: #991b1b; }
+  .mcq-opt .opt-letter {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 900; flex-shrink: 0;
+  }
+  .mcq-opt.correct .opt-letter { background: var(--green); color: #fff; }
+  .mcq-opt.wrong   .opt-letter { background: var(--red);   color: #fff; }
+
+  /* ── QUIZ SCORE ── */
+  .score-display {
+    text-align: center;
+    padding: 24px;
+    background: linear-gradient(135deg, var(--primary-light), #eef2ff);
+    border-radius: 20px;
+    margin-top: 16px;
+  }
+  .score-num {
+    font-size: 56px;
+    font-weight: 900;
+    color: var(--primary);
+    line-height: 1;
+  }
+  .score-label { font-size: 15px; color: var(--muted); font-weight: 700; margin-top: 6px; }
+
+  /* ── SUMMARY ── */
+  .summary-row {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--bg);
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .summary-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .summary-row h4 { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+  .summary-row p { font-size: 13px; color: var(--muted); font-weight: 600; line-height: 1.6; }
+
+  /* ── CHALLENGE ── */
+  .challenge-card {
+    background: linear-gradient(135deg, #1e40af, #7c3aed);
+    border-radius: 20px;
+    padding: 28px;
+    color: #fff;
+    text-align: center;
+  }
+  .challenge-card h3 { font-size: 20px; font-weight: 900; margin-bottom: 12px; }
+  .challenge-input {
+    width: 100%;
+    border: 2px solid rgba(255,255,255,.4);
+    background: rgba(255,255,255,.15);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    outline: none;
+    margin: 14px 0;
+  }
+  .challenge-input::placeholder { color: rgba(255,255,255,.6); }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    margin-top: 32px;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .footer .brand { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 1px; }
+  .footer .ar-name { font-family: 'Tajawal', sans-serif; font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .footer .made { font-family: 'Tajawal', sans-serif; font-size: 12px; color: #94a3b8; margin-top: 2px; }
+
+  /* ── NAV ── */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.06);
+  }
+  .nav-counter { font-size: 13px; font-weight: 700; color: var(--muted); }
+  .nav-btns { display: flex; gap: 10px; }
+
+  .tag-gerund { background: #dbeafe; color: #1e40af; border-radius: 8px; padding: 2px 10px; font-size: 13px; font-weight: 800; }
+  .tag-inf    { background: #d1fae5; color: #065f46; border-radius: 8px; padding: 2px 10px; font-size: 13px; font-weight: 800; }
+
+  /* ── PRACTICE B ── */
+  .practice-row {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .practice-row:last-child { border-bottom: none; }
+  .practice-full {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    background: transparent;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    outline: none;
+    padding: 4px 6px;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 600px) {
+    .slides-container { padding: 20px 10px 90px; }
+    .card { padding: 18px; }
+    .top-bar { padding: 0 14px; }
+    .opening-slide { padding: 40px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="left">
+    <div class="badge">📘 Unit 11</div>
+    <div class="badge">📄 Page 109</div>
+  </div>
+  <div class="right">First Intermediate &nbsp;|&nbsp; أول متوسط</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-bar" id="progressBar" style="width:11%"></div>
+</div>
+
+<!-- SLIDES -->
+<div class="slides-container">
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 1 – OPENING
+  ══════════════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="opening-slide">
+      <div class="unit-tag">📘 UNIT 11 &nbsp;·&nbsp; PAGE 109</div>
+      <h1>Form, Meaning and Function</h1>
+      <div class="ar-title">الفعل الجاردة والمصدر بعد الأفعال</div>
+      <div class="meta">
+        <div class="meta-pill">🏫 First Intermediate</div>
+        <div class="meta-pill">📖 Super Goal 1</div>
+        <div class="meta-pill">📅 الفصل الدراسي الثاني</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 2 – OBJECTIVES
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="card">
+      <div class="section-label">🎯 Objectives</div>
+      <h2 class="slide-title">What will you learn?</h2>
+      <ul class="obj-list">
+        <li>
+          <div class="obj-icon">1️⃣</div>
+          <div>
+            Understand what a <strong>gerund</strong> is and how to form it.
+            <div class="ar-note">تعلّم ما هو الفعل الجاردة وكيف يُبنى</div>
+          </div>
+        </li>
+        <li>
+          <div class="obj-icon">2️⃣</div>
+          <div>
+            Understand what an <strong>infinitive</strong> is and how to form it.
+            <div class="ar-note">تعلّم ما هو المصدر وكيف يُبنى</div>
+          </div>
+        </li>
+        <li>
+          <div class="obj-icon">3️⃣</div>
+          <div>
+            Know which verbs are followed by a <strong>gerund</strong>.
+            <div class="ar-note">تحديد الأفعال التي يتبعها الجاردة</div>
+          </div>
+        </li>
+        <li>
+          <div class="obj-icon">4️⃣</div>
+          <div>
+            Know which verbs are followed by an <strong>infinitive</strong>.
+            <div class="ar-note">تحديد الأفعال التي يتبعها المصدر</div>
+          </div>
+        </li>
+        <li>
+          <div class="obj-icon">5️⃣</div>
+          <div>
+            Complete exercises using gerunds and infinitives correctly.
+            <div class="ar-note">إكمال التمارين باستخدام الجاردة والمصدر بشكل صحيح</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 3 – GERUNDS EXPLANATION
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="card">
+      <div class="section-label">📖 Explanation</div>
+      <h2 class="slide-title">What is a Gerund? <span class="tag-gerund">verb + ing</span></h2>
+
+      <div class="grammar-box">
+        A <span class="highlight">gerund</span> is the <span class="highlight">-ing</span> form of a verb.<br>
+        It acts like a <strong>noun</strong> and answers the question <em>what</em>.
+        <div class="ar-note" style="margin-top:8px;font-family:'Tajawal',sans-serif;font-size:13px;color:#1e40af;">
+          الجاردة هي الفعل المضاف إليه <strong>ing</strong> — تعمل كاسم وتجيب على سؤال "ماذا؟"
+        </div>
+      </div>
+
+      <p style="font-size:14px;font-weight:700;margin-bottom:10px;">🔗 Verbs followed by a GERUND: <span class="ar-note" style="font-family:'Tajawal',sans-serif;">(أفعال يتبعها الجاردة)</span></p>
+
+      <div class="verb-table" id="gerundVerbs">
+        <!-- filled by JS -->
+      </div>
+
+      <div class="example-box" style="margin-top:18px;">
+        <div class="eng">They spend their free time <span>playing</span> basketball.</div>
+        <div class="ar">يقضون وقت فراغهم في لعب كرة السلة.</div>
+      </div>
+      <div class="example-box">
+        <div class="eng">He enjoys <span>skateboarding</span> in the park.</div>
+        <div class="ar">يستمتع بركوب السكيت في الحديقة.</div>
+      </div>
+      <div class="example-box">
+        <div class="eng">She can't stand <span>waiting</span> in long lines.</div>
+        <div class="ar">لا تتحمل الانتظار في الطوابير الطويلة.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 4 – INFINITIVES EXPLANATION
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="card">
+      <div class="section-label">📖 Explanation</div>
+      <h2 class="slide-title">What is an Infinitive? <span class="tag-inf">to + verb</span></h2>
+
+      <div class="grammar-box green">
+        An <span class="highlight">infinitive</span> is <span class="highlight">to + the base form</span> of a verb.<br>
+        Like gerunds, infinitives act like <strong>nouns</strong> and answer the question <em>what</em>.
+        <div class="ar-note" style="margin-top:8px;font-family:'Tajawal',sans-serif;font-size:13px;color:#065f46;">
+          المصدر هو <strong>to</strong> + الفعل الأساسي — يعمل أيضاً كاسم ويجيب على سؤال "ماذا؟"
+        </div>
+      </div>
+
+      <p style="font-size:14px;font-weight:700;margin-bottom:10px;">🔗 Verbs followed by an INFINITIVE: <span class="ar-note" style="font-family:'Tajawal',sans-serif;">(أفعال يتبعها المصدر)</span></p>
+
+      <div class="verb-table" id="infVerbs"></div>
+
+      <div class="example-box" style="margin-top:18px;">
+        <div class="eng">I like <span>to watch</span> TV.</div>
+        <div class="ar">أحب مشاهدة التلفزيون.</div>
+      </div>
+      <div class="example-box">
+        <div class="eng">She wants <span>to travel</span> abroad.</div>
+        <div class="ar">تريد السفر إلى الخارج.</div>
+      </div>
+
+      <div class="grammar-box purple" style="margin-top:16px;">
+        ⚠️ <span class="highlight">like, love, hate,</span> and <span class="highlight">prefer</span> can go with <strong>either</strong> a gerund or an infinitive.
+        <div class="ar-note" style="margin-top:6px;font-family:'Tajawal',sans-serif;font-size:13px;color:#4c1d95;">
+          بعض الأفعال مثل like و love و hate و prefer تقبل الجاردة والمصدر معاً
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 5 – QUICK COMPARISON
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="card">
+      <div class="section-label">🔀 Compare</div>
+      <h2 class="slide-title">Gerund vs. Infinitive</h2>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;">
+        <div style="background:var(--primary-light);border-radius:16px;padding:18px;text-align:center;">
+          <div style="font-size:28px;margin-bottom:8px;">🏃</div>
+          <div style="font-weight:900;color:var(--primary-dark);font-size:16px;margin-bottom:10px;">GERUND</div>
+          <div style="font-size:13px;font-weight:700;color:var(--primary);">verb + <strong>-ing</strong></div>
+          <hr style="border-color:#bfdbfe;margin:10px 0;">
+          <div style="font-size:13px;font-weight:600;line-height:1.8;color:var(--text);">
+            enjoy <strong>swimming</strong><br>
+            dislike <strong>cooking</strong><br>
+            can't stand <strong>waiting</strong>
+          </div>
+        </div>
+        <div style="background:var(--green-light);border-radius:16px;padding:18px;text-align:center;">
+          <div style="font-size:28px;margin-bottom:8px;">💡</div>
+          <div style="font-weight:900;color:#065f46;font-size:16px;margin-bottom:10px;">INFINITIVE</div>
+          <div style="font-size:13px;font-weight:700;color:var(--green);">to + <strong>verb</strong></div>
+          <hr style="border-color:#a7f3d0;margin:10px 0;">
+          <div style="font-size:13px;font-weight:600;line-height:1.8;color:var(--text);">
+            want <strong>to go</strong><br>
+            would like <strong>to eat</strong><br>
+            hate <strong>to wake</strong> up early
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;">
+        <p style="font-size:14px;font-weight:800;margin-bottom:12px;">🧠 Quick Check — Tap the correct form:</p>
+        <div id="quickCheck"></div>
+        <div class="feedback" id="qcFeedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 6 – QUIZ (before exercises)
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="card">
+      <div class="section-label">🎮 Quiz</div>
+      <h2 class="slide-title">Test Your Knowledge!</h2>
+      <div id="quizContainer"></div>
+      <div id="quizResult" style="display:none;" class="score-display">
+        <div class="score-num" id="scoreNum">0/5</div>
+        <div class="score-label">Great job! Review any missed questions above.</div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="submitQuiz()">🎯 Submit Quiz</button>
+        <button class="btn btn-outline" onclick="resetQuiz()">🔄 Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 7 – EXERCISE A (Part 1: sentences 1-6)
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="card">
+      <div class="section-label">✏️ Exercise A</div>
+      <h2 class="slide-title">Write the gerund or infinitive</h2>
+      <p style="font-size:13px;color:var(--muted);font-weight:600;margin-bottom:16px;">Fill in each blank with the correct form of the verb in parentheses. <span style="font-family:'Tajawal',sans-serif;">أكمل الفراغات بالصيغة الصحيحة للفعل بين القوسين.</span></p>
+
+      <div class="ex-text" id="exA1">
+        My family and I love
+        <span class="blank-wrap"><span class="blank-num">(1. go)</span><input class="ex-input" id="a1" placeholder="..." data-answer="going" /></span>
+        to Beachside Resort on vacation every summer. We always stay in a comfortable apartment with a beautiful view.<br><br>
+
+        There are lots of fun activities to do at Beachside. My dad and brothers enjoy
+        <span class="blank-wrap"><span class="blank-num">(2. do)</span><input class="ex-input" id="a2" placeholder="..." data-answer="doing" /></span>
+        water sports. They usually rent a boat. My dad and Ahmed spend the day
+        <span class="blank-wrap"><span class="blank-num">(3. fish)</span><input class="ex-input" id="a3" placeholder="..." data-answer="fishing" /></span>
+        . Sometimes they catch enough fish for dinner. Hameed prefers
+        <span class="blank-wrap"><span class="blank-num">(4. snorkel)</span><input class="ex-input" id="a4" placeholder="..." data-answer="to snorkel" /></span>
+        , and this year he would like
+        <span class="blank-wrap"><span class="blank-num">(5. try)</span><input class="ex-input" id="a5" placeholder="..." data-answer="to try" /></span>
+        scuba diving. My mom can't stand
+        <span class="blank-wrap"><span class="blank-num">(6. sail)</span><input class="ex-input" id="a6" placeholder="..." data-answer="sailing" /></span>
+        because she gets seasick.
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="checkExA1()">✅ Check Answers</button>
+        <button class="btn btn-outline btn-sm" onclick="toggleAnswer('ansA1')">👁️ Show / Hide Answers</button>
+      </div>
+
+      <div class="answer-box" id="ansA1">
+        <strong>Answers (1–6):</strong><br>
+        1. going &nbsp;|&nbsp; 2. doing &nbsp;|&nbsp; 3. fishing &nbsp;|&nbsp; 4. to snorkel &nbsp;|&nbsp; 5. to try &nbsp;|&nbsp; 6. sailing
+      </div>
+
+      <div class="feedback" id="fbA1"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 8 – EXERCISE A (Part 2: sentences 7-12)
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="card">
+      <div class="section-label">✏️ Exercise A (continued)</div>
+      <h2 class="slide-title">Continue – sentences 7 to 12</h2>
+
+      <div class="ex-text" id="exA2">
+        …and I hate
+        <span class="blank-wrap"><span class="blank-num">(7. sit)</span><input class="ex-input" id="a7" placeholder="..." data-answer="sitting" /></span>
+        on the boat all day. We prefer
+        <span class="blank-wrap"><span class="blank-num">(8. walk)</span><input class="ex-input" id="a8" placeholder="..." data-answer="to walk" /></span>
+        along the beach.<br><br>
+
+        In the evening, I help my mom cook dinner. We all love
+        <span class="blank-wrap"><span class="blank-num">(9. eat)</span><input class="ex-input" id="a9" placeholder="..." data-answer="eating" /></span>
+        fresh fish and seafood. After dinner, my brothers like
+        <span class="blank-wrap"><span class="blank-num">(10. hike)</span><input class="ex-input" id="a10" placeholder="..." data-answer="to hike" /></span>
+        along the ecological trails. I clear the table and wash up the dishes because my parents want
+        <span class="blank-wrap"><span class="blank-num">(11. relax)</span><input class="ex-input" id="a11" placeholder="..." data-answer="to relax" /></span>
+        on the balcony. Then, I usually feel like
+        <span class="blank-wrap"><span class="blank-num">(12. read)</span><input class="ex-input" id="a12" placeholder="..." data-answer="reading" /></span>
+        a good book.
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="checkExA2()">✅ Check Answers</button>
+        <button class="btn btn-outline btn-sm" onclick="toggleAnswer('ansA2')">👁️ Show / Hide Answers</button>
+      </div>
+
+      <div class="answer-box" id="ansA2">
+        <strong>Answers (7–12):</strong><br>
+        7. sitting &nbsp;|&nbsp; 8. to walk &nbsp;|&nbsp; 9. eating &nbsp;|&nbsp; 10. to hike &nbsp;|&nbsp; 11. to relax &nbsp;|&nbsp; 12. reading
+      </div>
+
+      <div class="feedback" id="fbA2"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 9 – EXERCISE B
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="card">
+      <div class="section-label">✏️ Exercise B</div>
+      <h2 class="slide-title">Write about YOUR likes and dislikes</h2>
+      <p style="font-size:13px;color:var(--muted);font-weight:600;margin-bottom:16px;">Use gerunds and infinitives to write about yourself. <span style="font-family:'Tajawal',sans-serif;">اكتب عن نفسك باستخدام الجاردة والمصدر.</span></p>
+
+      <div class="card" style="background:var(--bg);box-shadow:none;border:1px solid var(--border);">
+        <div class="practice-row">1. I like <input class="practice-full" placeholder="e.g. playing football / to read books" /></div>
+        <div class="practice-row">2. I would like <input class="practice-full" placeholder="e.g. to travel to Japan" /></div>
+        <div class="practice-row">3. I enjoy <input class="practice-full" placeholder="e.g. watching movies" /></div>
+        <div class="practice-row">4. I prefer <input class="practice-full" placeholder="e.g. staying home / to go out with friends" /></div>
+        <div class="practice-row">5. I dislike <input class="practice-full" placeholder="e.g. waking up early" /></div>
+        <div class="practice-row">6. I can't stand <input class="practice-full" placeholder="e.g. sitting in traffic" /></div>
+        <div class="practice-row">7. I spend my free time <input class="practice-full" placeholder="e.g. playing video games" /></div>
+      </div>
+
+      <div style="margin-top:14px;background:var(--accent-light);border-radius:14px;padding:14px;border:1px solid #fde68a;">
+        <p style="font-size:13px;font-weight:700;color:#92400e;">
+          💡 <strong>Tip:</strong> Your answers are personal! There is no single correct answer for Exercise B.
+          <span style="font-family:'Tajawal',sans-serif;display:block;margin-top:4px;">إجاباتك شخصية! لا توجد إجابة واحدة صحيحة لهذا التمرين.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 10 – SUMMARY
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <div class="card">
+      <div class="section-label">📋 Summary</div>
+      <h2 class="slide-title">What did we learn?</h2>
+
+      <div class="summary-row">
+        <div class="summary-icon" style="background:#dbeafe;">🏃</div>
+        <div>
+          <h4>Gerund = verb + <em>-ing</em></h4>
+          <p>Acts like a noun. Used after: enjoy, dislike, hate, like, love, prefer, can't stand, feel like, spend time.<br><span style="font-family:'Tajawal',sans-serif;">يعمل كاسم. يأتي بعد: enjoy, dislike, hate, like, love, prefer...</span></p>
+        </div>
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-icon" style="background:#d1fae5;">💡</div>
+        <div>
+          <h4>Infinitive = to + base verb</h4>
+          <p>Acts like a noun. Used after: want, would like, love, hate, like, prefer.<br><span style="font-family:'Tajawal',sans-serif;">يعمل كاسم. يأتي بعد: want, would like, love, hate...</span></p>
+        </div>
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-icon" style="background:#ede9fe;">⚡</div>
+        <div>
+          <h4>Some verbs take BOTH</h4>
+          <p>like, love, hate, prefer → can use gerund OR infinitive.<br><span style="font-family:'Tajawal',sans-serif;">بعض الأفعال تقبل الجاردة والمصدر معاً.</span></p>
+        </div>
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-icon" style="background:#fef3c7;">📝</div>
+        <div>
+          <h4>Remember the key verbs!</h4>
+          <p>Gerund only: enjoy, can't stand, feel like, spend time, dislike.<br>Infinitive only: want, would like.<br><span style="font-family:'Tajawal',sans-serif;">احفظ الأفعال المهمة.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 11 – CHALLENGE
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-11">
+    <div class="card">
+      <div class="section-label">🌟 Challenge</div>
+      <h2 class="slide-title">Challenge Question</h2>
+
+      <div class="challenge-card">
+        <h3>✍️ Write 3 sentences about your typical weekend!</h3>
+        <p style="font-size:14px;opacity:.85;margin-bottom:12px;">Use at least ONE gerund and ONE infinitive in your sentences.<br><span style="font-family:'Tajawal',sans-serif;">اكتب 3 جمل عن عطلة نهاية أسبوعك باستخدام جاردة ومصدر على الأقل.</span></p>
+        <textarea class="challenge-input" rows="4" placeholder="Example: On Fridays, I enjoy playing football. I would like to visit my grandparents. I can't stand waking up early..."></textarea>
+        <button class="btn" style="background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.5);" onclick="challengeCheck()">
+          🚀 Submit My Answer
+        </button>
+      </div>
+
+      <div class="feedback" id="challengeFb" style="margin-top:16px;"></div>
+
+      <div class="footer">
+        <div class="brand">eduvorra</div>
+        <div class="ar-name">عبدالحكيم صالح الحسون</div>
+        <div class="made">صُنع بحب في بريدة 💙</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /slides-container -->
+
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <button class="btn btn-outline btn-sm" onclick="prevSlide()">← Previous</button>
+  <div class="nav-counter" id="navCounter">1 / 11</div>
+  <button class="btn btn-primary btn-sm" onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const gerundVerbList = ['can\'t stand','dislike','enjoy','feel like','hate*','like*','love*','prefer*','spend time'];
+const infVerbList    = ['hate*','like*','love*','prefer*','want','would like'];
+
+function speak(word) {
+  if ('speechSynthesis' in window) {
+    const u = new SpeechSynthesisUtterance(word);
+    u.lang = 'en-US';
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  }
+}
+
+function buildVerbChips(listId, verbs) {
+  const el = document.getElementById(listId);
+  if (!el) return;
+  el.innerHTML = verbs.map(v => {
+    const clean = v.replace('*','');
+    const star  = v.includes('*') ? '<small style="color:#f59e0b;">★</small>' : '';
+    return `<div class="verb-chip" onclick="speak('${clean}')">
+      <button class="speak-btn" title="Pronounce">🔊</button>
+      <span>${clean}</span>${star}
+    </div>`;
+  }).join('');
+}
+
+// ── QUICK CHECK (Slide 5) ──────────────────────────
+const quickCheckData = [
+  { q: 'She enjoys _____ (swim).', opts:['swimming','to swim','swims','swam'], ans:0 },
+];
+function buildQuickCheck() {
+  const el = document.getElementById('quickCheck');
+  if (!el) return;
+  const q = quickCheckData[0];
+  el.innerHTML = `<p style="font-size:15px;font-weight:700;margin-bottom:10px;">${q.q}</p>
+  <div class="mcq-wrap" id="qcOpts">
+    ${q.opts.map((o,i)=>`<div class="mcq-opt" onclick="qcAnswer(${i})">
+      <div class="opt-letter">${'ABCD'[i]}</div><span>${o}</span></div>`).join('')}
+  </div>`;
+}
+function qcAnswer(i) {
+  const opts = document.querySelectorAll('#qcOpts .mcq-opt');
+  opts.forEach((o,idx) => {
+    o.classList.remove('correct','wrong');
+    if(idx===0) o.classList.add('correct');
+    else if(idx===i && i!==0) o.classList.add('wrong');
+  });
+  const fb = document.getElementById('qcFeedback');
+  fb.className = 'feedback show ' + (i===0 ? 'ok':'fail');
+  fb.innerHTML = i===0 ? '✅ Correct! "swimming" is a gerund after "enjoys".' : '❌ Not quite! The correct answer is "swimming" (gerund after enjoys).';
+}
+
+// ── EXERCISE A CHECKS ─────────────────────────────
+function checkInputs(ids) {
+  let correct = 0;
+  ids.forEach(id => {
+    const inp = document.getElementById(id);
+    if (!inp) return;
+    const val = inp.value.trim().toLowerCase();
+    const ans = inp.dataset.answer.toLowerCase();
+    inp.classList.remove('correct','wrong');
+    if (val === ans) { inp.classList.add('correct'); correct++; }
+    else if (val) { inp.classList.add('wrong'); }
+  });
+  return correct;
+}
+function checkExA1() {
+  const ids = ['a1','a2','a3','a4','a5','a6'];
+  const c = checkInputs(ids);
+  const fb = document.getElementById('fbA1');
+  fb.className = 'feedback show ' + (c===6?'ok':'fail');
+  fb.innerHTML = c===6 ? `✅ Perfect! All 6 answers correct!` : `❌ ${c}/6 correct. Check the highlighted boxes and try again.`;
+}
+function checkExA2() {
+  const ids = ['a7','a8','a9','a10','a11','a12'];
+  const c = checkInputs(ids);
+  const fb = document.getElementById('fbA2');
+  fb.className = 'feedback show ' + (c===6?'ok':'fail');
+  fb.innerHTML = c===6 ? `✅ Perfect! All 6 answers correct!` : `❌ ${c}/6 correct. Check the highlighted boxes and try again.`;
+}
+function toggleAnswer(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+}
+
+// ── QUIZ ──────────────────────────────────────────
+const quizData = [
+  {
+    q: 'He enjoys _____ (play) tennis every day.',
+    opts: ['to play','played','playing','plays'],
+    ans: 2,
+    hint: '"enjoy" is always followed by a gerund (verb + -ing).'
+  },
+  {
+    q: 'They want _____ (visit) the museum.',
+    opts: ['visiting','to visit','visited','visits'],
+    ans: 1,
+    hint: '"want" is followed by an infinitive (to + verb).'
+  },
+  {
+    q: 'I can\'t stand _____ (wait) in traffic.',
+    opts: ['wait','to wait','waiting','waited'],
+    ans: 2,
+    hint: '"can\'t stand" is followed by a gerund (verb + -ing).'
+  },
+  {
+    q: 'She would like _____ (learn) Spanish.',
+    opts: ['learning','learns','learned','to learn'],
+    ans: 3,
+    hint: '"would like" is followed by an infinitive (to + verb).'
+  },
+  {
+    q: 'My brothers dislike _____ (do) homework.',
+    opts: ['to do','did','doing','done'],
+    ans: 2,
+    hint: '"dislike" is followed by a gerund (verb + -ing).'
+  }
+];
+let quizAnswered = {};
+function buildQuiz() {
+  const el = document.getElementById('quizContainer');
+  if (!el) return;
+  el.innerHTML = quizData.map((q,qi)=>
+    `<div style="margin-bottom:20px;padding:16px;background:var(--bg);border-radius:16px;border:1px solid var(--border);">
+      <p style="font-size:15px;font-weight:800;margin-bottom:10px;">${qi+1}. ${q.q}</p>
+      <div class="mcq-wrap" id="quiz_${qi}">
+        ${q.opts.map((o,oi)=>`<div class="mcq-opt" onclick="quizSelect(${qi},${oi})">
+          <div class="opt-letter">${'ABCD'[oi]}</div><span>${o}</span></div>`).join('')}
+      </div>
+      <div class="feedback" id="qhint_${qi}"></div>
+    </div>`
+  ).join('');
+}
+function quizSelect(qi, oi) {
+  if (quizAnswered[qi] !== undefined) return;
+  quizAnswered[qi] = oi;
+  const opts = document.querySelectorAll(`#quiz_${qi} .mcq-opt`);
+  opts.forEach((o,idx) => {
+    o.classList.remove('correct','wrong');
+    if (idx === quizData[qi].ans) o.classList.add('correct');
+    else if (idx === oi && oi !== quizData[qi].ans) o.classList.add('wrong');
+  });
+  const fb = document.getElementById(`qhint_${qi}`);
+  const ok = oi === quizData[qi].ans;
+  fb.className = 'feedback show ' + (ok?'ok':'fail');
+  fb.innerHTML = ok ? `✅ Correct! ${quizData[qi].hint}` : `❌ Not quite. ${quizData[qi].hint}`;
+}
+function submitQuiz() {
+  let score = 0;
+  quizData.forEach((_,qi) => {
+    if (quizAnswered[qi] === quizData[qi].ans) score++;
+    if (quizAnswered[qi] === undefined) {
+      const opts = document.querySelectorAll(`#quiz_${qi} .mcq-opt`);
+      opts[quizData[qi].ans].classList.add('correct');
+      const fb = document.getElementById(`qhint_${qi}`);
+      fb.className = 'feedback show fail';
+      fb.innerHTML = `❌ Not answered. ${quizData[qi].hint}`;
+    }
+  });
+  const res = document.getElementById('quizResult');
+  res.style.display = 'block';
+  document.getElementById('scoreNum').textContent = `${score}/5`;
+  const label = res.querySelector('.score-label');
+  if (score===5) label.textContent = '🏆 Perfect score! You mastered gerunds and infinitives!';
+  else if (score>=3) label.textContent = '👍 Good job! Review the missed questions above.';
+  else label.textContent = '📚 Keep practicing! Go back and review the explanation slides.';
+}
+function resetQuiz() {
+  quizAnswered = {};
+  document.getElementById('quizResult').style.display = 'none';
+  buildQuiz();
+}
+
+// ── CHALLENGE ─────────────────────────────────────
+function challengeCheck() {
+  const ta = document.querySelector('.challenge-input');
+  const val = ta.value.trim();
+  const fb = document.getElementById('challengeFb');
+  if (!val) {
+    fb.className = 'feedback show fail';
+    fb.innerHTML = '❌ Please write your answer first!';
+    return;
+  }
+  fb.className = 'feedback show ok';
+  fb.innerHTML = '✅ Great effort! Show your teacher for feedback. Remember to check you used at least one gerund (verb + -ing) and one infinitive (to + verb)!';
+}
+
+// ── SLIDES NAVIGATION ─────────────────────────────
+const totalSlides = 11;
+let current = 1;
+
+function showSlide(n) {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('slide-' + n);
+  if (el) el.classList.add('active');
+  document.getElementById('navCounter').textContent = `${n} / ${totalSlides}`;
+  const pct = (n / totalSlides) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function nextSlide() {
+  if (current < totalSlides) { current++; showSlide(current); }
+}
+function prevSlide() {
+  if (current > 1) { current--; showSlide(current); }
+}
+
+// ── INIT ─────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  buildVerbChips('gerundVerbs', gerundVerbList);
+  buildVerbChips('infVerbs',    infVerbList);
+  buildQuickCheck();
+  buildQuiz();
+});
+</script>
+</body>
+</html>
