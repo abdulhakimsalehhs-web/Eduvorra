@@ -35,7 +35,6 @@ body{
   min-height:100vh; overflow-x:hidden;
 }
 
-/* ─── GLOWS ──────────────────────────────────────────────── */
 .glow-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
 .glow{position:absolute;border-radius:50%;filter:blur(90px);animation:gdrift 14s ease-in-out infinite alternate;}
 .glow-1{width:600px;height:600px;background:rgba(30,92,179,0.2);top:-200px;right:-150px;animation-duration:16s;}
@@ -46,20 +45,14 @@ body{
 #platform{position:relative;z-index:1;}
 #eduvorra-app{max-width:960px;margin:0 auto;padding:0 20px 80px;}
 
-/* ═══════════════════════════════════════════════════════════
-   LANDING PAGE
-═══════════════════════════════════════════════════════════ */
+/* LANDING */
 #view-landing{
-  min-height:100vh;
-  display:flex; flex-direction:column;
+  min-height:100vh; display:flex; flex-direction:column;
   align-items:center; justify-content:center;
-  padding:60px 20px 80px;
-  text-align:center;
-  position:relative;
+  padding:60px 20px 80px; text-align:center; position:relative;
 }
 #view-landing::before{
-  content:'';
-  position:absolute; inset:0;
+  content:''; position:absolute; inset:0;
   background-image:
     linear-gradient(rgba(59,139,245,0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(59,139,245,0.04) 1px, transparent 1px);
@@ -68,7 +61,6 @@ body{
   pointer-events:none;
 }
 
-/* Entrance animations */
 .land-logo     { animation: landIn .6s .0s ease both; }
 .land-badge    { animation: landIn .6s .1s ease both; }
 .land-headline { animation: landIn .6s .2s ease both; }
@@ -79,141 +71,143 @@ body{
 .land-features { animation: landIn .6s .72s ease both; }
 @keyframes landIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
-/* Logo */
 .land-logo{display:inline-flex;align-items:center;gap:14px;margin-bottom:24px;}
-.land-logo-text{
-  font-family:'Sora',sans-serif;
-  font-size:clamp(2rem,7vw,3.2rem);
-  font-weight:800; letter-spacing:-2px; line-height:1;
-}
-.land-logo-text .edu  {color:var(--text);}
+.land-logo-text{font-family:'Sora',sans-serif;font-size:clamp(2rem,7vw,3.2rem);font-weight:800;letter-spacing:-2px;line-height:1;}
+.land-logo-text .edu{color:var(--text);}
 .land-logo-text .vorra{color:var(--accent);}
 
-/* First badge */
 .land-badge{
-  display:inline-flex; align-items:center; gap:8px;
-  background:rgba(240,192,64,0.1);
-  border:1px solid rgba(240,192,64,0.25);
-  color:var(--gold);
-  font-family:'Sora',sans-serif; font-size:.75rem; font-weight:700;
-  padding:6px 16px; border-radius:50px;
-  letter-spacing:.05em; margin-bottom:24px;
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(240,192,64,0.1);border:1px solid rgba(240,192,64,0.25);
+  color:var(--gold);font-family:'Sora',sans-serif;font-size:.75rem;font-weight:700;
+  padding:6px 16px;border-radius:50px;letter-spacing:.05em;margin-bottom:24px;
 }
 .land-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
 
-/* Headline — Arabic */
 .land-headline{
-  font-family:'Tajawal',sans-serif;
-  font-size:clamp(1.7rem,5.5vw,3.2rem);
-  font-weight:900; line-height:1.35;
-  letter-spacing:.01em;
-  margin-bottom:20px;
-  direction:rtl;
-  max-width:680px;
+  font-family:'Tajawal',sans-serif;font-size:clamp(1.7rem,5.5vw,3.2rem);
+  font-weight:900;line-height:1.35;letter-spacing:.01em;
+  margin-bottom:20px;direction:rtl;max-width:680px;
 }
-.land-headline .line1{color:var(--text); display:block;}
-.land-headline .line2{color:var(--text); display:block;}
+.land-headline .line1,.land-headline .line2{color:var(--text);display:block;}
 .land-headline .line3{
   display:block;
-  background:linear-gradient(135deg, var(--accent) 0%, var(--sky) 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  background-clip:text;
-  position:relative;
+  background:linear-gradient(135deg,var(--accent) 0%,var(--sky) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 
-/* Tagline — Arabic */
 .land-tagline{
-  font-family:'Tajawal',sans-serif;
-  font-size:clamp(1.1rem,3vw,1.5rem);
-  font-weight:700; direction:rtl;
-  color:var(--muted);
-  margin-bottom:12px;
-  letter-spacing:.02em;
+  font-family:'Tajawal',sans-serif;font-size:clamp(1.1rem,3vw,1.5rem);
+  font-weight:700;direction:rtl;color:var(--muted);margin-bottom:12px;
 }
-.land-tagline .t{
-  display:inline-block;
-  padding:0 12px;
-  color:var(--text);
-  position:relative;
-}
-.land-tagline .t::after{
-  content:'·';
-  position:absolute; right:-8px;
-  color:var(--accent); font-size:.8em;
-}
+.land-tagline .t{display:inline-block;padding:0 12px;color:var(--text);position:relative;}
+.land-tagline .t::after{content:'·';position:absolute;right:-8px;color:var(--accent);font-size:.8em;}
 .land-tagline .t:last-child::after{display:none;}
 
-/* Sub — English */
-.land-sub{
-  font-size:.9rem; color:var(--muted);
-  max-width:440px; margin:0 auto 36px;
-  line-height:1.7; letter-spacing:.01em;
-}
+.land-sub{font-size:.9rem;color:var(--muted);max-width:440px;margin:0 auto 36px;line-height:1.7;}
 
-/* Stats */
-.land-stats{
-  display:flex; justify-content:center; gap:16px;
-  margin-bottom:40px; flex-wrap:wrap;
-}
+/* ── COUNT-UP STATS ── */
+.land-stats{display:flex;justify-content:center;gap:16px;margin-bottom:40px;flex-wrap:wrap;}
 .land-stat{
-  display:flex; flex-direction:column; align-items:center; gap:4px;
-  background:var(--surface); border:1.5px solid var(--border);
-  border-radius:14px; padding:16px 24px; min-width:90px;
-  box-shadow:var(--shadow); transition:var(--tr);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:14px;padding:16px 24px;min-width:90px;
+  box-shadow:var(--shadow);transition:var(--tr);position:relative;overflow:hidden;
 }
-.land-stat:hover{border-color:var(--border-h);transform:translateY(-3px);}
+.land-stat::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(59,139,245,0.07),transparent);opacity:0;transition:.3s;}
+.land-stat:hover{border-color:var(--border-h);transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.land-stat:hover::after{opacity:1;}
 .land-stat-num{
-  font-family:'Sora',sans-serif;
-  font-size:1.7rem; font-weight:800;
-  color:var(--accent); line-height:1;
+  font-family:'Sora',sans-serif;font-size:1.7rem;font-weight:800;
+  color:var(--accent);line-height:1;transition:color .3s;
 }
+.land-stat:hover .land-stat-num{color:var(--sky);}
 .land-stat-label{font-size:.72rem;color:var(--muted);font-family:'Sora',sans-serif;font-weight:600;text-align:center;}
 
-/* CTA */
 .land-cta{
-  display:inline-flex; align-items:center; gap:10px;
-  background:var(--accent); color:#fff;
-  font-family:'Tajawal',sans-serif; font-weight:700;
-  font-size:1.1rem; padding:16px 44px;
-  border-radius:50px; border:none; cursor:pointer;
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--accent);color:#fff;
+  font-family:'Tajawal',sans-serif;font-weight:700;font-size:1.1rem;
+  padding:16px 44px;border-radius:50px;border:none;cursor:pointer;
   box-shadow:0 8px 32px rgba(59,139,245,0.4);
-  transition:var(--tr); position:relative; overflow:hidden;
-  margin-bottom:28px;
+  transition:var(--tr);position:relative;overflow:hidden;margin-bottom:28px;
 }
-.land-cta::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(255,255,255,0.12),transparent);
-  opacity:0;transition:opacity .2s;
-}
+.land-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.12),transparent);opacity:0;transition:.2s;}
 .land-cta:hover{transform:translateY(-3px);box-shadow:0 14px 44px rgba(59,139,245,0.55);}
 .land-cta:hover::before{opacity:1;}
 .land-cta .arrow{display:inline-block;transition:transform .25s;}
 .land-cta:hover .arrow{transform:translateX(5px);}
 
-/* Feature pills */
-.land-features{
-  display:flex; justify-content:center; gap:8px; flex-wrap:wrap;
-}
+.land-features{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;}
 .land-feat{
-  display:inline-flex; align-items:center; gap:6px;
-  font-family:'Sora',sans-serif; font-size:.72rem; font-weight:600;
-  color:var(--muted);
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.07);
-  padding:5px 13px; border-radius:50px;
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Sora',sans-serif;font-size:.72rem;font-weight:600;
+  color:var(--muted);background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.07);padding:5px 13px;border-radius:50px;
 }
-.land-feat .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.land-feat .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);}
 
-/* ═══════════════════════════════════════════════════════════
-   APP VIEWS
-═══════════════════════════════════════════════════════════ */
+/* ── SEARCH ── */
+.search-wrap{position:relative;margin-bottom:36px;}
+.search-input{
+  width:100%;background:var(--surface);border:1.5px solid var(--border);
+  border-radius:50px;padding:14px 52px 14px 22px;
+  font-family:'Sora',sans-serif;font-size:.9rem;color:var(--text);
+  outline:none;transition:var(--tr);box-shadow:var(--shadow);
+}
+.search-input::placeholder{color:var(--muted);}
+.search-input:focus{border-color:var(--border-h);box-shadow:0 0 0 3px rgba(59,139,245,0.12),var(--shadow);}
+.search-clear{
+  position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  color:var(--muted);cursor:pointer;font-size:.85rem;
+  background:none;border:none;padding:4px;display:none;transition:color .2s;
+}
+.search-clear:hover{color:var(--accent);}
+
+#search-results-panel{
+  display:none;margin-top:8px;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow-lg);overflow:hidden;
+  animation:edvIn .2s ease forwards;
+}
+.search-result-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 18px;cursor:pointer;
+  border-bottom:1px solid rgba(59,139,245,0.08);
+  transition:var(--tr);
+}
+.search-result-item:last-child{border-bottom:none;}
+.search-result-item:hover{background:var(--surface2);}
+.sr-num{
+  width:32px;height:32px;border-radius:9px;
+  background:rgba(59,139,245,0.1);color:var(--accent);
+  font-family:'Sora',sans-serif;font-weight:700;font-size:.78rem;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;border:1px solid rgba(59,139,245,0.2);
+}
+.sr-info{flex:1;min-width:0;}
+.sr-title{font-family:'Sora',sans-serif;font-size:.88rem;font-weight:700;color:var(--text);}
+.sr-path{font-size:.72rem;color:var(--muted);margin-top:2px;font-family:'Sora',sans-serif;}
+.sr-path span{color:var(--accent);}
+.sr-badge{font-family:'Sora',sans-serif;font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:50px;flex-shrink:0;}
+.sr-badge.available{color:var(--accent);background:rgba(59,139,245,0.1);border:1px solid rgba(59,139,245,0.2);}
+.sr-badge.soon{color:var(--muted);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);}
+.search-empty{padding:28px;text-align:center;color:var(--muted);font-family:'Sora',sans-serif;font-size:.85rem;}
+.search-header{
+  padding:10px 18px 8px;font-family:'Sora',sans-serif;
+  font-size:.7rem;font-weight:700;color:var(--muted);
+  letter-spacing:.08em;text-transform:uppercase;
+  border-bottom:1px solid rgba(59,139,245,0.08);
+}
+
+/* APP VIEWS */
 header{text-align:center;padding:56px 20px 40px;}
 .logo-mark{display:inline-flex;align-items:center;gap:12px;margin-bottom:8px;}
 .logo-text{font-family:'Sora',sans-serif;font-size:clamp(2rem,6vw,3rem);font-weight:800;letter-spacing:-1.5px;line-height:1;}
 .logo-text .edu{color:var(--text);}
 .logo-text .vorra{color:var(--accent);}
-.logo-sub{font-family:'Sora',sans-serif;font-size:.9rem;font-weight:400;color:var(--muted);letter-spacing:.06em;}
+.logo-sub{font-family:'Sora',sans-serif;font-size:.9rem;color:var(--muted);letter-spacing:.06em;}
 
 .breadcrumb{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);margin-bottom:28px;flex-wrap:wrap;font-family:'Sora',sans-serif;}
 .breadcrumb span{color:var(--border);}
@@ -235,7 +229,7 @@ header{text-align:center;padding:56px 20px 40px;}
 .stats-row{display:flex;justify-content:center;gap:12px;margin:24px 0 48px;flex-wrap:wrap;}
 .stat-pill{background:var(--surface);border:1.5px solid var(--border);border-radius:50px;padding:9px 18px;font-family:'Sora',sans-serif;font-size:.82rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:7px;box-shadow:var(--shadow);}
 .stat-pill strong{color:var(--accent);}
-.hero-tagline{text-align:center;font-size:clamp(1rem,3vw,1.2rem);color:var(--muted);font-weight:400;max-width:500px;margin:0 auto 12px;line-height:1.65;}
+.hero-tagline{text-align:center;font-size:clamp(1rem,3vw,1.2rem);color:var(--muted);max-width:500px;margin:0 auto 12px;line-height:1.65;}
 
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
 
@@ -257,12 +251,18 @@ header{text-align:center;padding:56px 20px 40px;}
 .subject-card{display:flex;align-items:center;gap:16px;padding:20px 22px;}
 .subject-icon-wrap{width:52px;height:52px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem;background:rgba(59,139,245,0.1);border:1px solid var(--border);}
 
+/* ── UNIT: Available & Locked ── */
 .unit-card{padding:24px 22px 34px;}
 .unit-card .unit-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(59,139,245,0.13);color:var(--accent);font-family:'Sora',sans-serif;font-size:.68rem;font-weight:700;padding:3px 11px;border-radius:50px;margin-bottom:12px;letter-spacing:.06em;border:1px solid rgba(59,139,245,0.22);}
 .unit-card .unit-icon{font-size:1.9rem;margin-bottom:9px;display:block;}
-.unit-card .card-title{font-size:1rem;}
 .unit-card .unit-lesson-count{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-family:'Sora',sans-serif;font-size:.72rem;font-weight:600;color:var(--muted);background:rgba(255,255,255,0.04);padding:4px 11px;border-radius:50px;border:1px solid rgba(255,255,255,0.07);}
 
+.unit-card.locked{opacity:.55;cursor:not-allowed;}
+.unit-card.locked:hover{transform:none!important;box-shadow:var(--shadow)!important;border-color:var(--border)!important;background:var(--surface)!important;}
+.unit-card.locked::before{display:none!important;}
+.lock-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.05);color:var(--muted);font-family:'Sora',sans-serif;font-size:.68rem;font-weight:700;padding:3px 11px;border-radius:50px;margin-top:10px;border:1px solid rgba(255,255,255,0.08);}
+
+/* LESSON */
 a.lesson-card{display:flex;align-items:center;gap:14px;padding:20px 22px;text-decoration:none;color:inherit;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);transition:var(--tr);position:relative;overflow:hidden;}
 a.lesson-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent),var(--sky));transform:scaleX(0);transform-origin:left;transition:transform var(--tr);}
 a.lesson-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:var(--border-h);background:var(--surface2);}
@@ -305,20 +305,16 @@ footer{text-align:center;margin-top:64px;color:var(--muted);font-size:.78rem;fon
 <div id="platform">
 <div id="eduvorra-app">
 
-<!-- ══════════════════════════════════════════════════════
-     VIEW 0 — LANDING
-══════════════════════════════════════════════════════ -->
+<!-- VIEW 0 — LANDING -->
 <section id="view-landing" class="edv-view active">
-
-  <!-- Logo -->
   <div class="land-logo">
     <svg width="52" height="52" viewBox="0 0 64 64" fill="none">
-      <rect x="8"  y="12" width="22" height="4" rx="2" fill="#3B8BF5"/>
-      <rect x="8"  y="20" width="16" height="4" rx="2" fill="#7BB8FF"/>
-      <rect x="8"  y="28" width="20" height="4" rx="2" fill="#3B8BF5"/>
-      <rect x="8"  y="36" width="16" height="4" rx="2" fill="#7BB8FF"/>
-      <rect x="8"  y="44" width="22" height="4" rx="2" fill="#3B8BF5"/>
-      <rect x="33" y="12" width="3"  height="36" rx="1.5" fill="rgba(59,139,245,0.28)"/>
+      <rect x="8" y="12" width="22" height="4" rx="2" fill="#3B8BF5"/>
+      <rect x="8" y="20" width="16" height="4" rx="2" fill="#7BB8FF"/>
+      <rect x="8" y="28" width="20" height="4" rx="2" fill="#3B8BF5"/>
+      <rect x="8" y="36" width="16" height="4" rx="2" fill="#7BB8FF"/>
+      <rect x="8" y="44" width="22" height="4" rx="2" fill="#3B8BF5"/>
+      <rect x="33" y="12" width="3" height="36" rx="1.5" fill="rgba(59,139,245,0.28)"/>
       <rect x="39" y="16" width="17" height="3" rx="1.5" fill="rgba(123,184,255,0.45)"/>
       <rect x="39" y="22" width="13" height="3" rx="1.5" fill="rgba(123,184,255,0.3)"/>
       <rect x="39" y="28" width="15" height="3" rx="1.5" fill="rgba(123,184,255,0.45)"/>
@@ -328,58 +324,44 @@ footer{text-align:center;margin-top:64px;color:var(--muted);font-size:.78rem;fon
     <span class="land-logo-text"><span class="edu">Edu</span><span class="vorra">vorra</span></span>
   </div>
 
-  <!-- Gold badge -->
-  <div class="land-badge">
-    <span class="dot"></span>
-    أول منصة سعودية · First Saudi Platform
-  </div>
+  <div class="land-badge"><span class="dot"></span>طريقك نحو التميز.. يبدأ من هنا· Excellence starts here</div>
 
-  <!-- Headline — Arabic -->
   <h1 class="land-headline">
-    <span class="line1">أول منصة سعودية</span>
+    <span class="line1">منصتك التعليمية</span>
     <span class="line2">للدروس التفاعلية</span>
     <span class="line3">بالذكاء الاصطناعي 🤖</span>
   </h1>
 
-  <!-- Tagline -->
   <div class="land-tagline">
     <span class="t">تعلّم أكثر</span>
     <span class="t">تعلّم بذكاء</span>
     <span class="t">تعلّم بطريقتك</span>
   </div>
 
-  <!-- Sub English -->
-  <p class="land-sub">
-    Interactive English lessons powered by AI —<br>
-    built for Saudi intermediate students.
-  </p>
+  <p class="land-sub">Interactive English lessons powered by AI —<br>built for Saudi intermediate students.</p>
 
-  <!-- Stats -->
+  <!-- COUNT-UP STATS -->
   <div class="land-stats">
     <div class="land-stat">
-      <span class="land-stat-num">3</span>
+      <span class="land-stat-num" data-target="3" data-suffix="">0</span>
       <span class="land-stat-label">Grades<br>صفوف</span>
     </div>
     <div class="land-stat">
-      <span class="land-stat-num">3+</span>
+      <span class="land-stat-num" data-target="7" data-suffix="+">0</span>
       <span class="land-stat-label">Units<br>وحدات</span>
     </div>
     <div class="land-stat">
-      <span class="land-stat-num">15+</span>
+      <span class="land-stat-num" data-target="15" data-suffix="+">0</span>
       <span class="land-stat-label">Lessons<br>دروس</span>
     </div>
     <div class="land-stat">
-      <span class="land-stat-num">∞</span>
+      <span class="land-stat-num" style="font-size:2rem;">∞</span>
       <span class="land-stat-label">Growing<br>متجددة</span>
     </div>
   </div>
 
-  <!-- CTA -->
-  <button class="land-cta" onclick="goHome()">
-    ابدأ الآن &nbsp;<span class="arrow">→</span>
-  </button>
+  <button class="land-cta" onclick="goHome()">ابدأ الآن &nbsp;<span class="arrow">→</span></button>
 
-  <!-- Feature pills -->
   <div class="land-features">
     <span class="land-feat"><span class="dot"></span>SuperGoal Curriculum</span>
     <span class="land-feat"><span class="dot"></span>Grades 7 · 8 · 9</span>
@@ -387,22 +369,19 @@ footer{text-align:center;margin-top:64px;color:var(--muted);font-size:.78rem;fon
     <span class="land-feat"><span class="dot"></span>بدون تسجيل</span>
     <span class="land-feat"><span class="dot"></span>Mobile Friendly</span>
   </div>
-
 </section>
 
-<!-- ══════════════════════════════════════════════════════
-     VIEW 1 — GRADES
-══════════════════════════════════════════════════════ -->
+<!-- VIEW 1 — GRADES -->
 <section id="view-home" class="edv-view">
   <header>
     <div class="logo-mark">
       <svg width="44" height="44" viewBox="0 0 64 64" fill="none">
-        <rect x="8"  y="12" width="22" height="4" rx="2" fill="#3B8BF5"/>
-        <rect x="8"  y="20" width="16" height="4" rx="2" fill="#7BB8FF"/>
-        <rect x="8"  y="28" width="20" height="4" rx="2" fill="#3B8BF5"/>
-        <rect x="8"  y="36" width="16" height="4" rx="2" fill="#7BB8FF"/>
-        <rect x="8"  y="44" width="22" height="4" rx="2" fill="#3B8BF5"/>
-        <rect x="33" y="12" width="3"  height="36" rx="1.5" fill="rgba(59,139,245,0.28)"/>
+        <rect x="8" y="12" width="22" height="4" rx="2" fill="#3B8BF5"/>
+        <rect x="8" y="20" width="16" height="4" rx="2" fill="#7BB8FF"/>
+        <rect x="8" y="28" width="20" height="4" rx="2" fill="#3B8BF5"/>
+        <rect x="8" y="36" width="16" height="4" rx="2" fill="#7BB8FF"/>
+        <rect x="8" y="44" width="22" height="4" rx="2" fill="#3B8BF5"/>
+        <rect x="33" y="12" width="3" height="36" rx="1.5" fill="rgba(59,139,245,0.28)"/>
         <rect x="39" y="16" width="17" height="3" rx="1.5" fill="rgba(123,184,255,0.45)"/>
         <rect x="39" y="22" width="13" height="3" rx="1.5" fill="rgba(123,184,255,0.3)"/>
         <rect x="39" y="28" width="15" height="3" rx="1.5" fill="rgba(123,184,255,0.45)"/>
@@ -413,6 +392,15 @@ footer{text-align:center;margin-top:64px;color:var(--muted);font-size:.78rem;fon
     </div>
     <div class="logo-sub">Smart Learning Platform &nbsp;·&nbsp; منصة التعلم الذكي</div>
   </header>
+
+  <!-- 🔍 GLOBAL SEARCH -->
+  <div class="search-wrap">
+    <input class="search-input" id="global-search" type="text"
+      placeholder="🔍  ابحث عن درس أو وحدة… Search lessons &amp; units"
+      autocomplete="off" oninput="handleSearch(this.value)" />
+    <button class="search-clear" id="search-clear-btn" onclick="clearSearch()">✕</button>
+    <div id="search-results-panel"></div>
+  </div>
 
   <p class="hero-tagline">Choose your grade to start learning. High-quality lessons, anytime, anywhere.</p>
   <div class="stats-row">
@@ -450,9 +438,7 @@ footer{text-align:center;margin-top:64px;color:var(--muted);font-size:.78rem;fon
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════
-     VIEW 2 — SUBJECTS
-══════════════════════════════════════════════════════ -->
+<!-- VIEW 2 — SUBJECTS -->
 <section id="view-subjects" class="edv-view">
   <div class="breadcrumb" id="breadcrumb-subjects"></div>
   <button class="btn-back" onclick="goHome()">← Back to Grades</button>
@@ -470,9 +456,7 @@ footer{text-align:center;margin-top:64px;color:var(--muted);font-size:.78rem;fon
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════
-     VIEW 3 — UNITS
-══════════════════════════════════════════════════════ -->
+<!-- VIEW 3 — UNITS -->
 <section id="view-units" class="edv-view">
   <div class="breadcrumb" id="breadcrumb-units"></div>
   <button class="btn-back" onclick="goSubjects()">← Back to Subjects</button>
@@ -481,9 +465,7 @@ footer{text-align:center;margin-top:64px;color:var(--muted);font-size:.78rem;fon
   <div class="cards-grid" id="units-container"></div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════
-     VIEW 4 — LESSONS
-══════════════════════════════════════════════════════ -->
+<!-- VIEW 4 — LESSONS -->
 <section id="view-lessons" class="edv-view">
   <div class="breadcrumb" id="breadcrumb-lessons"></div>
   <button class="btn-back" onclick="goUnits()">← Back to Units</button>
@@ -492,181 +474,330 @@ footer{text-align:center;margin-top:64px;color:var(--muted);font-size:.78rem;fon
   <div class="cards-grid" id="lessons-container"></div>
 </section>
 
-<footer>© 2026 Eduvorra – Smart Learning Platform &nbsp;·&nbsp; Beta V1.2 - النسخة التجريبية</footer>
-
+<footer>© 2026 Eduvorra – Smart Learning Platform &nbsp;·&nbsp; Beta V1.3 - النسخة التجريبية</footer>
 </div>
 </div>
 
 <script>
+/* ══════════════════════════════════
+   DATA
+══════════════════════════════════ */
 const LESSONS = {
   'Grade 1': {
     'English': {
       'Unit 12': {
-        icon: '📗', desc: 'What Can You Do There?',
-        lessons: [
-          { title: "Listen & Discuss",          desc: "Name places in a town.",           link: "lessons/lessons1/U12/U12L1.html.html" },
-          { title: "Grammar",                   desc: "Can & Like + Infinitive.",          link: "lessons/lessons1/U12/U12L2.html.html" },
-          { title: "Listening & Conversation",  desc: "Practice using can & can't.",       link: "lessons/lessons1/U12/U12L3.html.html" },
-          { title: "Reading",                   desc: "Read and understand simple texts.", link: "lessons/lessons1/U12/U12L4.html.html" },
-          { title: "Writing",                   desc: "Write and express opinions.",       link: "lessons/lessons1/U12/U12L5.html.html" },
-          { title: "Form Meaning and Function", desc: "Gerund & Infinitive.",              link: "lessons/lessons1/U12/U12L6.html.html" },
+        icon:'📗', desc:'What Can You Do There?', available:true,
+        lessons:[
+          {title:"Listen & Discuss",         desc:"Name places in a town.",           link:"lessons/lessons1/U12/U12L1.html.html"},
+          {title:"Grammar",                  desc:"Can & Like + Infinitive.",          link:"lessons/lessons1/U12/U12L2.html.html"},
+          {title:"Listening & Conversation", desc:"Practice using can & can't.",       link:"lessons/lessons1/U12/U12L3.html.html"},
+          {title:"Reading",                  desc:"Read and understand simple texts.", link:"lessons/lessons1/U12/U12L4.html.html"},
+          {title:"Writing",                  desc:"Write and express opinions.",       link:"lessons/lessons1/U12/U12L5.html.html"},
+          {title:"Form Meaning and Function",desc:"Gerund & Infinitive.",              link:"lessons/lessons1/U12/U12L6.html.html"},
         ]
       },
-      'Unit 13': { icon: '📙', desc: 'soon.', lessons: [
-        { title: "Listen & Discuss", desc: "Places in town.", link: "YOUR_LINK" },
-        { title: "Grammar",          desc: "Prepositions.",   link: "YOUR_LINK" },
-      ]},
-      'Unit 14': { icon: '📘', desc: 'soon.', lessons: [
-        { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
-      ]},
-    },
+      'Unit 13':{icon:'📙', desc:'قريباً', available:false, lessons:[]},
+      'Unit 14':{icon:'📘', desc:'قريباً', available:false, lessons:[]},
+    }
   },
   'Grade 2': {
     'English': {
       'Unit 11': {
-        icon: '📘', desc: "There's No Comparison",
-        lessons: [
-          { title: "Reading",                   desc: "Form and use the present simple correctly.", link: "lessons/lessons2/U11/U11L4.html.html" },
-          { title: "Writing",                   desc: "Write & passive voice.",                     link: "lessons/lessons2/U11/U11L5.html.html" },
-          { title: "Form Meaning and Function", desc: "Use So...That / Such...That.",               link: "lessons/lessons2/U11/U11L6.html.html" },
+        icon:'📘', desc:"There's No Comparison", available:true,
+        lessons:[
+          {title:"Reading",                  desc:"Form and use the present simple correctly.", link:"lessons/lessons2/U11/U11L4.html.html"},
+          {title:"Writing",                  desc:"Write & passive voice.",                     link:"lessons/lessons2/U11/U11L5.html.html"},
+          {title:"Form Meaning and Function",desc:"Use So...That / Such...That.",               link:"lessons/lessons2/U11/U11L6.html.html"},
         ]
       },
       'Unit 12': {
-        icon: '📗', desc: "It's Going to Be Fun!",
-        lessons: [
-          { title: "Listen & Discuss", desc: "Read and understand a vacation brochure.", link: "lessons/lessons2/U12/U12L1.html.html" },
-          { title: "Grammar",          desc: "Future going to, information questions.",  link: "lessons/lessons2/U12/U12L2.html.html" },
+        icon:'📗', desc:"It's Going to Be Fun!", available:true,
+        lessons:[
+          {title:"Listen & Discuss",desc:"Read and understand a vacation brochure.", link:"lessons/lessons2/U12/U12L1.html.html"},
+          {title:"Grammar",        desc:"Future going to, information questions.",   link:"lessons/lessons2/U12/U12L2.html.html"},
         ]
       },
-      'Unit 13': { icon: '📙', desc: 'soon', lessons: [
-        { title: "Listen & Discuss", desc: "Places in town.", link: "YOUR_LINK" },
-        { title: "Grammar",          desc: "Prepositions.",   link: "YOUR_LINK" },
-      ]},
-      'Unit 14': { icon: '📘', desc: 'soon.', lessons: [
-        { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
-      ]},
-    },
+      'Unit 13':{icon:'📙', desc:'قريباً', available:false, lessons:[]},
+      'Unit 14':{icon:'📘', desc:'قريباً', available:false, lessons:[]},
+    }
   },
   'Grade 3': {
     'English': {
       'Unit 9': {
-        icon: '📙', desc: 'All Kinds of People',
-        lessons: [
-          { title: "Grammar",                    desc: "Relative Clauses & Past Progressive.",                 link: "lessons/lessons3/U9/U9L2.html.html" },
-          { title: "Conversation",               desc: "Practice speaking and listening skills.",              link: "lessons/lessons3/U9/U9L3.html.html" },
-          { title: "Reading",                    desc: "Read and understand simple texts.",                    link: "lessons/lessons3/U9/U9L4.html.html" },
-          { title: "Writing",                    desc: "Write about your vision for the future.",              link: "lessons/lessons3/U9/U9L5.html.html" },
-          { title: "Form, Meaning and Function", desc: "Modal verbs: can, may, and could.",                   link: "lessons/lessons3/U9/U9L6.html.html" },
+        icon:'📙', desc:'All Kinds of People', available:true,
+        lessons:[
+          {title:"Grammar",                   desc:"Relative Clauses & Past Progressive.",   link:"lessons/lessons3/U9/U9L2.html.html"},
+          {title:"Conversation",              desc:"Practice speaking and listening skills.", link:"lessons/lessons3/U9/U9L3.html.html"},
+          {title:"Reading",                   desc:"Read and understand simple texts.",       link:"lessons/lessons3/U9/U9L4.html.html"},
+          {title:"Writing",                   desc:"Write about your vision for the future.", link:"lessons/lessons3/U9/U9L5.html.html"},
+          {title:"Form, Meaning and Function",desc:"Modal verbs: can, may, and could.",       link:"lessons/lessons3/U9/U9L6.html.html"},
         ]
       },
       'Unit 10': {
-        icon: '📗', desc: "Who Used My Toothpaste?",
-        lessons: [
-          { title: "Listen & Discuss", desc: "Common complaints in families.",               link: "lessons/lessons3/U10/U10L1.html.html" },
-          { title: "Grammar",          desc: "Present Perfect, Verb + Gerund, Two-Word Verbs.", link: "lessons/lessons3/U10/U10L2.html.html" },
+        icon:'📗', desc:"Who Used My Toothpaste?", available:true,
+        lessons:[
+          {title:"Listen & Discuss",desc:"Common complaints in families.",                 link:"lessons/lessons3/U10/U10L1.html.html"},
+          {title:"Grammar",        desc:"Present Perfect, Verb + Gerund, Two-Word Verbs.",link:"lessons/lessons3/U10/U10L2.html.html"},
         ]
       },
-      'Unit 11': { icon: '📘', desc: 'soon.', lessons: [
-        { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
-      ]},
-    },
+      'Unit 11':{icon:'📘', desc:'قريباً', available:false, lessons:[]},
+    }
   },
+};
+
+const GRADE_META = {
+  'Grade 1': {label:'First Intermediate',  ar:'اول متوسط'},
+  'Grade 2': {label:'Second Intermediate', ar:'ثاني متوسط'},
+  'Grade 3': {label:'Third Intermediate',  ar:'ثالث متوسط'},
 };
 
 let currentGradeKey='', currentGradeLabel='', currentGradeAr='', currentSubject='', currentUnit='';
 
+/* ══════════════════════════════════
+   VIEW SWITCHING
+══════════════════════════════════ */
 function showEduvorraView(id) {
-  document.querySelectorAll('.edv-view').forEach(v => { v.classList.remove('active'); v.style.display='none'; });
-  const el = document.getElementById(id);
-  el.style.display = id === 'view-landing' ? 'flex' : 'block';
+  document.querySelectorAll('.edv-view').forEach(v=>{v.classList.remove('active');v.style.display='none';});
+  const el=document.getElementById(id);
+  el.style.display = id==='view-landing'?'flex':'block';
   void el.offsetWidth;
   el.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-
-function goHome()     { showEduvorraView('view-home'); }
+function goHome()     { clearSearch(); showEduvorraView('view-home'); }
 function goSubjects() { showEduvorraView('view-subjects'); }
 function goUnits()    { showEduvorraView('view-units'); }
 
 function showSubjects(gradeKey, gradeLabel, gradeAr) {
   currentGradeKey=gradeKey; currentGradeLabel=gradeLabel; currentGradeAr=gradeAr;
-  document.getElementById('subjects-title').textContent = gradeLabel + ' – ' + gradeAr;
+  document.getElementById('subjects-title').textContent = gradeLabel+' – '+gradeAr;
   document.getElementById('breadcrumb-subjects').innerHTML =
     `<a onclick="goHome()">🏠 Home</a><span>›</span><strong>${gradeLabel} (${gradeAr})</strong>`;
   showEduvorraView('view-subjects');
 }
 
 function showUnits(subject) {
-  currentSubject = subject;
-  document.getElementById('units-title').textContent = subject + ' – ' + currentGradeLabel + ' (' + currentGradeAr + ')';
+  currentSubject=subject;
+  document.getElementById('units-title').textContent = subject+' – '+currentGradeLabel+' ('+currentGradeAr+')';
   document.getElementById('breadcrumb-units').innerHTML =
     `<a onclick="goHome()">🏠 Home</a><span>›</span>
      <a onclick="goSubjects()">${currentGradeLabel}</a><span>›</span>
      <strong>${subject}</strong>`;
-  const container = document.getElementById('units-container');
-  container.innerHTML = '';
-  const subjectData = ((LESSONS[currentGradeKey]||{})[subject])||{};
-  const unitKeys = Object.keys(subjectData);
-  if (!unitKeys.length) {
-    container.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;padding:24px 0;">No units added yet. Check back soon!</p>';
-    showEduvorraView('view-units'); return;
+  const container=document.getElementById('units-container');
+  container.innerHTML='';
+  const subjectData=((LESSONS[currentGradeKey]||{})[subject])||{};
+  const unitKeys=Object.keys(subjectData);
+  if(!unitKeys.length){
+    container.innerHTML='<p style="color:var(--muted);grid-column:1/-1;padding:24px 0;">No units added yet. Check back soon!</p>';
+    showEduvorraView('view-units');return;
   }
-  unitKeys.forEach(unitKey => {
-    const unitData = subjectData[unitKey];
-    const lessonCount = (unitData.lessons||[]).length;
-    const card = document.createElement('div');
-    card.className = 'card unit-card';
-    card.onclick = () => showLessons(unitKey);
-    card.innerHTML = `
-      <span class="unit-badge">📂 ${unitKey}</span>
-      <span class="unit-icon">${unitData.icon||'📄'}</span>
-      <div class="card-title">${unitKey}</div>
-      ${unitData.desc?`<div class="card-sub" style="margin-top:5px;">${unitData.desc}</div>`:''}
-      <div class="unit-lesson-count">📝 ${lessonCount} Lesson${lessonCount!==1?'s':''}</div>
-      <span class="card-arrow">→</span>`;
+  unitKeys.forEach(unitKey=>{
+    const ud=subjectData[unitKey];
+    const avail=ud.available!==false;
+    const cnt=(ud.lessons||[]).length;
+    const card=document.createElement('div');
+    card.className='card unit-card'+(avail?'':' locked');
+    if(avail){
+      card.onclick=()=>showLessons(unitKey);
+      card.innerHTML=`
+        <span class="unit-badge">📂 ${unitKey}</span>
+        <span class="unit-icon">${ud.icon||'📄'}</span>
+        <div class="card-title">${unitKey}</div>
+        ${ud.desc?`<div class="card-sub" style="margin-top:5px;">${ud.desc}</div>`:''}
+        <div class="unit-lesson-count">📝 ${cnt} Lesson${cnt!==1?'s':''}</div>
+        <span class="card-arrow">→</span>`;
+    } else {
+      card.innerHTML=`
+        <span class="unit-badge" style="background:rgba(255,255,255,0.05);color:var(--muted);border-color:rgba(255,255,255,0.1);">🔒 ${unitKey}</span>
+        <span class="unit-icon" style="filter:grayscale(1);opacity:.4;">${ud.icon||'📄'}</span>
+        <div class="card-title" style="color:var(--muted);">${unitKey}</div>
+        <div class="lock-badge">⏳ قريباً · Coming Soon</div>`;
+    }
     container.appendChild(card);
   });
   showEduvorraView('view-units');
 }
 
 function showLessons(unitKey) {
-  currentUnit = unitKey;
-  document.getElementById('lessons-title').textContent = unitKey + ' · ' + currentSubject + ' – ' + currentGradeLabel;
+  currentUnit=unitKey;
+  document.getElementById('lessons-title').textContent = unitKey+' · '+currentSubject+' – '+currentGradeLabel;
   document.getElementById('breadcrumb-lessons').innerHTML =
     `<a onclick="goHome()">🏠 Home</a><span>›</span>
      <a onclick="goSubjects()">${currentGradeLabel}</a><span>›</span>
      <a onclick="goUnits()">${currentSubject}</a><span>›</span>
      <strong>${unitKey}</strong>`;
-  const container = document.getElementById('lessons-container');
-  container.innerHTML = '';
-  const unitData = ((LESSONS[currentGradeKey]||{})[currentSubject]||{})[unitKey]||{};
-  const lessons = unitData.lessons||[];
-  if (!lessons.length) {
-    container.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;padding:24px 0;">No lessons added yet. Check back soon!</p>';
-    showEduvorraView('view-lessons'); return;
+  const container=document.getElementById('lessons-container');
+  container.innerHTML='';
+  const ud=((LESSONS[currentGradeKey]||{})[currentSubject]||{})[unitKey]||{};
+  const lessons=ud.lessons||[];
+  if(!lessons.length){
+    container.innerHTML='<p style="color:var(--muted);grid-column:1/-1;padding:24px 0;">No lessons added yet. Check back soon!</p>';
+    showEduvorraView('view-lessons');return;
   }
-  lessons.forEach((lesson, i) => {
-    const hasRealLink = lesson.link &&
-      !lesson.link.includes('YOUR_LINK') &&
-      !lesson.link.includes('PASTE_YOUR') &&
-      !lesson.link.includes('example.com');
-    const card = document.createElement('a');
-    card.className = hasRealLink ? 'lesson-card' : 'lesson-card no-link';
-    if (hasRealLink) { card.href=lesson.link; card.target='_blank'; card.rel='noopener noreferrer'; }
-    else { card.href='#'; card.addEventListener('click',e=>e.preventDefault()); }
-    card.innerHTML = `
+  lessons.forEach((lesson,i)=>{
+    const hasLink=lesson.link&&!lesson.link.includes('YOUR_LINK')&&!lesson.link.includes('example.com');
+    const card=document.createElement('a');
+    card.className=hasLink?'lesson-card':'lesson-card no-link';
+    if(hasLink){card.href=lesson.link;card.target='_blank';card.rel='noopener noreferrer';}
+    else{card.href='#';card.addEventListener('click',e=>e.preventDefault());}
+    card.innerHTML=`
       <div class="lesson-num">${String(i+1).padStart(2,'0')}</div>
       <div class="lesson-info">
         <div class="card-title">${lesson.title}</div>
         ${lesson.desc?`<div class="card-sub">${lesson.desc}</div>`:''}
-        ${hasRealLink
-          ?`<span class="lesson-link-badge">🔗 Open Lesson</span>`
-          :`<span class="no-link-badge">⏳ Coming Soon</span>`}
+        ${hasLink?`<span class="lesson-link-badge">🔗 Open Lesson</span>`:`<span class="no-link-badge">⏳ Coming Soon</span>`}
       </div>
       <span class="card-arrow">→</span>`;
     container.appendChild(card);
   });
   showEduvorraView('view-lessons');
+}
+
+/* ══════════════════════════════════
+   SEARCH INDEX
+══════════════════════════════════ */
+function buildSearchIndex() {
+  const idx=[];
+  Object.keys(LESSONS).forEach(gk=>{
+    const gm=GRADE_META[gk]||{};
+    Object.keys(LESSONS[gk]).forEach(subject=>{
+      const subData=LESSONS[gk][subject];
+      if(typeof subData!=='object') return;
+      Object.keys(subData).forEach(unitKey=>{
+        const ud=subData[unitKey];
+        if(!ud||typeof ud!=='object') return;
+        const avail=ud.available!==false;
+        idx.push({
+          type:'unit', gradeKey:gk, gradeLabel:gm.label||gk, gradeAr:gm.ar||'',
+          subject, unitKey, desc:ud.desc||'', available:avail,
+          searchText:(unitKey+' '+(ud.desc||'')+' '+subject+' '+(gm.label||'')+' '+(gm.ar||'')).toLowerCase()
+        });
+        (ud.lessons||[]).forEach((lesson,i)=>{
+          const hasLink=lesson.link&&!lesson.link.includes('YOUR_LINK')&&!lesson.link.includes('example.com');
+          idx.push({
+            type:'lesson', gradeKey:gk, gradeLabel:gm.label||gk, gradeAr:gm.ar||'',
+            subject, unitKey, lessonTitle:lesson.title, lessonDesc:lesson.desc||'',
+            lessonLink:hasLink?lesson.link:null, lessonIndex:i, available:hasLink,
+            searchText:(lesson.title+' '+lesson.desc+' '+unitKey+' '+subject+' '+(gm.label||'')+' '+(gm.ar||'')).toLowerCase()
+          });
+        });
+      });
+    });
+  });
+  return idx;
+}
+const SEARCH_INDEX=buildSearchIndex();
+
+function handleSearch(query) {
+  const panel=document.getElementById('search-results-panel');
+  const clearBtn=document.getElementById('search-clear-btn');
+  if(!query.trim()){panel.style.display='none';clearBtn.style.display='none';return;}
+  clearBtn.style.display='block';
+  const q=query.toLowerCase().trim();
+  const results=SEARCH_INDEX.filter(item=>item.searchText.includes(q)).slice(0,8);
+  panel.style.display='block';
+  if(!results.length){
+    panel.innerHTML=`<div class="search-empty">🔍 لا توجد نتائج لـ "<strong>${query}</strong>"<br><span style="font-size:.78rem;color:var(--muted);">جرّب كلمة أخرى · Try a different keyword</span></div>`;
+    return;
+  }
+  let html=`<div class="search-header">نتائج البحث · Results (${results.length})</div>`;
+  results.forEach(item=>{
+    const safeGK=encodeURIComponent(item.gradeKey);
+    const safeGL=encodeURIComponent(item.gradeLabel);
+    const safeGA=encodeURIComponent(item.gradeAr);
+    const safeSubj=encodeURIComponent(item.subject);
+    const safeUnit=encodeURIComponent(item.unitKey);
+    const safeLink=encodeURIComponent(item.lessonLink||'');
+    if(item.type==='unit'){
+      html+=`<div class="search-result-item" onclick="openFromSearch('unit','${safeGK}','${safeGL}','${safeGA}','${safeSubj}','${safeUnit}','',${item.available})">
+        <div class="sr-num">📂</div>
+        <div class="sr-info">
+          <div class="sr-title">${item.unitKey} · ${item.subject}</div>
+          <div class="sr-path"><span>${item.gradeLabel}</span> › ${item.gradeAr}${item.desc?' · '+item.desc:''}</div>
+        </div>
+        <span class="sr-badge ${item.available?'available':'soon'}">${item.available?'📖 Open':'⏳ Soon'}</span>
+      </div>`;
+    } else {
+      const num=String(item.lessonIndex+1).padStart(2,'0');
+      html+=`<div class="search-result-item" onclick="openFromSearch('lesson','${safeGK}','${safeGL}','${safeGA}','${safeSubj}','${safeUnit}','${safeLink}',${item.available})">
+        <div class="sr-num">${num}</div>
+        <div class="sr-info">
+          <div class="sr-title">${item.lessonTitle}</div>
+          <div class="sr-path"><span>${item.gradeLabel}</span> › ${item.unitKey} · ${item.lessonDesc}</div>
+        </div>
+        <span class="sr-badge ${item.available?'available':'soon'}">${item.available?'🔗 Open':'⏳ Soon'}</span>
+      </div>`;
+    }
+  });
+  panel.innerHTML=html;
+}
+
+function openFromSearch(type, gk, gl, ga, subj, unit, link, available) {
+  const gradeKey=decodeURIComponent(gk);
+  const gradeLabel=decodeURIComponent(gl);
+  const gradeAr=decodeURIComponent(ga);
+  const subject=decodeURIComponent(subj);
+  const unitKey=decodeURIComponent(unit);
+  const lessonLink=decodeURIComponent(link);
+  clearSearch();
+  currentGradeKey=gradeKey; currentGradeLabel=gradeLabel; currentGradeAr=gradeAr; currentSubject=subject;
+  if(type==='lesson'){
+    if(available&&lessonLink){ window.open(lessonLink,'_blank','noopener,noreferrer'); }
+    else { showUnits(subject); }
+  } else {
+    if(available){ showLessons(unitKey); }
+    else { showUnits(subject); }
+  }
+}
+
+function clearSearch() {
+  const inp=document.getElementById('global-search');
+  if(inp) inp.value='';
+  const panel=document.getElementById('search-results-panel');
+  if(panel) panel.style.display='none';
+  const btn=document.getElementById('search-clear-btn');
+  if(btn) btn.style.display='none';
+}
+
+document.addEventListener('click',function(e){
+  const wrap=document.querySelector('.search-wrap');
+  if(wrap&&!wrap.contains(e.target)){
+    const panel=document.getElementById('search-results-panel');
+    if(panel) panel.style.display='none';
+  }
+});
+
+/* ══════════════════════════════════
+   COUNT-UP ANIMATION
+══════════════════════════════════ */
+function runCountUp() {
+  document.querySelectorAll('.land-stat-num[data-target]').forEach(el=>{
+    const suffix=el.dataset.suffix||'';
+    const end=parseInt(el.dataset.target);
+    if(isNaN(end)) return;
+    const duration=1100;
+    const start=performance.now();
+    function step(now){
+      const p=Math.min((now-start)/duration,1);
+      const eased=1-Math.pow(1-p,3);
+      el.textContent=Math.round(eased*end)+suffix;
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+let countUpDone=false;
+const statsEl=document.querySelector('.land-stats');
+if(statsEl){
+  const obs=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting&&!countUpDone){
+      countUpDone=true;
+      setTimeout(runCountUp,650);
+      obs.disconnect();
+    }
+  },{threshold:0.5});
+  obs.observe(statsEl);
 }
 </script>
 </body>
