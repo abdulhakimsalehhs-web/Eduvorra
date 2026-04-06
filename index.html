@@ -1,844 +1,713 @@
 <!DOCTYPE html>
+
 <html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eduvorra – Smart Learning Platform BETA V1.1</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Eduvorra – Smart Learning Platform BETA V1.1</title>
+<!-- ============================================================
+  EDUVORRA – Smart Learning Platform (v1.2 – Brand Refresh)
+  ─────────────────────────────────────────────────────────────
+  HOW TO ADD A NEW LESSON:
+  1. Find the correct grade → subject → unit array below.
+  2. Copy this block and paste inside the lessons array:
+     { title: "Lesson Title", desc: "Short description.", link: "YOUR_LESSON_LINK" },
+  3. Replace values. Save. Done!
 
-  <!-- ============================================================
-       EDUVORRA – Smart Learning Platform  (v1.1 – Units Update)
-       ─────────────────────────────────────────────────────────────
-       HOW TO ADD A NEW LESSON:
-         1. Find the correct grade → subject → unit array below.
-         2. Copy this block and paste inside the lessons array:
-              { title: "Lesson Title", desc: "Short description.", link: "YOUR_LESSON_LINK" },
-         3. Replace values. Save. Done!
+HOW TO ADD A NEW UNIT:
+Inside a subject object, add a new unit key:
+‘Unit 13’: {
+icon: ‘📗’,
+desc: ‘Unit description here.’,
+lessons: [
+{ title: “…”, desc: “…”, link: “…” },
+]
+},
+============================================================ –>
 
-       HOW TO ADD A NEW UNIT:
-         Inside a subject object, add a new unit key:
-           'Unit 13': {
-             icon: '📗',
-             desc: 'Unit description here.',
-             lessons: [
-               { title: "...", desc: "...", link: "..." },
-             ]
-           },
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=IBM+Plex+Sans:wght@300;400;500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-       HOW TO ADD A NEW SUBJECT:
-         Inside a grade object, add a new subject key (e.g. 'Arabic').
-         Add a matching card in the HTML (search "ADD NEW SUBJECT CARD HERE").
+<style>
+/* ─── EDUVORRA BRAND VARIABLES ───────────────────────────── */
+:root {
+  --bg:         #080F1E;
+  --surface:    #0B1D3A;
+  --surface2:   #0F2449;
+  --hover:      #1A3A6B;
+  --primary:    #1E5CB3;
+  --accent:     #3B8BF5;
+  --sky:        #7BB8FF;
+  --gold:       #F0C040;
+  --text:       #F4F8FF;
+  --muted:      #7A99C0;
+  --border:     rgba(59,139,245,0.18);
+  --border-h:   rgba(59,139,245,0.45);
+  --radius:     16px;
+  --shadow:     0 4px 24px rgba(0,0,0,0.35);
+  --shadow-lg:  0 16px 48px rgba(0,0,0,0.5);
+  --transition: .32s cubic-bezier(.4,0,.2,1);
+}
 
-       HOW TO ADD A NEW GRADE:
-         Copy an existing grade block in LESSONS.
-         Add a matching card in the HTML (search "ADD NEW GRADE CARD HERE").
-  ============================================================ -->
+/* ─── RESET & BASE ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'IBM Plex Sans', 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  <style>
-    /* ─── FONTS ─────────────────────────────────────────────── */
-    @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap');
+/* ─── BACKGROUND GLOWS ───────────────────────────────────── */
+.glow-wrap {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+.glow {
+  position: absolute; border-radius: 50%; filter: blur(90px);
+  animation: glow-drift 14s ease-in-out infinite alternate;
+}
+.glow-1 { width: 600px; height: 600px; background: rgba(30,92,179,0.2);  top: -200px; right: -150px; animation-duration: 16s; }
+.glow-2 { width: 400px; height: 400px; background: rgba(59,139,245,0.1); bottom: 50px; left: -100px;  animation-duration: 12s; animation-delay: -5s; }
+.glow-3 { width: 300px; height: 300px; background: rgba(123,184,255,0.07); top: 45%; left: 50%; animation-duration: 18s; animation-delay: -9s; }
+@keyframes glow-drift {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(30px,25px) scale(1.07); }
+}
 
-    /* ─── EDUVORRA CSS VARIABLES ─────────────────────────────── */
-    :root {
-      --bg:         #f0f4ff;
-      --surface:    #ffffff;
-      --surface2:   #e8eeff;
-      --primary:    #4361ee;
-      --primary-d:  #3451d1;
-      --accent:     #f72585;
-      --accent2:    #4cc9f0;
-      --text:       #1a1a2e;
-      --muted:      #6b7ea8;
-      --border:     #d9e2ff;
-      --radius:     18px;
-      --shadow:     0 8px 32px rgba(67,97,238,.13);
-      --shadow-lg:  0 20px 56px rgba(67,97,238,.22);
-      --transition: .35s cubic-bezier(.4,0,.2,1);
-    }
+/* ─── PLATFORM WRAPPER ───────────────────────────────────── */
+#platform { position: relative; z-index: 1; }
+#eduvorra-app { max-width: 960px; margin: 0 auto; padding: 0 20px 80px; }
 
-    /* ─── RESET & BASE ───────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Sora', 'Tajawal', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+/* ─── HEADER ─────────────────────────────────────────────── */
+header { text-align: center; padding: 56px 20px 40px; }
 
-    /* ─── ANIMATED BACKGROUND BLOBS ─────────────────────────── */
-    .blob-wrap {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-    }
-    .blob {
-      position: absolute; border-radius: 50%; filter: blur(80px); opacity: .35;
-      animation: drift 12s ease-in-out infinite alternate;
-    }
-    .blob-1 { width:520px; height:520px; background:#4361ee; top:-180px; left:-160px; animation-duration:13s; }
-    .blob-2 { width:400px; height:400px; background:#f72585; bottom:-100px; right:-100px; animation-duration:11s; animation-delay:-4s; }
-    .blob-3 { width:300px; height:300px; background:#4cc9f0; top:40%; left:55%; animation-duration:15s; animation-delay:-7s; }
-    @keyframes drift {
-      from { transform: translate(0,0) scale(1); }
-      to   { transform: translate(40px,30px) scale(1.08); }
-    }
+.logo-mark {
+  display: inline-flex; align-items: center; gap: 12px;
+  margin-bottom: 8px;
+}
+.logo-icon-svg { flex-shrink: 0; }
+.logo-text {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1;
+}
+.logo-text .edu   { color: var(--text); }
+.logo-text .vorra { color: var(--accent); }
+.logo-sub {
+  font-family: 'Sora', sans-serif;
+  font-size: .9rem; font-weight: 400;
+  color: var(--muted); letter-spacing: .06em;
+}
 
-    /* ─── PLATFORM WRAPPER ───────────────────────────────────── */
-    #platform { position: relative; z-index: 1; }
+/* ─── BREADCRUMB ─────────────────────────────────────────── */
+.breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  font-size: .8rem; color: var(--muted);
+  margin-bottom: 28px; flex-wrap: wrap;
+  font-family: 'Sora', sans-serif;
+}
+.breadcrumb span { color: var(--border); }
+.breadcrumb a {
+  color: var(--accent); text-decoration: none; font-weight: 600;
+  cursor: pointer; transition: color var(--transition);
+}
+.breadcrumb a:hover { color: var(--sky); }
 
-    /* ─── EDUVORRA APP CONTAINER ─────────────────────────────── */
-    #eduvorra-app {
-      max-width: 960px; margin: 0 auto;
-      padding: 0 20px 60px;
-    }
+/* ─── BACK BUTTON ────────────────────────────────────────── */
+.btn-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--surface); border: 1.5px solid var(--border);
+  color: var(--accent); font-family: 'Sora', sans-serif;
+  font-size: .85rem; font-weight: 600;
+  padding: 10px 22px; border-radius: 50px;
+  cursor: pointer; margin-bottom: 32px;
+  transition: var(--transition); box-shadow: var(--shadow);
+}
+.btn-back:hover {
+  background: var(--hover); border-color: var(--border-h);
+  color: var(--sky); transform: translateX(-3px);
+}
 
-    /* ─── HEADER / LOGO ──────────────────────────────────────── */
-    header {
-      text-align: center;
-      padding: 52px 20px 36px;
-    }
-    .logo-mark {
-      display: inline-flex; align-items: center; gap: 10px;
-      margin-bottom: 6px;
-    }
-    .logo-icon {
-      width: 46px; height: 46px;
-      background: var(--primary);
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 18px rgba(67,97,238,.45);
-      font-size: 22px;
-    }
-    .logo-text {
-      font-size: clamp(2rem, 6vw, 3rem);
-      font-weight: 800;
-      letter-spacing: -1px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .logo-sub {
-      font-size: .95rem; font-weight: 500;
-      color: var(--muted); letter-spacing: .04em;
-    }
+/* ─── SECTION TITLE ──────────────────────────────────────── */
+.section-title {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  font-weight: 700; color: var(--text);
+  margin-bottom: 8px; letter-spacing: -.4px;
+}
+.section-desc {
+  color: var(--muted); font-size: .9rem; margin-bottom: 36px;
+}
 
-    /* ─── BREADCRUMB ─────────────────────────────────────────── */
-    .breadcrumb {
-      display: flex; align-items: center; gap: 6px;
-      font-size: .82rem; color: var(--muted);
-      margin-bottom: 28px; flex-wrap: wrap;
-    }
-    .breadcrumb span { color: var(--border); }
-    .breadcrumb a {
-      color: var(--primary); text-decoration: none; font-weight: 600;
-      cursor: pointer; transition: color var(--transition);
-    }
-    .breadcrumb a:hover { color: var(--accent); }
+/* ─── STAT PILLS ─────────────────────────────────────────── */
+.stats-row {
+  display: flex; justify-content: center; gap: 12px;
+  margin: 24px 0 48px; flex-wrap: wrap;
+}
+.stat-pill {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 50px; padding: 9px 18px;
+  font-family: 'Sora', sans-serif;
+  font-size: .82rem; font-weight: 600; color: var(--muted);
+  display: flex; align-items: center; gap: 7px;
+  box-shadow: var(--shadow);
+}
+.stat-pill strong { color: var(--accent); }
 
-    /* ─── BACK BUTTON ────────────────────────────────────────── */
-    .btn-back {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--surface); border: 2px solid var(--border);
-      color: var(--primary); font-family: inherit;
-      font-size: .9rem; font-weight: 600;
-      padding: 10px 22px; border-radius: 50px;
-      cursor: pointer; margin-bottom: 32px;
-      transition: var(--transition); box-shadow: var(--shadow);
-    }
-    .btn-back:hover {
-      background: var(--primary); color: #fff; border-color: var(--primary);
-      transform: translateX(-4px);
-    }
+.hero-tagline {
+  text-align: center;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  color: var(--muted); font-weight: 400;
+  max-width: 500px; margin: 0 auto 12px;
+  line-height: 1.65;
+}
 
-    /* ─── SECTION TITLE ──────────────────────────────────────── */
-    .section-title {
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      font-weight: 700; color: var(--text);
-      margin-bottom: 8px;
-    }
-    .section-desc {
-      color: var(--muted); font-size: .95rem;
-      margin-bottom: 36px;
-    }
+/* ─── CARDS GRID ─────────────────────────────────────────── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
 
-    /* ─── CARDS GRID ─────────────────────────────────────────── */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 22px;
-    }
+/* ─── GENERIC CARD ───────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px 24px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  position: relative; overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--sky));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--transition);
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-h);
+  background: var(--surface2);
+}
+.card:hover::before { transform: scaleX(1); }
 
-    /* ─── GENERIC CARD ───────────────────────────────────────── */
-    .card {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px 26px;
-      cursor: pointer;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      position: relative; overflow: hidden;
-    }
-    .card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 4px;
-      border-radius: var(--radius) var(--radius) 0 0;
-      background: linear-gradient(90deg, var(--primary), var(--accent2));
-      transform: scaleX(0); transform-origin: left;
-      transition: transform var(--transition);
-    }
-    .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
-    .card:hover::before { transform: scaleX(1); }
+.card-emoji { font-size: 2rem; margin-bottom: 12px; display: block; line-height: 1; }
+.card-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--text); margin-bottom: 5px;
+}
+.card-sub { font-size: .83rem; color: var(--muted); line-height: 1.55; }
+.card-arrow {
+  position: absolute; bottom: 18px; right: 20px;
+  color: var(--accent); font-size: 1rem; opacity: 0;
+  transition: var(--transition); transform: translateX(-5px);
+}
+.card:hover .card-arrow { opacity: 1; transform: translateX(0); }
 
-    .card-emoji {
-      font-size: 2.2rem; margin-bottom: 14px;
-      display: block; line-height: 1;
-    }
-    .card-title {
-      font-size: 1.15rem; font-weight: 700;
-      color: var(--text); margin-bottom: 6px;
-    }
-    .card-sub {
-      font-size: .85rem; color: var(--muted);
-      line-height: 1.55;
-    }
-    .card-arrow {
-      position: absolute; bottom: 20px; right: 22px;
-      color: var(--primary); font-size: 1.1rem; opacity: 0;
-      transition: var(--transition); transform: translateX(-6px);
-    }
-    .card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+/* ─── GRADE CARDS ────────────────────────────────────────── */
+.grade-card { padding: 32px 26px; }
+.grade-card .badge {
+  display: inline-block;
+  background: rgba(59,139,245,0.12); color: var(--accent);
+  font-family: 'Sora', sans-serif;
+  font-size: .7rem; font-weight: 700;
+  padding: 3px 12px; border-radius: 50px;
+  margin-bottom: 14px; letter-spacing: .08em;
+  border: 1px solid rgba(59,139,245,0.2);
+}
+.grade-card .card-title { font-size: 1.2rem; }
+.grade-card .card-sub-ar {
+  font-size: 1rem; font-weight: 600; color: var(--accent);
+  margin-top: 3px; font-family: 'Tajawal', sans-serif;
+}
 
-    /* ─── GRADE CARDS ────────────────────────────────────────── */
-    .grade-card {
-      padding: 36px 28px;
-      background: linear-gradient(140deg, var(--surface) 60%, var(--surface2));
-    }
-    .grade-card .badge {
-      display: inline-block;
-      background: var(--surface2); color: var(--primary);
-      font-size: .75rem; font-weight: 700;
-      padding: 4px 12px; border-radius: 50px;
-      margin-bottom: 14px; letter-spacing: .04em;
-    }
-    .grade-card .card-title { font-size: 1.3rem; }
-    .grade-card .card-sub-ar {
-      font-size: 1rem; font-weight: 600; color: var(--primary);
-      margin-top: 4px; font-family: 'Tajawal', sans-serif;
-    }
+/* ─── SUBJECT CARDS ──────────────────────────────────────── */
+.subject-card { display: flex; align-items: center; gap: 16px; padding: 20px 22px; }
+.subject-icon-wrap {
+  width: 52px; height: 52px; border-radius: 13px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  background: rgba(59,139,245,0.1);
+  border: 1px solid var(--border);
+}
 
-    /* ─── SUBJECT CARDS ──────────────────────────────────────── */
-    .subject-card {
-      display: flex; align-items: center; gap: 18px;
-      padding: 22px 24px;
-    }
-    .subject-icon-wrap {
-      width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem;
-    }
+/* ─── UNIT CARDS ─────────────────────────────────────────── */
+.unit-card { padding: 24px 22px 34px; }
+.unit-card .unit-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(59,139,245,0.13); color: var(--accent);
+  font-family: 'Sora', sans-serif;
+  font-size: .68rem; font-weight: 700;
+  padding: 3px 11px; border-radius: 50px;
+  margin-bottom: 12px; letter-spacing: .06em;
+  border: 1px solid rgba(59,139,245,0.22);
+}
+.unit-card .unit-icon { font-size: 1.9rem; margin-bottom: 9px; display: block; }
+.unit-card .card-title { font-size: 1rem; }
+.unit-card .unit-lesson-count {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 10px; font-family: 'Sora', sans-serif;
+  font-size: .72rem; font-weight: 600;
+  color: var(--muted);
+  background: rgba(255,255,255,0.04);
+  padding: 4px 11px; border-radius: 50px;
+  border: 1px solid rgba(255,255,255,0.07);
+}
 
-    /* ─── UNIT CARDS ─────────────────────────────────────────── */
-    .unit-card {
-      padding: 26px 24px 36px;
-      background: linear-gradient(140deg, var(--surface) 55%, #f0f7ff);
-    }
-    .unit-card .unit-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: linear-gradient(90deg, var(--primary), var(--accent2));
-      color: #fff;
-      font-size: .72rem; font-weight: 700;
-      padding: 4px 12px; border-radius: 50px;
-      margin-bottom: 14px; letter-spacing: .05em;
-    }
-    .unit-card .unit-icon {
-      font-size: 2rem; margin-bottom: 10px; display: block;
-    }
-    .unit-card .card-title { font-size: 1.1rem; }
-    .unit-card .unit-lesson-count {
-      display: inline-flex; align-items: center; gap: 5px;
-      margin-top: 10px;
-      font-size: .76rem; font-weight: 600;
-      color: var(--primary);
-      background: var(--surface2);
-      padding: 4px 12px; border-radius: 50px;
-    }
+/* ─── LESSON CARDS ───────────────────────────────────────── */
+a.lesson-card {
+  display: flex; align-items: center; gap: 14px;
+  padding: 20px 22px;
+  text-decoration: none; color: inherit;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  position: relative; overflow: hidden;
+}
+a.lesson-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--sky));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--transition);
+}
+a.lesson-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-h);
+  background: var(--surface2);
+}
+a.lesson-card:hover::before { transform: scaleX(1); }
+a.lesson-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
 
-    /* ─── LESSON CARDS (external link style) ────────────────── */
-    a.lesson-card {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 22px;
-      text-decoration: none;
-      color: inherit;
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-    a.lesson-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 4px;
-      border-radius: var(--radius) var(--radius) 0 0;
-      background: linear-gradient(90deg, var(--primary), var(--accent2));
-      transform: scaleX(0); transform-origin: left;
-      transition: transform var(--transition);
-    }
-    a.lesson-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--primary);
-    }
-    a.lesson-card:hover::before { transform: scaleX(1); }
-    a.lesson-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+.lesson-num {
+  width: 40px; height: 40px; border-radius: 11px;
+  background: rgba(59,139,245,0.1); color: var(--accent);
+  font-family: 'Sora', sans-serif;
+  font-weight: 700; font-size: .85rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; border: 1px solid rgba(59,139,245,0.2);
+}
+.lesson-info { flex: 1; min-width: 0; }
+.lesson-info .card-title { font-size: .95rem; }
 
-    .lesson-num {
-      width: 42px; height: 42px; border-radius: 12px;
-      background: var(--surface2); color: var(--primary);
-      font-weight: 700; font-size: .9rem;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .lesson-info { flex: 1; min-width: 0; }
-    .lesson-info .card-title { font-size: 1rem; }
-    .lesson-link-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      margin-top: 6px;
-      font-size: .72rem; font-weight: 700; letter-spacing: .04em;
-      color: #fff;
-      background: linear-gradient(90deg, var(--primary), var(--accent2));
-      padding: 3px 10px; border-radius: 50px;
-    }
+.lesson-link-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-top: 5px; font-family: 'Sora', sans-serif;
+  font-size: .68rem; font-weight: 700; letter-spacing: .05em;
+  color: var(--accent);
+  background: rgba(59,139,245,0.1);
+  padding: 3px 9px; border-radius: 50px;
+  border: 1px solid rgba(59,139,245,0.2);
+}
+a.lesson-card.no-link { opacity: .5; cursor: not-allowed; }
+a.lesson-card.no-link:hover { transform: none; box-shadow: var(--shadow); border-color: var(--border); background: var(--surface); }
+a.lesson-card.no-link::before { display: none; }
+.no-link-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-top: 5px; font-family: 'Sora', sans-serif;
+  font-size: .68rem; font-weight: 600;
+  color: var(--muted);
+  background: rgba(255,255,255,0.05);
+  padding: 3px 9px; border-radius: 50px;
+}
 
-    /* ─── NO-LINK PLACEHOLDER ────────────────────────────────── */
-    a.lesson-card.no-link {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-    a.lesson-card.no-link:hover {
-      transform: none;
-      box-shadow: var(--shadow);
-      border-color: var(--border);
-    }
-    a.lesson-card.no-link::before { display: none; }
-    .no-link-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      margin-top: 6px;
-      font-size: .72rem; font-weight: 700;
-      color: var(--muted);
-      background: var(--surface2);
-      padding: 3px 10px; border-radius: 50px;
-    }
+/* ─── VIEW TRANSITIONS ───────────────────────────────────── */
+.edv-view { display: none; opacity: 0; transform: translateY(16px); }
+.edv-view.active {
+  display: block;
+  animation: edvIn .35s ease forwards;
+}
+@keyframes edvIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-    /* ─── EDUVORRA VIEWS (show / hide) ──────────────────────── */
-    .edv-view {
-      display: none;
-      opacity: 0;
-      transform: translateY(18px);
-    }
-    .edv-view.active {
-      display: block;
-      animation: edvFadeIn .38s ease forwards;
-    }
-    @keyframes edvFadeIn {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+/* ─── FOOTER ─────────────────────────────────────────────── */
+footer {
+  text-align: center; margin-top: 64px;
+  color: var(--muted); font-size: .78rem;
+  font-family: 'Sora', sans-serif;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 28px;
+}
 
-    /* ─── STAT PILLS ─────────────────────────────────────────── */
-    .stats-row {
-      display: flex; justify-content: center; gap: 16px;
-      margin: 28px 0 48px; flex-wrap: wrap;
-    }
-    .stat-pill {
-      background: var(--surface); border: 1.5px solid var(--border);
-      border-radius: 50px; padding: 10px 20px;
-      font-size: .85rem; font-weight: 600; color: var(--muted);
-      display: flex; align-items: center; gap: 7px;
-      box-shadow: var(--shadow);
-    }
-    .stat-pill strong { color: var(--primary); }
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .cards-grid { grid-template-columns: 1fr; }
+  header { padding: 38px 16px 28px; }
+  .logo-text { font-size: 2rem; }
+}
+</style>
 
-    .hero-tagline {
-      text-align: center;
-      font-size: clamp(1.1rem, 3vw, 1.35rem);
-      color: var(--muted); font-weight: 400;
-      max-width: 520px; margin: 0 auto 12px;
-      line-height: 1.6;
-    }
-
-    footer {
-      text-align: center; margin-top: 60px;
-      color: var(--muted); font-size: .8rem; opacity: .7;
-    }
-
-    /* ─── RESPONSIVE ─────────────────────────────────────────── */
-    @media (max-width: 600px) {
-      .cards-grid { grid-template-columns: 1fr; }
-      header { padding: 36px 16px 28px; }
-    }
-  </style>
 </head>
 <body>
 
-  <!-- Animated background blobs -->
-  <div class="blob-wrap">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-  </div>
+<!-- Background glows -->
 
-  <div id="platform">
-    <div id="eduvorra-app">
+<div class="glow-wrap">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+</div>
 
-      <!-- ── LOGO / HEADER ───────────────────────────────────── -->
-      <header>
-        <div class="logo-mark">
-          <div class="logo-icon">🎓</div>
-          <span class="logo-text">Eduvorra</span>
+<div id="platform">
+<div id="eduvorra-app">
+
+  <!-- ── HEADER / LOGO ──────────────────────────────────── -->
+
+  <header>
+    <div class="logo-mark">
+      <!-- Book logo SVG -->
+      <svg class="logo-icon-svg" width="48" height="48" viewBox="0 0 64 64" fill="none">
+        <rect x="8"  y="12" width="22" height="4" rx="2" fill="#3B8BF5"/>
+        <rect x="8"  y="20" width="16" height="4" rx="2" fill="#7BB8FF"/>
+        <rect x="8"  y="28" width="20" height="4" rx="2" fill="#3B8BF5"/>
+        <rect x="8"  y="36" width="16" height="4" rx="2" fill="#7BB8FF"/>
+        <rect x="8"  y="44" width="22" height="4" rx="2" fill="#3B8BF5"/>
+        <rect x="33" y="12" width="3"  height="36" rx="1.5" fill="rgba(59,139,245,0.28)"/>
+        <rect x="39" y="16" width="17" height="3" rx="1.5" fill="rgba(123,184,255,0.45)"/>
+        <rect x="39" y="22" width="13" height="3" rx="1.5" fill="rgba(123,184,255,0.3)"/>
+        <rect x="39" y="28" width="15" height="3" rx="1.5" fill="rgba(123,184,255,0.45)"/>
+        <rect x="39" y="34" width="11" height="3" rx="1.5" fill="rgba(123,184,255,0.3)"/>
+        <rect x="39" y="40" width="17" height="3" rx="1.5" fill="rgba(123,184,255,0.45)"/>
+      </svg>
+      <span class="logo-text"><span class="edu">Edu</span><span class="vorra">vorra</span></span>
+    </div>
+    <div class="logo-sub">Smart Learning Platform &nbsp;·&nbsp; منصة التعلم الذكي</div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════
+       VIEW 1: HOME — Grade Selection
+  ══════════════════════════════════════════════════════ -->
+
+  <section id="view-home" class="edv-view active">
+    <p class="hero-tagline">Choose your grade to start learning. High-quality lessons, anytime, anywhere.</p>
+    <div class="stats-row">
+      <div class="stat-pill">📚 <strong>3</strong> Grades</div>
+      <div class="stat-pill">📖 <strong>1+</strong> Subjects</div>
+      <div class="stat-pill">✨ Interactive Lessons</div>
+    </div>
+    <h2 class="section-title">Select Your Grade &nbsp; اختر صفك</h2>
+    <p class="section-desc">Choose the intermediate grade that matches your level.</p>
+    <div class="cards-grid">
+      <div class="card grade-card" onclick="showSubjects('Grade 1','First Intermediate','اول متوسط')">
+        <span class="badge">GRADE 1</span>
+        <span class="card-emoji">🌱</span>
+        <div class="card-title">First Intermediate</div>
+        <div class="card-sub-ar">اول متوسط</div>
+        <div class="card-sub">Start your intermediate journey with foundational skills.</div>
+        <span class="card-arrow">→</span>
+      </div>
+      <div class="card grade-card" onclick="showSubjects('Grade 2','Second Intermediate','ثاني متوسط')">
+        <span class="badge">GRADE 2</span>
+        <span class="card-emoji">📘</span>
+        <div class="card-title">Second Intermediate</div>
+        <div class="card-sub-ar">ثاني متوسط</div>
+        <div class="card-sub">Build on your knowledge and deepen your understanding.</div>
+        <span class="card-arrow">→</span>
+      </div>
+      <div class="card grade-card" onclick="showSubjects('Grade 3','Third Intermediate','ثالث متوسط')">
+        <span class="badge">GRADE 3</span>
+        <span class="card-emoji">🚀</span>
+        <div class="card-title">Third Intermediate</div>
+        <div class="card-sub-ar">ثالث متوسط</div>
+        <div class="card-sub">Master advanced concepts and prepare for high school.</div>
+        <span class="card-arrow">→</span>
+      </div>
+      <!-- ADD NEW GRADE CARD HERE -->
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       VIEW 2: SUBJECTS
+  ══════════════════════════════════════════════════════ -->
+
+  <section id="view-subjects" class="edv-view">
+    <div class="breadcrumb" id="breadcrumb-subjects"></div>
+    <button class="btn-back" onclick="goHome()">← Back to Grades</button>
+    <h2 class="section-title" id="subjects-title">Subjects</h2>
+    <p class="section-desc">Select a subject to explore its units.</p>
+    <div class="cards-grid">
+      <div class="card subject-card" onclick="showUnits('English')">
+        <div class="subject-icon-wrap">🇬🇧</div>
+        <div>
+          <div class="card-title">English</div>
+          <div class="card-sub">Grammar · Vocabulary · Reading · Writing</div>
         </div>
-        <div class="logo-sub">Smart Learning Platform &nbsp;·&nbsp; منصة التعلم الذكي</div>
-      </header>
+        <span class="card-arrow">→</span>
+      </div>
+      <!-- ADD NEW SUBJECT CARD HERE -->
+    </div>
+  </section>
 
-      <!-- ══════════════════════════════════════════════════════
-           VIEW 1: HOME — Grade Selection
-      ══════════════════════════════════════════════════════ -->
-      <section id="view-home" class="edv-view active">
-        <p class="hero-tagline">Choose your grade to start learning. High-quality lessons, anytime, anywhere.</p>
-        <div class="stats-row">
-          <div class="stat-pill">📚 <strong>3</strong> Grades</div>
-          <div class="stat-pill">📖 <strong>1+</strong> Subjects</div>
-          <div class="stat-pill">✨ Interactive Lessons</div>
-        </div>
-        <h2 class="section-title">Select Your Grade &nbsp; اختر صفك</h2>
-        <p class="section-desc">Choose the intermediate grade that matches your level.</p>
-        <div class="cards-grid">
+  <!-- ══════════════════════════════════════════════════════
+       VIEW 3: UNITS
+  ══════════════════════════════════════════════════════ -->
 
-          <!-- Grade 1 Card -->
-          <div class="card grade-card" onclick="showSubjects('Grade 1','First Intermediate','اول متوسط')">
-            <span class="badge">GRADE 1</span>
-            <span class="card-emoji">🌱</span>
-            <div class="card-title">First Intermediate</div>
-            <div class="card-sub-ar">اول متوسط</div>
-            <div class="card-sub">Start your intermediate journey with foundational skills.</div>
-            <span class="card-arrow">→</span>
-          </div>
+  <section id="view-units" class="edv-view">
+    <div class="breadcrumb" id="breadcrumb-units"></div>
+    <button class="btn-back" onclick="goSubjects()">← Back to Subjects</button>
+    <h2 class="section-title" id="units-title">Units</h2>
+    <p class="section-desc">Select a unit to see its lessons.</p>
+    <div class="cards-grid" id="units-container"></div>
+  </section>
 
-          <!-- Grade 2 Card -->
-          <div class="card grade-card" onclick="showSubjects('Grade 2','Second Intermediate','ثاني متوسط')">
-            <span class="badge">GRADE 2</span>
-            <span class="card-emoji">📘</span>
-            <div class="card-title">Second Intermediate</div>
-            <div class="card-sub-ar">ثاني متوسط</div>
-            <div class="card-sub">Build on your knowledge and deepen your understanding.</div>
-            <span class="card-arrow">→</span>
-          </div>
+  <!-- ══════════════════════════════════════════════════════
+       VIEW 4: LESSONS
+  ══════════════════════════════════════════════════════ -->
 
-          <!-- Grade 3 Card -->
-          <div class="card grade-card" onclick="showSubjects('Grade 3','Third Intermediate','ثالث متوسط')">
-            <span class="badge">GRADE 3</span>
-            <span class="card-emoji">🚀</span>
-            <div class="card-title">Third Intermediate</div>
-            <div class="card-sub-ar">ثالث متوسط</div>
-            <div class="card-sub">Master advanced concepts and prepare for high school.</div>
-            <span class="card-arrow">→</span>
-          </div>
+  <section id="view-lessons" class="edv-view">
+    <div class="breadcrumb" id="breadcrumb-lessons"></div>
+    <button class="btn-back" onclick="goUnits()">← Back to Units</button>
+    <h2 class="section-title" id="lessons-title">Lessons</h2>
+    <p class="section-desc">Click any lesson card to open it in a new tab.</p>
+    <div class="cards-grid" id="lessons-container"></div>
+  </section>
 
-          <!-- ADD NEW GRADE CARD HERE:
-               Copy one of the grade-card blocks above, update
-               the badge text, emoji, titles, and onclick values.
-          -->
+  <footer>© 2026 Eduvorra – Smart Learning Platform &nbsp;·&nbsp; Beta V1.2 - النسخة التجريبية</footer>
 
-        </div>
-      </section>
+</div><!-- /#eduvorra-app -->
+</div><!-- /#platform -->
 
-      <!-- ══════════════════════════════════════════════════════
-           VIEW 2: SUBJECTS
-      ══════════════════════════════════════════════════════ -->
-      <section id="view-subjects" class="edv-view">
-        <div class="breadcrumb" id="breadcrumb-subjects"></div>
-        <button class="btn-back" onclick="goHome()">← Back to Grades</button>
-        <h2 class="section-title" id="subjects-title">Subjects</h2>
-        <p class="section-desc">Select a subject to explore its units.</p>
-        <div class="cards-grid">
-
-          <!-- English Subject Card -->
-          <div class="card subject-card" onclick="showUnits('English')">
-            <div class="subject-icon-wrap" style="background:#e8f0fe;">🇬🇧</div>
-            <div>
-              <div class="card-title">English</div>
-              <div class="card-sub">Grammar · Vocabulary · Reading · Writing</div>
-            </div>
-            <span class="card-arrow">→</span>
-          </div>
-
-          <!-- ADD NEW SUBJECT CARD HERE:
-               Copy the subject-card block above.
-               Change the icon, title, desc, and onclick subject name.
-               Add matching data in the LESSONS object below.
-          -->
-
-        </div>
-      </section>
-
-      <!-- ══════════════════════════════════════════════════════
-           VIEW 3: UNITS  ← NEW
-      ══════════════════════════════════════════════════════ -->
-      <section id="view-units" class="edv-view">
-        <div class="breadcrumb" id="breadcrumb-units"></div>
-        <button class="btn-back" onclick="goSubjects()">← Back to Subjects</button>
-        <h2 class="section-title" id="units-title">Units</h2>
-        <p class="section-desc">Select a unit to see its lessons.</p>
-        <!-- Unit cards are injected here by JavaScript -->
-        <div class="cards-grid" id="units-container"></div>
-      </section>
-
-      <!-- ══════════════════════════════════════════════════════
-           VIEW 4: LESSONS — External Link Cards
-      ══════════════════════════════════════════════════════ -->
-      <section id="view-lessons" class="edv-view">
-        <div class="breadcrumb" id="breadcrumb-lessons"></div>
-        <button class="btn-back" onclick="goUnits()">← Back to Units</button>
-        <h2 class="section-title" id="lessons-title">Lessons</h2>
-        <p class="section-desc">Click any lesson card to open it in a new tab.</p>
-        <!-- Lesson cards are injected here by JavaScript -->
-        <div class="cards-grid" id="lessons-container"></div>
-      </section>
-
-      <footer>© 2026 Eduvorra – Smart Learning Platform &nbsp;·&nbsp; Beta V1.1 - النسخة التجريبية</footer>
-
-    </div><!-- /#eduvorra-app -->
-  </div><!-- /#platform -->
-
-  <script>
-    /* ============================================================
-       EDUVORRA LESSON DATA  (v1.1 – with Units layer)
-       ─────────────────────────────────────────────────────────────
-       STRUCTURE:
-         LESSONS = {
-           'Grade X': {
-             'Subject': {
-               'Unit Name': {
-                 icon: '📗',          ← emoji shown on unit card
-                 desc: 'Description', ← shown below unit title
-                 lessons: [
-                   { title: "Lesson Title", desc: "Short desc.", link: "URL" },
-                 ]
-               },
-             }
-           }
-         }
-
-       HOW TO ADD A LESSON:
-         Find the right grade → subject → unit, then add inside lessons[]:
-           { title: "Listen & Discuss", desc: "Places in town.", link: "lessons/..." },
-
-       HOW TO ADD A NEW UNIT:
-         Inside the subject object, add:
-           'Unit 13': {
-             icon: '📗',
-             desc: 'What this unit covers.',
-             lessons: [
-               { title: "...", desc: "...", link: "..." },
-             ]
-           },
-
-       NOTE: If 'link' is "PASTE_YOUR_LESSON_LINK_HERE" or
-       contains "example.com", the card shows "Coming Soon".
-    ============================================================ */
-
-    const LESSONS = {
-
-      // ── GRADE 1 ──────────────────────────────────────────────────
-      'Grade 1': {
-        'English': {
-
-          'Unit 12': {
-            icon: '📗',
-            desc: 'What Can You Do There?',
-            lessons: [
-              { title: "Listen & Discuss",        desc: "Name places in a town.",             link: "lessons/lessons1/U12/U12L1.html.html" },
-              { title: "Grammar",                  desc: "Can & Like + Infinitive.",            link: "lessons/lessons1/U12/U12L2.html.html" },
-              { title: "Listening & Conversation", desc: "Practice using can & can't.",         link: "lessons/lessons1/U12/U12L3.html.html" },
-              { title: "Reading",                  desc: "Read and understand simple texts.",   link: "lessons/lessons1/U12/U12L4.html.html" },
-              { title: "Writing",                  desc: "Write and express opinions.",         link: "lessons/lessons1/U12/U12L5.html.html" },
-              { title: "Form Meaning and Function",                  desc: "gerund & infinitive",         link: "lessons/lessons1/U12/U12L6.html.html" },
-            ]
-          },
-
-          'Unit 13': {
-  icon: '📙',
-  desc: 'soon.',
-  lessons: [
-    { title: "Listen & Discuss", desc: "Places in town.", link: "YOUR_LINK" },
-    { title: "Grammar", desc: "Prepositions.", link: "YOUR_LINK" },
-  ]
-},
-
-'Unit 14': {
-  icon: '📘',
-  desc: 'soon.',
-  lessons: [
-    { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
-  ]
-},// ADD NEW UNIT HERE (Grade 1 / English) ↓
-          // 'Unit 13': {
-          //   icon: '📘',
-          //   desc: 'test.',
-          //   lessons: [
-          //     { title: "...", desc: "...", link: "PASTE_YOUR_LESSON_LINK_HERE" },
-          //   ]
-          // },
-
-        },
+<script>
+/* ============================================================
+   EDUVORRA LESSON DATA (v1.2)
+============================================================ */
+const LESSONS = {
+  'Grade 1': {
+    'English': {
+      'Unit 12': {
+        icon: '📗', desc: 'What Can You Do There?',
+        lessons: [
+          { title: "Listen & Discuss",          desc: "Name places in a town.",               link: "lessons/lessons1/U12/U12L1.html.html" },
+          { title: "Grammar",                   desc: "Can & Like + Infinitive.",              link: "lessons/lessons1/U12/U12L2.html.html" },
+          { title: "Listening & Conversation",  desc: "Practice using can & can't.",           link: "lessons/lessons1/U12/U12L3.html.html" },
+          { title: "Reading",                   desc: "Read and understand simple texts.",     link: "lessons/lessons1/U12/U12L4.html.html" },
+          { title: "Writing",                   desc: "Write and express opinions.",           link: "lessons/lessons1/U12/U12L5.html.html" },
+          { title: "Form Meaning and Function", desc: "Gerund & Infinitive.",                  link: "lessons/lessons1/U12/U12L6.html.html" },
+        ]
       },
-
-      // ── GRADE 2 ──────────────────────────────────────────────────
-      'Grade 2': {
-        'English': {
-
-          'Unit 11': {
-            icon: '📘',
-            desc: 'There’s No Comparison',
-            lessons: [
-              { title: "Reading",                    desc: "Form and use the present simple correctly.", link: "lessons/lessons2/U11/U11L4.html.html" },
-              { title: "Writing",                    desc: "Write & passive voice.",                     link: "lessons/lessons2/U11/U11L5.html.html" },
-              { title: "Form Meaning and Function",  desc: "Use So...That / Such...That.",               link: "lessons/lessons2/U11/U11L6.html.html" },
-          
-            ]
-          },
-
-          'Unit 12': {
-  icon: '📗',
-  desc: 'It’s Going to Be Fun!',
-  lessons: [
-    { title: "Listen & Discuss", desc: "Read and understand a vacation brochure about global travel destinations.", link: "lessons/lessons2/U12/U12L1.html.html" },
-    { title: "Grammar", desc: "Future going to, information questions and position adjectives.", link: "lessons/lessons2/U12/U12L2.html.html" },
-  ]
-},
-'Unit 13': {
-  icon: '📙',
-  desc: 'soon',
-  lessons: [
-    { title: "Listen & Discuss", desc: "Places in town.", link: "YOUR_LINK" },
-    { title: "Grammar", desc: "Prepositions.", link: "YOUR_LINK" },
-  ]
-},
-
-'Unit 14': {
-  icon: '📘',
-  desc: 'soon.',
-  lessons: [
-    { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
-  ]
-},
-        },
+      'Unit 13': {
+        icon: '📙', desc: 'soon.',
+        lessons: [
+          { title: "Listen & Discuss", desc: "Places in town.",  link: "YOUR_LINK" },
+          { title: "Grammar",          desc: "Prepositions.",    link: "YOUR_LINK" },
+        ]
       },
-
-      // ── GRADE 3 ──────────────────────────────────────────────────
-      'Grade 3': {
-        'English': {
-
-          'Unit 9': {
-            icon: '📙',
-            desc: 'All Kinds of People',
-            lessons: [
-              { title: "Grammar",      desc: "Relative Clauses (who, that, which) & Past Progressive.", link: "lessons/lessons3/U9/U9L2.html.html" },
-              { title: "Conversation", desc: "Practice speaking and listening skills.",                   link: "lessons/lessons3/U9/U9L3.html.html" },
-              { title: "Reading",      desc: "Read and understand simple texts.",                         link: "lessons/lessons3/U9/U9L4.html.html" },
-              { title: "Writing",      desc: "Write about your vision for the future.",                               link: "lessons/lessons3/U9/U9L5.html.html" },
-              { title: "Form, Meaning and Function",      desc: " learn how to use the modal verbs can, may, and could",                               link: "lessons/lessons3/U9/U9L6.html.html" },
-            ]
-          },
-
-         'Unit 10': {
-  icon: '📗',
-  desc: 'Who Used My Toothpaste?',
-  lessons: [
-    { title: "Listen & Discuss", desc: "Recognize and discuss common complaints in families.", link: "lessons/lessons3/U10/U10L1.html.html" },
-    { title: "Grammar", desc: "Present Perfect,Verb + Gerund and Two-Word Verbs ", link: "lessons/lessons3/U10/U10L2.html.html" },
-  ]
-},
-
-'Unit 11': {
-  icon: '📘',
-  desc: 'soon.',
-  lessons: [
-    { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
-  ]
-}, // ADD NEW UNIT HERE (Grade 3 / English) ↓
-          // 'Unit 10': {
-          //   icon: '📗',
-          //   desc: 'Unit description.',
-          //   lessons: [
-          //     { title: "...", desc: "...", link: "PASTE_YOUR_LESSON_LINK_HERE" },
-          //   ]
-          // },
-
-        },
+      'Unit 14': {
+        icon: '📘', desc: 'soon.',
+        lessons: [
+          { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
+        ]
       },
+    },
+  },
+  'Grade 2': {
+    'English': {
+      'Unit 11': {
+        icon: '📘', desc: "There's No Comparison",
+        lessons: [
+          { title: "Reading",                   desc: "Form and use the present simple correctly.",  link: "lessons/lessons2/U11/U11L4.html.html" },
+          { title: "Writing",                   desc: "Write & passive voice.",                      link: "lessons/lessons2/U11/U11L5.html.html" },
+          { title: "Form Meaning and Function", desc: "Use So...That / Such...That.",                link: "lessons/lessons2/U11/U11L6.html.html" },
+        ]
+      },
+      'Unit 12': {
+        icon: '📗', desc: "It's Going to Be Fun!",
+        lessons: [
+          { title: "Listen & Discuss", desc: "Read and understand a vacation brochure about global travel destinations.", link: "lessons/lessons2/U12/U12L1.html.html" },
+          { title: "Grammar",          desc: "Future going to, information questions and position adjectives.",           link: "lessons/lessons2/U12/U12L2.html.html" },
+        ]
+      },
+      'Unit 13': {
+        icon: '📙', desc: 'soon',
+        lessons: [
+          { title: "Listen & Discuss", desc: "Places in town.", link: "YOUR_LINK" },
+          { title: "Grammar",          desc: "Prepositions.",   link: "YOUR_LINK" },
+        ]
+      },
+      'Unit 14': {
+        icon: '📘', desc: 'soon.',
+        lessons: [
+          { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
+        ]
+      },
+    },
+  },
+  'Grade 3': {
+    'English': {
+      'Unit 9': {
+        icon: '📙', desc: 'All Kinds of People',
+        lessons: [
+          { title: "Grammar",                   desc: "Relative Clauses (who, that, which) & Past Progressive.",              link: "lessons/lessons3/U9/U9L2.html.html" },
+          { title: "Conversation",              desc: "Practice speaking and listening skills.",                               link: "lessons/lessons3/U9/U9L3.html.html" },
+          { title: "Reading",                   desc: "Read and understand simple texts.",                                     link: "lessons/lessons3/U9/U9L4.html.html" },
+          { title: "Writing",                   desc: "Write about your vision for the future.",                               link: "lessons/lessons3/U9/U9L5.html.html" },
+          { title: "Form, Meaning and Function",desc: "Learn how to use the modal verbs can, may, and could.",                link: "lessons/lessons3/U9/U9L6.html.html" },
+        ]
+      },
+      'Unit 10': {
+        icon: '📗', desc: "Who Used My Toothpaste?",
+        lessons: [
+          { title: "Listen & Discuss", desc: "Recognize and discuss common complaints in families.",                         link: "lessons/lessons3/U10/U10L1.html.html" },
+          { title: "Grammar",          desc: "Present Perfect, Verb + Gerund and Two-Word Verbs.",                           link: "lessons/lessons3/U10/U10L2.html.html" },
+        ]
+      },
+      'Unit 11': {
+        icon: '📘', desc: 'soon.',
+        lessons: [
+          { title: "Vocabulary", desc: "Healthy food.", link: "YOUR_LINK" },
+        ]
+      },
+    },
+  },
+};
 
-      // ADD NEW GRADE HERE ↓
-      // 'Grade 4': {
-      //   'English': {
-      //     'Unit 1': {
-      //       icon: '📗',
-      //       desc: 'Unit description.',
-      //       lessons: [
-      //         { title: "...", desc: "...", link: "PASTE_YOUR_LESSON_LINK_HERE" },
-      //       ]
-      //     },
-      //   },
-      // },
+/* ─── STATE ─────────────────────────────────────────────── */
+let currentGradeKey   = '';
+let currentGradeLabel = '';
+let currentGradeAr    = '';
+let currentSubject    = '';
+let currentUnit       = '';
 
-    };
+/* ─── VIEW SWITCHER ─────────────────────────────────────── */
+function showEduvorraView(id) {
+  document.querySelectorAll('.edv-view').forEach(v => {
+    v.classList.remove('active');
+    v.style.display = 'none';
+  });
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  void el.offsetWidth;
+  el.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-    /* ─── STATE ─────────────────────────────────────────────── */
-    let currentGradeKey   = '';
-    let currentGradeLabel = '';
-    let currentGradeAr    = '';
-    let currentSubject    = '';
-    let currentUnit       = '';
+/* ─── NAVIGATION ────────────────────────────────────────── */
+function goHome()     { showEduvorraView('view-home'); }
+function goSubjects() { showEduvorraView('view-subjects'); }
+function goUnits()    { showEduvorraView('view-units'); }
 
-    /* ─── VIEW SWITCHER ─────────────────────────────────────── */
-    function showEduvorraView(id) {
-      document.querySelectorAll('.edv-view').forEach(v => {
-        v.classList.remove('active');
-        v.style.display = 'none';
-      });
-      const el = document.getElementById(id);
-      el.style.display = 'block';
-      void el.offsetWidth;
-      el.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+/* ─── SHOW SUBJECTS ─────────────────────────────────────── */
+function showSubjects(gradeKey, gradeLabel, gradeAr) {
+  currentGradeKey   = gradeKey;
+  currentGradeLabel = gradeLabel;
+  currentGradeAr    = gradeAr;
+  document.getElementById('subjects-title').textContent = gradeLabel + ' – ' + gradeAr;
+  document.getElementById('breadcrumb-subjects').innerHTML =
+    `<a onclick="goHome()">🏠 Home</a><span>›</span><strong>${gradeLabel} (${gradeAr})</strong>`;
+  showEduvorraView('view-subjects');
+}
+
+/* ─── SHOW UNITS ────────────────────────────────────────── */
+function showUnits(subject) {
+  currentSubject = subject;
+  document.getElementById('units-title').textContent =
+    subject + ' – ' + currentGradeLabel + ' (' + currentGradeAr + ')';
+  document.getElementById('breadcrumb-units').innerHTML =
+    `<a onclick="goHome()">🏠 Home</a><span>›</span>
+     <a onclick="goSubjects()">${currentGradeLabel}</a><span>›</span>
+     <strong>${subject}</strong>`;
+
+  const container = document.getElementById('units-container');
+  container.innerHTML = '';
+  const subjectData = ((LESSONS[currentGradeKey] || {})[subject]) || {};
+  const unitKeys = Object.keys(subjectData);
+
+  if (unitKeys.length === 0) {
+    container.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;padding:24px 0;">No units added yet. Check back soon!</p>';
+    showEduvorraView('view-units');
+    return;
+  }
+
+  unitKeys.forEach(unitKey => {
+    const unitData    = subjectData[unitKey];
+    const lessonCount = (unitData.lessons || []).length;
+    const card        = document.createElement('div');
+    card.className    = 'card unit-card';
+    card.onclick      = () => showLessons(unitKey);
+    card.innerHTML    = `
+      <span class="unit-badge">📂 ${unitKey}</span>
+      <span class="unit-icon">${unitData.icon || '📄'}</span>
+      <div class="card-title">${unitKey}</div>
+      ${unitData.desc ? `<div class="card-sub" style="margin-top:5px;">${unitData.desc}</div>` : ''}
+      <div class="unit-lesson-count">📝 ${lessonCount} Lesson${lessonCount !== 1 ? 's' : ''}</div>
+      <span class="card-arrow">→</span>
+    `;
+    container.appendChild(card);
+  });
+
+  showEduvorraView('view-units');
+}
+
+/* ─── SHOW LESSONS ──────────────────────────────────────── */
+function showLessons(unitKey) {
+  currentUnit = unitKey;
+  document.getElementById('lessons-title').textContent =
+    unitKey + ' · ' + currentSubject + ' – ' + currentGradeLabel;
+  document.getElementById('breadcrumb-lessons').innerHTML =
+    `<a onclick="goHome()">🏠 Home</a><span>›</span>
+     <a onclick="goSubjects()">${currentGradeLabel}</a><span>›</span>
+     <a onclick="goUnits()">${currentSubject}</a><span>›</span>
+     <strong>${unitKey}</strong>`;
+
+  const container = document.getElementById('lessons-container');
+  container.innerHTML = '';
+  const unitData = ((LESSONS[currentGradeKey] || {})[currentSubject] || {})[unitKey] || {};
+  const lessons  = unitData.lessons || [];
+
+  if (lessons.length === 0) {
+    container.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;padding:24px 0;">No lessons added yet. Check back soon!</p>';
+    showEduvorraView('view-lessons');
+    return;
+  }
+
+  lessons.forEach((lesson, i) => {
+    const hasRealLink = lesson.link &&
+      !lesson.link.includes('YOUR_LINK') &&
+      !lesson.link.includes('PASTE_YOUR') &&
+      !lesson.link.includes('example.com');
+
+    const card     = document.createElement('a');
+    card.className = hasRealLink ? 'lesson-card' : 'lesson-card no-link';
+
+    if (hasRealLink) {
+      card.href   = lesson.link;
+      card.target = '_blank';
+      card.rel    = 'noopener noreferrer';
+    } else {
+      card.href = '#';
+      card.addEventListener('click', e => e.preventDefault());
     }
 
-    /* ─── NAVIGATION ────────────────────────────────────────── */
-    function goHome()     { showEduvorraView('view-home'); }
-    function goSubjects() { showEduvorraView('view-subjects'); }
-    function goUnits()    { showEduvorraView('view-units'); }
+    card.innerHTML = `
+      <div class="lesson-num">${String(i + 1).padStart(2, '0')}</div>
+      <div class="lesson-info">
+        <div class="card-title">${lesson.title}</div>
+        ${lesson.desc ? `<div class="card-sub">${lesson.desc}</div>` : ''}
+        ${hasRealLink
+          ? `<span class="lesson-link-badge">🔗 Open Lesson</span>`
+          : `<span class="no-link-badge">⏳ Coming Soon</span>`}
+      </div>
+      <span class="card-arrow">→</span>
+    `;
+    container.appendChild(card);
+  });
 
-    /* ─── SHOW SUBJECTS ─────────────────────────────────────── */
-    function showSubjects(gradeKey, gradeLabel, gradeAr) {
-      currentGradeKey   = gradeKey;
-      currentGradeLabel = gradeLabel;
-      currentGradeAr    = gradeAr;
-      document.getElementById('subjects-title').textContent = gradeLabel + ' – ' + gradeAr;
-      document.getElementById('breadcrumb-subjects').innerHTML =
-        `<a onclick="goHome()">🏠 Home</a><span>›</span><strong>${gradeLabel} (${gradeAr})</strong>`;
-      showEduvorraView('view-subjects');
-    }
+  showEduvorraView('view-lessons');
+}
+</script>
 
-    /* ─── SHOW UNITS ────────────────────────────────────────── */
-    function showUnits(subject) {
-      currentSubject = subject;
-
-      document.getElementById('units-title').textContent =
-        subject + ' – ' + currentGradeLabel + ' (' + currentGradeAr + ')';
-      document.getElementById('breadcrumb-units').innerHTML =
-        `<a onclick="goHome()">🏠 Home</a><span>›</span>
-         <a onclick="goSubjects()">${currentGradeLabel}</a><span>›</span>
-         <strong>${subject}</strong>`;
-
-      const container = document.getElementById('units-container');
-      container.innerHTML = '';
-
-      const subjectData = ((LESSONS[currentGradeKey] || {})[subject]) || {};
-      const unitKeys = Object.keys(subjectData);
-
-      if (unitKeys.length === 0) {
-        container.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;padding:24px 0;">No units added yet. Check back soon!</p>';
-        showEduvorraView('view-units');
-        return;
-      }
-
-      unitKeys.forEach((unitKey, idx) => {
-        const unitData = subjectData[unitKey];
-        const lessonCount = (unitData.lessons || []).length;
-
-        const card = document.createElement('div');
-        card.className = 'card unit-card';
-        card.onclick = () => showLessons(unitKey);
-
-        card.innerHTML = `
-          <span class="unit-badge">📂 ${unitKey}</span>
-          <span class="unit-icon">${unitData.icon || '📄'}</span>
-          <div class="card-title">${unitKey}</div>
-          ${unitData.desc ? `<div class="card-sub" style="margin-top:6px;">${unitData.desc}</div>` : ''}
-          <div class="unit-lesson-count">📝 ${lessonCount} Lesson${lessonCount !== 1 ? 's' : ''}</div>
-          <span class="card-arrow">→</span>
-        `;
-
-        container.appendChild(card);
-      });
-
-      showEduvorraView('view-units');
-    }
-
-    /* ─── SHOW LESSONS ──────────────────────────────────────── */
-    function showLessons(unitKey) {
-      currentUnit = unitKey;
-
-      document.getElementById('lessons-title').textContent =
-        unitKey + ' · ' + currentSubject + ' – ' + currentGradeLabel;
-      document.getElementById('breadcrumb-lessons').innerHTML =
-        `<a onclick="goHome()">🏠 Home</a><span>›</span>
-         <a onclick="goSubjects()">${currentGradeLabel}</a><span>›</span>
-         <a onclick="goUnits()">${currentSubject}</a><span>›</span>
-         <strong>${unitKey}</strong>`;
-
-      const container = document.getElementById('lessons-container');
-      container.innerHTML = '';
-
-      const unitData  = ((LESSONS[currentGradeKey] || {})[currentSubject] || {})[unitKey] || {};
-      const lessons   = unitData.lessons || [];
-
-      if (lessons.length === 0) {
-        container.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;padding:24px 0;">No lessons added yet. Check back soon!</p>';
-        showEduvorraView('view-lessons');
-        return;
-      }
-
-      lessons.forEach((lesson, i) => {
-        const hasRealLink = lesson.link &&
-          !lesson.link.includes('PASTE_YOUR_LESSON_LINK_HERE') &&
-          !lesson.link.includes('example.com');
-
-        const card = document.createElement('a');
-
-        if (hasRealLink) {
-          card.href   = lesson.link;
-          card.target = '_blank';
-          card.rel    = 'noopener noreferrer';
-          card.className = 'lesson-card';
-        } else {
-          card.href      = '#';
-          card.className = 'lesson-card no-link';
-          card.addEventListener('click', e => e.preventDefault());
-        }
-
-        card.innerHTML = `
-          <div class="lesson-num">${String(i + 1).padStart(2, '0')}</div>
-          <div class="lesson-info">
-            <div class="card-title">${lesson.title}</div>
-            ${lesson.desc ? `<div class="card-sub">${lesson.desc}</div>` : ''}
-            ${hasRealLink
-              ? `<span class="lesson-link-badge">🔗 Open Lesson</span>`
-              : `<span class="no-link-badge">⏳ Coming Soon</span>`}
-          </div>
-          <span class="card-arrow">→</span>
-        `;
-
-        container.appendChild(card);
-      });
-
-      showEduvorraView('view-lessons');
-    }
-
-  </script>
 </body>
 </html>
