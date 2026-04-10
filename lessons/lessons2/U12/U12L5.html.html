@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 12 – Writing | Second Intermediate</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --surface2: #eef2ff;
+    --primary: #3b5bdb;
+    --primary-light: #4c6ef5;
+    --accent: #f76707;
+    --accent2: #2f9e44;
+    --text: #1a1a2e;
+    --text2: #495057;
+    --text3: #868e96;
+    --border: #dee2e6;
+    --card: #ffffff;
+    --header-bg: #3b5bdb;
+    --header-text: #ffffff;
+    --reveal-btn: #2f9e44;
+    --hide-btn: #e03131;
+    --correct: #2f9e44;
+    --wrong: #e03131;
+    --shadow: 0 4px 24px rgba(59,91,219,0.10);
+    --radius: 16px;
+    --transition: 0.35s cubic-bezier(.4,0,.2,1);
+  }
+  body.dark {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --primary: #4c6ef5;
+    --primary-light: #748ffc;
+    --accent: #fd7e14;
+    --accent2: #40c057;
+    --text: #e6edf3;
+    --text2: #b1bac4;
+    --text3: #8b949e;
+    --border: #30363d;
+    --card: #1c2128;
+    --header-bg: #161b22;
+    --header-text: #e6edf3;
+    --shadow: 0 4px 24px rgba(0,0,0,0.40);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background var(--transition), color var(--transition);
+    overflow: hidden;
+  }
+  /* THEME TOGGLE */
+  #themeToggle {
+    position: fixed;
+    bottom: 80px; right: 16px;
+    z-index: 1000;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow);
+    transition: all var(--transition);
+  }
+  #themeToggle:hover { transform: scale(1.12); }
+
+  /* HEADER */
+  .slide-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 54px;
+    background: var(--header-bg);
+    color: var(--header-text);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+    z-index: 900;
+    box-shadow: 0 2px 12px rgba(59,91,219,0.18);
+    transition: background var(--transition);
+  }
+  .header-left { font-size: 13px; font-weight: 800; letter-spacing: .5px; opacity: .93; }
+  .header-right { font-size: 13px; font-weight: 700; font-family: 'Tajawal', sans-serif; opacity: .93; }
+  .header-pill {
+    background: rgba(255,255,255,0.18);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    position: fixed;
+    top: 54px; left: 0; right: 0;
+    height: 4px;
+    background: var(--border);
+    z-index: 899;
+    transition: background var(--transition);
+  }
+  .progress-bar-fill {
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--primary));
+    transition: width 0.45s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* SLIDES */
+  .slides-container {
+    position: fixed;
+    top: 58px; left: 0; right: 0; bottom: 64px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .slide {
+    display: none;
+    min-height: 100%;
+    padding: 28px 20px 20px;
+    animation: fadeSlide .4s ease;
+  }
+  .slide.active { display: block; }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* NAV BAR */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 64px;
+    background: var(--surface);
+    border-top: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+    z-index: 900;
+    transition: background var(--transition), border-color var(--transition);
+  }
+  .nav-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 22px;
+    border: none; border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800; font-size: 14px;
+    cursor: pointer;
+    transition: all .22s;
+  }
+  .nav-btn.prev { background: var(--surface2); color: var(--text); }
+  .nav-btn.next { background: var(--primary); color: #fff; }
+  .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(59,91,219,0.20); }
+  .nav-btn:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+  .slide-counter {
+    font-size: 13px; font-weight: 700; color: var(--text3);
+    background: var(--surface2);
+    border-radius: 20px; padding: 5px 14px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+    border: 1.5px solid var(--border);
+    transition: background var(--transition), border-color var(--transition);
+  }
+
+  /* OPENING SLIDE */
+  .opening-slide {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100%;
+    text-align: center;
+    gap: 18px;
+  }
+  .opening-badge {
+    display: inline-flex; gap: 10px; align-items: center;
+    background: var(--surface2);
+    border-radius: 30px; padding: 8px 20px;
+    font-size: 13px; font-weight: 800; color: var(--primary);
+    border: 2px solid var(--primary-light);
+  }
+  .opening-title-en {
+    font-size: clamp(32px, 7vw, 56px);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+  .opening-title-ar {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(20px, 4vw, 30px);
+    font-weight: 700;
+    color: var(--text2);
+    margin-top: -8px;
+  }
+  .opening-meta {
+    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 6px;
+  }
+  .meta-pill {
+    padding: 6px 16px; border-radius: 20px;
+    font-size: 13px; font-weight: 700;
+    border: 2px solid var(--border);
+    background: var(--surface2);
+    color: var(--text2);
+  }
+  .meta-pill.highlight { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .opening-book {
+    font-size: 14px; color: var(--text3); font-weight: 600;
+    margin-top: 6px;
+  }
+  .wave-decor {
+    width: 90px; height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    margin: 0 auto;
+  }
+
+  /* SLIDE TITLES */
+  .slide-title {
+    font-size: 22px; font-weight: 900;
+    color: var(--primary);
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .slide-title .icon { font-size: 24px; }
+
+  /* OBJECTIVES */
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .obj-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--surface2);
+    border-radius: 12px; padding: 14px 16px;
+    border-left: 4px solid var(--primary);
+    font-size: 15px; font-weight: 600;
+    transition: background var(--transition);
+  }
+  .obj-item .num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    font-size: 13px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* VOCAB */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .vocab-card {
+    background: var(--surface2);
+    border-radius: 14px; padding: 16px;
+    border: 2px solid var(--border);
+    text-align: center;
+    transition: all .2s;
+  }
+  .vocab-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .vocab-word { font-size: 17px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+  .vocab-type { font-size: 11px; color: var(--text3); font-weight: 600; margin-bottom: 6px; }
+  .vocab-ar { font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 700; color: var(--accent); }
+  .tts-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--primary); color: #fff;
+    border: none; border-radius: 20px;
+    padding: 5px 12px; font-size: 12px; font-weight: 700;
+    cursor: pointer; margin-top: 8px;
+    transition: all .2s;
+  }
+  .tts-btn:hover { background: var(--primary-light); transform: scale(1.05); }
+
+  /* EMAIL DISPLAY */
+  .email-box {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text);
+    transition: background var(--transition);
+  }
+  .email-header-line {
+    font-size: 13px; color: var(--text3); margin-bottom: 12px;
+    border-bottom: 1px solid var(--border); padding-bottom: 10px;
+  }
+  .email-header-line strong { color: var(--text); }
+  .email-para { margin-bottom: 10px; }
+
+  /* HIGHLIGHT SPANS */
+  .hl-adj {
+    background: rgba(247,103,7,0.18);
+    color: var(--accent);
+    border-radius: 4px; padding: 1px 4px;
+    font-weight: 700; font-style: italic;
+  }
+  .hl-adv {
+    background: rgba(47,158,68,0.18);
+    color: var(--accent2);
+    border-radius: 4px; padding: 1px 4px;
+    font-weight: 700; text-decoration: underline dotted;
+  }
+
+  /* LEGEND */
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 3px; }
+
+  /* REVEAL BUTTON */
+  .reveal-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; border-radius: 10px; border: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800; font-size: 13px; cursor: pointer;
+    transition: all .2s;
+  }
+  .reveal-btn.show { background: var(--reveal-btn); color: #fff; }
+  .reveal-btn.hide { background: var(--hide-btn); color: #fff; }
+  .reveal-btn:hover { transform: translateY(-2px); opacity: .9; }
+  .answer-box {
+    display: none;
+    background: var(--surface2);
+    border-left: 4px solid var(--accent2);
+    border-radius: 10px; padding: 14px 16px;
+    margin-top: 10px;
+    font-weight: 700; font-size: 14px;
+    color: var(--text);
+    animation: fadeIn .3s ease;
+    transition: background var(--transition);
+  }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+  /* CHART / TABLE */
+  .writing-chart {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  .writing-chart td {
+    padding: 13px 16px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+    vertical-align: top;
+    transition: background var(--transition);
+  }
+  .writing-chart td:first-child {
+    background: var(--primary);
+    color: #fff;
+    font-weight: 800;
+    width: 38%;
+    white-space: nowrap;
+  }
+  .writing-chart td:last-child {
+    background: var(--surface2);
+    color: var(--text2);
+    font-style: italic;
+  }
+
+  /* EXPLANATION STEPS */
+  .step-list { display: flex; flex-direction: column; gap: 14px; }
+  .step-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--surface2);
+    border-radius: 14px; padding: 16px;
+    border: 1.5px solid var(--border);
+    transition: background var(--transition), border-color var(--transition);
+  }
+  .step-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff; font-size: 16px; font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-content h4 { font-size: 15px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+  .step-content p { font-size: 14px; color: var(--text2); line-height: 1.6; }
+  .step-ar { font-family: 'Tajawal', sans-serif; font-size: 13px; color: var(--text3); margin-top: 4px; direction: rtl; }
+
+  /* QUIZ */
+  .quiz-question {
+    margin-bottom: 22px;
+    background: var(--surface2);
+    border-radius: 14px; padding: 18px;
+    border: 1.5px solid var(--border);
+    transition: background var(--transition);
+  }
+  .quiz-q-text { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 10px; cursor: pointer;
+    font-size: 14px; font-weight: 600;
+    transition: all .2s;
+  }
+  .quiz-opt:hover { border-color: var(--primary); background: var(--surface2); }
+  .quiz-opt.correct { background: rgba(47,158,68,.15); border-color: var(--correct); color: var(--correct); }
+  .quiz-opt.wrong { background: rgba(224,49,49,.12); border-color: var(--wrong); color: var(--wrong); }
+  .quiz-feedback {
+    margin-top: 8px; font-size: 13px; font-weight: 700;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { color: var(--correct); }
+  .quiz-feedback.bad { color: var(--wrong); }
+
+  /* PRACTICE INPUT */
+  .practice-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    background: var(--surface);
+    color: var(--text);
+    margin-top: 8px;
+    transition: border-color .2s, background var(--transition), color var(--transition);
+    resize: vertical;
+  }
+  .practice-input:focus { outline: none; border-color: var(--primary); }
+
+  /* CHALLENGE */
+  .challenge-box {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    color: #fff; border-radius: var(--radius);
+    padding: 28px; text-align: center;
+  }
+  .challenge-box h3 { font-size: 22px; font-weight: 900; margin-bottom: 10px; }
+  .challenge-box p { font-size: 15px; opacity: .92; margin-bottom: 18px; line-height: 1.7; }
+  .challenge-input {
+    width: 100%; padding: 14px 18px;
+    border: none; border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px; background: rgba(255,255,255,.15);
+    color: #fff; resize: vertical;
+  }
+  .challenge-input::placeholder { color: rgba(255,255,255,.6); }
+  .challenge-input:focus { outline: 2px solid rgba(255,255,255,.5); }
+
+  /* SUMMARY */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .summary-item {
+    background: var(--surface2);
+    border-radius: 14px; padding: 18px;
+    text-align: center;
+    border: 2px solid var(--border);
+    transition: background var(--transition);
+  }
+  .summary-icon { font-size: 32px; margin-bottom: 8px; }
+  .summary-item h4 { font-size: 15px; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+  .summary-item p { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+  /* FOOTER (last slide only) */
+  .slide-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px dashed var(--border);
+    color: var(--text3);
+  }
+  .slide-footer .brand { font-size: 20px; font-weight: 900; color: var(--primary); letter-spacing: 1px; }
+  .slide-footer .author { font-family: 'Tajawal', sans-serif; font-size: 14px; margin-top: 4px; color: var(--text2); }
+  .slide-footer .city { font-family: 'Tajawal', sans-serif; font-size: 13px; color: var(--text3); margin-top: 2px; }
+
+  /* SECTION LABEL */
+  .section-label {
+    display: inline-block;
+    background: var(--primary);
+    color: #fff; border-radius: 8px;
+    padding: 3px 12px; font-size: 12px; font-weight: 800;
+    letter-spacing: .5px; margin-bottom: 14px;
+  }
+  .section-label.orange { background: var(--accent); }
+  .section-label.green { background: var(--accent2); }
+
+  /* TAG CHIP */
+  .chip {
+    display: inline-block;
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 12px; font-weight: 700;
+    margin: 2px;
+  }
+  .chip.adj { background: rgba(247,103,7,.15); color: var(--accent); border: 1.5px solid rgba(247,103,7,.3); }
+  .chip.adv { background: rgba(47,158,68,.15); color: var(--accent2); border: 1.5px solid rgba(47,158,68,.3); }
+
+  /* RESPONSIVE */
+  @media (max-width: 480px) {
+    .slide { padding: 20px 14px 14px; }
+    .nav-btn { padding: 9px 14px; font-size: 13px; }
+    .vocab-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* scrollbar */
+  .slides-container::-webkit-scrollbar { width: 5px; }
+  .slides-container::-webkit-scrollbar-track { background: transparent; }
+  .slides-container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+
+  /* sentence highlight for exercise A */
+  .ex-sentence { margin: 6px 0; font-size: 14px; line-height: 1.7; }
+  .answered-adj { background: rgba(247,103,7,.18); color: var(--accent); font-weight:800; border-radius: 4px; padding: 0 4px; font-style: italic; }
+  .answered-adv { background: rgba(47,158,68,.18); color: var(--accent2); font-weight:800; border-radius: 4px; padding: 0 4px; text-decoration: underline dotted; }
+
+  /* tip box */
+  .tip-box {
+    background: rgba(59,91,219,.08);
+    border-left: 4px solid var(--primary);
+    border-radius: 10px; padding: 12px 16px;
+    font-size: 13px; color: var(--text2);
+    margin-bottom: 14px;
+  }
+  .tip-box strong { color: var(--primary); }
+</style>
+</head>
+<body>
+
+<!-- Theme Toggle -->
+<button id="themeToggle" title="Toggle Dark/Light Mode">☀️</button>
+
+<!-- Header -->
+<div class="slide-header">
+  <div class="header-left">
+    <span class="header-pill">Unit 12 &nbsp;·&nbsp; Page 108</span>
+  </div>
+  <div class="header-right">Second Intermediate &nbsp;|&nbsp; ثاني متوسط</div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressFill"></div>
+</div>
+
+<!-- Slides Container -->
+<div class="slides-container" id="slidesContainer">
+
+  <!-- ============================================================ SLIDE 1: OPENING -->
+  <div class="slide active" id="slide-1">
+    <div class="opening-slide">
+      <div class="opening-badge">📘 Super Goal 2 &nbsp;·&nbsp; Second Term &nbsp;·&nbsp; الفصل الثاني</div>
+      <div class="wave-decor"></div>
+      <div class="opening-title-en">Writing</div>
+      <div class="opening-title-ar">كتابة</div>
+      <div class="opening-meta">
+        <span class="meta-pill highlight">Unit 12</span>
+        <span class="meta-pill">It's Going to Be Fun!</span>
+        <span class="meta-pill">Page 108</span>
+        <span class="meta-pill">Exercise 9 &amp; 10</span>
+      </div>
+      <div class="opening-book">Second Intermediate &nbsp;|&nbsp; ثاني متوسط</div>
+      <div style="margin-top:10px; font-size:15px; color:var(--text3); font-weight:600;">
+        ✉️ Writing an Email About a Place You Visited or Would Like to Visit
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ SLIDE 2: OBJECTIVES -->
+  <div class="slide" id="slide-2">
+    <div class="slide-title"><span class="icon">🎯</span> Lesson Objectives</div>
+    <ul class="obj-list">
+      <li class="obj-item"><span class="num">1</span><div>Identify <strong>adjectives</strong> (circle) and <strong>adverbs</strong> (underline) in a reading text.</div></li>
+      <li class="obj-item"><span class="num">2</span><div>Read and understand the structure of a <strong>friendly email</strong> about a travel experience.</div></li>
+      <li class="obj-item"><span class="num">3</span><div>Use a <strong>planning chart</strong> to organize ideas before writing.</div></li>
+      <li class="obj-item"><span class="num">4</span><div>Write a <strong>structured email</strong> to a friend about a place you know or would like to visit.</div></li>
+      <li class="obj-item"><span class="num">5</span><div>Plan and present a <strong>picnic project</strong> in a group using pictures and brochures.</div></li>
+    </ul>
+  </div>
+
+  <!-- ============================================================ SLIDE 3: KEY VOCABULARY -->
+  <div class="slide" id="slide-3">
+    <div class="slide-title"><span class="icon">📚</span> Key Vocabulary</div>
+    <div class="tip-box"><strong>💡 Tip:</strong> Click 🔊 to hear the word pronounced aloud. أضغط لتسمع النطق.</div>
+    <div class="vocab-grid">
+      <div class="vocab-card">
+        <div class="vocab-word">picturesque</div>
+        <div class="vocab-type">adjective</div>
+        <div class="vocab-ar">خلاب / جميل المنظر</div>
+        <button class="tts-btn" onclick="speak('picturesque')">🔊 Listen</button>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-word">spectacular</div>
+        <div class="vocab-type">adjective</div>
+        <div class="vocab-ar">رائع / مذهل</div>
+        <button class="tts-btn" onclick="speak('spectacular')">🔊 Listen</button>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-word">voyage</div>
+        <div class="vocab-type">noun</div>
+        <div class="vocab-ar">رحلة بحرية</div>
+        <button class="tts-btn" onclick="speak('voyage')">🔊 Listen</button>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-word">traditional</div>
+        <div class="vocab-type">adjective</div>
+        <div class="vocab-ar">تقليدي</div>
+        <button class="tts-btn" onclick="speak('traditional')">🔊 Listen</button>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-word">crowded</div>
+        <div class="vocab-type">adjective</div>
+        <div class="vocab-ar">مزدحم</div>
+        <button class="tts-btn" onclick="speak('crowded')">🔊 Listen</button>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-word">absolutely</div>
+        <div class="vocab-type">adverb</div>
+        <div class="vocab-ar">تمامًا / بالكلية</div>
+        <button class="tts-btn" onclick="speak('absolutely')">🔊 Listen</button>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-word">scenic</div>
+        <div class="vocab-type">adjective</div>
+        <div class="vocab-ar">ذو مناظر خلابة</div>
+        <button class="tts-btn" onclick="speak('scenic')">🔊 Listen</button>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-word">Parthenon</div>
+        <div class="vocab-type">proper noun</div>
+        <div class="vocab-ar">البارثينون (معبد أثيني)</div>
+        <button class="tts-btn" onclick="speak('Parthenon')">🔊 Listen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ SLIDE 4: EMAIL TEXT (EXERCISE 9A) -->
+  <div class="slide" id="slide-4">
+    <div class="slide-title"><span class="icon">📖</span> Exercise 9A — Read the Email</div>
+    <div class="tip-box"><strong>📌 Task:</strong> Read the email. <strong>Circle the adjectives</strong> and <strong>underline the adverbs</strong>.</div>
+    <div class="card">
+      <div class="email-box">
+        <div class="email-header-line">
+          <strong>From:</strong> khalid_2001@sgmail.com<br>
+          <strong>Subject:</strong> Greek island
+        </div>
+        <div class="email-para">Hi Saeed,</div>
+        <div class="email-para">I hope you're well. I'm writing from the Greek island of Paros. You know how I always wanted to visit Greece. Well, I'm finally here. It's a dream come true!</div>
+        <div class="email-para">First, we flew to Athens. We spent a wonderful day there visiting the Parthenon and the Acropolis Museum. Amazing! The next day, we went to the port of Piraeus and caught a high-speed ferry to the island. The voyage took less than 3 hours.</div>
+        <div class="email-para">We're staying in a comfortable hotel in the capital, Parikia. It's a very picturesque town, with its narrow streets and traditional white houses that have blue doors and windows. In the evening, the stores, cafés, and restaurants are crowded with tourists. It's so lively, and I have to say Greek food is absolutely delicious!</div>
+        <div class="email-para">Of course, the island has many scenic beaches with crystal clear waters and soft sand. Tomorrow, we're going to spend the day at Golden Beach. I'm really excited because I'm going to try windsurfing! Apart from the spectacular beaches, we plan to explore the unique sights of the island. We're going to visit the Archaeological Museum and the Valley of Butterflies.</div>
+        <div class="email-para">I'll tell you more about my adventures in Paros soon. Write me back with your news.</div>
+        <div class="email-para">Best wishes,<br><strong>Khalid</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ SLIDE 5: ANSWERS FOR 9A -->
+  <div class="slide" id="slide-5">
+    <div class="slide-title"><span class="icon">✅</span> Exercise 9A — Answers</div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(247,103,7,.6);"></div><span>Adjective (صفة) — circled</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(47,158,68,.6);"></div><span>Adverb (ظرف / حال) — underlined</span></div>
+    </div>
+    <div class="card">
+      <div class="section-label">Adjectives</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
+        <span class="chip adj">wonderful</span><span class="chip adj">amazing</span><span class="chip adj">high-speed</span>
+        <span class="chip adj">comfortable</span><span class="chip adj">picturesque</span><span class="chip adj">narrow</span>
+        <span class="chip adj">traditional</span><span class="chip adj">white</span><span class="chip adj">blue</span>
+        <span class="chip adj">lively</span><span class="chip adj">delicious</span><span class="chip adj">scenic</span>
+        <span class="chip adj">crystal clear</span><span class="chip adj">soft</span><span class="chip adj">spectacular</span>
+        <span class="chip adj">unique</span>
+      </div>
+      <div class="section-label green">Adverbs</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px;">
+        <span class="chip adv">finally</span><span class="chip adv">first</span><span class="chip adv">very</span>
+        <span class="chip adv">so</span><span class="chip adv">absolutely</span><span class="chip adv">really</span>
+        <span class="chip adv">soon</span>
+      </div>
+    </div>
+    <div class="card" style="margin-top:0;">
+      <div class="tip-box" style="margin-bottom:0;">
+        <strong>📌 Remember:</strong><br>
+        • <strong>Adjective (صفة)</strong> = describes a noun → e.g., <em>wonderful</em> day<br>
+        • <strong>Adverb (ظرف)</strong> = describes a verb, adjective, or another adverb → e.g., <em>absolutely</em> delicious
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ SLIDE 6: EMAIL STRUCTURE EXPLANATION -->
+  <div class="slide" id="slide-6">
+    <div class="slide-title"><span class="icon">🏗️</span> How to Write a Friendly Email</div>
+    <div class="tip-box"><strong>كيف تكتب رسالة بريد إلكتروني لصديق؟</strong> Follow this structure every time!</div>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Greetings (التحية)</h4>
+          <p>Start with a friendly greeting. Address your friend by name.</p>
+          <div class="step-ar">ابدأ بتحية ودية مثل: Hi [Name], / Dear [Name],</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Describe the Journey (وصف الرحلة)</h4>
+          <p>Explain how you got there — flight, ferry, car? How long did it take?</p>
+          <div class="step-ar">كيف وصلت؟ ركبت طائرة؟ سفينة؟ وكم استغرق الوصول؟</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Describe the Place (وصف المكان)</h4>
+          <p>Use adjectives! Talk about the town, hotel, streets, food, people.</p>
+          <div class="step-ar">استخدم صفات وصفية جذابة لوصف المكان والطعام والناس.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Activities You Plan to Do (الأنشطة المخططة)</h4>
+          <p>Use <strong>"going to"</strong> to talk about planned activities.</p>
+          <div class="step-ar">استخدم "going to" للحديث عن الأنشطة المستقبلية المخططة.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h4>Closing (الختام)</h4>
+          <p>End warmly. Promise to write again. Use: Best wishes / Take care / Yours</p>
+          <div class="step-ar">اختم برسالة ودية وعد بالكتابة مجددًا.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ SLIDE 7: EXERCISE 9B — CHART -->
+  <div class="slide" id="slide-7">
+    <div class="slide-title"><span class="icon">📝</span> Exercise 9B — Planning Chart</div>
+    <div class="tip-box"><strong>📌 Task:</strong> Read the writing task in 9C. Before you write, complete the chart with notes for each paragraph. <br><span style="font-family:'Tajawal',sans-serif; direction:rtl; display:block; margin-top:4px;">اقرأ مهمة الكتابة في 9C، ثم أكمل الجدول بملاحظات لكل فقرة قبل الكتابة.</span></div>
+    <div class="card">
+      <p style="font-size:14px; font-weight:600; color:var(--text2); margin-bottom:14px;">Below is the chart you need to fill in. A sample answer is hidden — reveal it to see an example.</p>
+      <table class="writing-chart">
+        <tr><td>Greetings</td><td><textarea class="practice-input" rows="2" placeholder="Write your greeting here..."></textarea></td></tr>
+        <tr><td>Describe the journey</td><td><textarea class="practice-input" rows="2" placeholder="How did you get there?"></textarea></td></tr>
+        <tr><td>Describe the place</td><td><textarea class="practice-input" rows="2" placeholder="What does it look like?"></textarea></td></tr>
+        <tr><td>Activities you plan to do</td><td><textarea class="practice-input" rows="2" placeholder="What are you going to do?"></textarea></td></tr>
+        <tr><td>Closing</td><td><textarea class="practice-input" rows="2" placeholder="Write your closing line..."></textarea></td></tr>
+      </table>
+      <div style="margin-top:16px;">
+        <button class="reveal-btn show" onclick="toggleAnswer(this,'chart-sample')">👁️ Show Sample Answer</button>
+        <div class="answer-box" id="chart-sample">
+          <strong>✅ Sample Answers (for a place like Al-Ula, Saudi Arabia):</strong><br><br>
+          <strong>Greetings:</strong> Hi Omar, I hope you're doing great! I'm writing to you from the amazing city of Al-Ula.<br><br>
+          <strong>Describe the journey:</strong> We drove from Riyadh. It was a long trip, but the desert views were breathtaking.<br><br>
+          <strong>Describe the place:</strong> Al-Ula is a stunning historic city with ancient rock formations and beautiful old ruins. The weather is warm and the night sky is incredibly clear.<br><br>
+          <strong>Activities you plan to do:</strong> Tomorrow, we're going to visit Hegra (Mada'in Salih) and explore the ancient Nabataean tombs. We're also going to go stargazing!<br><br>
+          <strong>Closing:</strong> I'll tell you all about it when I get back. Write soon! Best wishes, [Your Name]
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ SLIDE 8: EXERCISE 9C — WRITING TASK -->
+  <div class="slide" id="slide-8">
+    <div class="slide-title"><span class="icon">✍️</span> Exercise 9C — Write Your Email</div>
+    <div class="tip-box"><strong>📌 Task:</strong> Write an email to a friend from a place that you know or would like to visit. Use your notes from the chart and ideas from this unit.<br><span style="font-family:'Tajawal',sans-serif; direction:rtl; display:block; margin-top:4px;">اكتب بريدًا إلكترونيًا لصديقك من مكان تعرفه أو تتمنى زيارته، مستعينًا بملاحظاتك من الجدول.</span></div>
+    <div class="card">
+      <div class="section-label">📋 Checklist before you write</div>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+        <li style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--text2);"><input type="checkbox" style="width:16px;height:16px;"> I have a greeting with my friend's name</li>
+        <li style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--text2);"><input type="checkbox" style="width:16px;height:16px;"> I described how I got there</li>
+        <li style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--text2);"><input type="checkbox" style="width:16px;height:16px;"> I used adjectives to describe the place</li>
+        <li style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--text2);"><input type="checkbox" style="width:16px;height:16px;"> I used "going to" for future plans</li>
+        <li style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--text2);"><input type="checkbox" style="width:16px;height:16px;"> I wrote a friendly closing</li>
+      </ul>
+      <textarea class="practice-input" rows="12" placeholder="Write your full email here...&#10;&#10;Hi [Friend's Name],&#10;&#10;I hope you're well. I'm writing to you from...&#10;&#10;...&#10;&#10;Best wishes,&#10;[Your Name]"></textarea>
+    </div>
+  </div>
+
+  <!-- ============================================================ SLIDE 9: QUIZ -->
+  <div class="slide" id="slide-9">
+    <div class="slide-title"><span class="icon">🧠</span> Quick Quiz</div>
+
+    <!-- Q1 -->
+    <div class="quiz-question">
+      <div class="quiz-q-text">1. Where is Khalid writing from?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q1')">🏙️ Athens, Greece</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'correct','q1')">🏝️ The Greek island of Paros</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q1')">⛵ The port of Piraeus</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q1')">🏛️ The Acropolis Museum</div>
+      </div>
+      <div class="quiz-feedback" id="q1-fb"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-question">
+      <div class="quiz-q-text">2. Which word is an ADVERB in the email?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q2')">🔤 comfortable</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q2')">🔤 picturesque</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'correct','q2')">🔤 absolutely</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q2')">🔤 scenic</div>
+      </div>
+      <div class="quiz-feedback" id="q2-fb"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-question">
+      <div class="quiz-q-text">3. Which tense does Khalid use to talk about future plans?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q3')">📅 Simple Past</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'correct','q3')">📅 "going to" future</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q3')">📅 Present Perfect</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q3')">📅 Simple Present</div>
+      </div>
+      <div class="quiz-feedback" id="q3-fb"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-question">
+      <div class="quiz-q-text">4. What is the FIRST section of a friendly email?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q4')">📝 Describe the place</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q4')">📝 Activities planned</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'correct','q4')">📝 Greetings</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q4')">📝 Closing</div>
+      </div>
+      <div class="quiz-feedback" id="q4-fb"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-question">
+      <div class="quiz-q-text">5. What activity does Khalid plan to try at Golden Beach?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q5')">🌊 Scuba diving</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'correct','q5')">🏄 Windsurfing</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q5')">🚣 Rowing</div>
+        <div class="quiz-opt" onclick="checkQuiz(this,'wrong','q5')">🏊 Swimming only</div>
+      </div>
+      <div class="quiz-feedback" id="q5-fb"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ SLIDE 10: EXERCISE 10 — PROJECT -->
+  <div class="slide" id="slide-10">
+    <div class="slide-title"><span class="icon">🎒</span> Exercise 10 — Project: Plan a Picnic!</div>
+    <div class="tip-box"><strong>📌 Task:</strong> In a group, plan a picnic. Present your picnic plan to the class. Use pictures and brochures.<br><span style="font-family:'Tajawal',sans-serif; direction:rtl; display:block; margin-top:4px;">في مجموعة، خططوا لنزهة. قدّموا خطتكم للصف مستعينين بالصور والكتيبات.</span></div>
+    <div class="card">
+      <div class="section-label orange">🗺️ Picnic Planning Guide</div>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">📍</div>
+          <div class="step-content">
+            <h4>Choose a Location</h4>
+            <p>Where will your picnic be? A park, beach, garden, or mountain?</p>
+            <div class="step-ar">أين ستكون النزهة؟ حديقة، شاطئ، حديقة عامة؟</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">🍔</div>
+          <div class="step-content">
+            <h4>Plan the Food &amp; Drinks</h4>
+            <p>What food and drinks will you bring? Use adjectives: fresh, delicious, cold...</p>
+            <div class="step-ar">ماذا ستأخذون من طعام وشراب؟ استخدم صفات وصفية.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">🎯</div>
+          <div class="step-content">
+            <h4>Plan the Activities</h4>
+            <p>What are you going to do? Use "going to": We're going to play football / fly kites...</p>
+            <div class="step-ar">استخدم "going to" لذكر الأنشطة المخططة.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">🖼️</div>
+          <div class="step-content">
+            <h4>Present to the Class</h4>
+            <p>Use pictures and brochures to make your presentation exciting and visual.</p>
+            <div class="step-ar">استخدم الصور والكتيبات لتقديم عرض جذاب ومميز.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:0;">
+      <div class="section-label green">✅ Example Presentation Opener</div>
+      <button class="reveal-btn show" onclick="toggleAnswer(this,'picnic-example')">👁️ Show Example</button>
+      <div class="answer-box" id="picnic-example">
+        <strong>Example opening for your presentation:</strong><br><br>
+        "Hello everyone! Our group is planning a picnic at <em>Al-Urubah Park</em> in Riyadh. 
+        We're going to have a wonderful time there! 
+        We're going to bring fresh sandwiches, cold juice, and delicious dates. 
+        We're going to play volleyball and fly kites. 
+        Here are some pictures of the park to show you how beautiful it is!"
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ SLIDE 11: EXAMPLES GALLERY -->
+  <div class="slide" id="slide-11">
+    <div class="slide-title"><span class="icon">💡</span> Model Examples — Adjectives &amp; Adverbs in Context</div>
+    <div class="tip-box">Each example is hidden. Reveal one by one. <strong>كل مثال مخفي — أكشفه واحدًا تلو الآخر.</strong></div>
+
+    <div class="card">
+      <p style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:10px;">🔸 Example 1: <em>wonderful</em> — Is it an adjective or adverb?</p>
+      <button class="reveal-btn show" onclick="toggleAnswer(this,'ex1')">👁️ Show Answer</button>
+      <div class="answer-box" id="ex1">✅ <strong>Adjective</strong> — "We spent a <span class="answered-adj">wonderful</span> day there." → It describes the noun <em>day</em>.</div>
+    </div>
+
+    <div class="card">
+      <p style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:10px;">🔸 Example 2: <em>absolutely</em> — Is it an adjective or adverb?</p>
+      <button class="reveal-btn show" onclick="toggleAnswer(this,'ex2')">👁️ Show Answer</button>
+      <div class="answer-box" id="ex2">✅ <strong>Adverb</strong> — "Greek food is <span class="answered-adv">absolutely</span> delicious!" → It modifies the adjective <em>delicious</em>.</div>
+    </div>
+
+    <div class="card">
+      <p style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:10px;">🔸 Example 3: <em>finally</em> — Is it an adjective or adverb?</p>
+      <button class="reveal-btn show" onclick="toggleAnswer(this,'ex3')">👁️ Show Answer</button>
+      <div class="answer-box" id="ex3">✅ <strong>Adverb</strong> — "I'm <span class="answered-adv">finally</span> here." → It modifies the verb <em>am (here)</em>.</div>
+    </div>
+
+    <div class="card">
+      <p style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:10px;">🔸 Example 4: <em>picturesque</em> — Is it an adjective or adverb?</p>
+      <button class="reveal-btn show" onclick="toggleAnswer(this,'ex4')">👁️ Show Answer</button>
+      <div class="answer-box" id="ex4">✅ <strong>Adjective</strong> — "It's a very <span class="answered-adj">picturesque</span> town." → It describes the noun <em>town</em>.</div>
+    </div>
+
+    <div class="card">
+      <p style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:10px;">🔸 Example 5: <em>scenic</em> — Use it in a sentence.</p>
+      <button class="reveal-btn show" onclick="toggleAnswer(this,'ex5')">👁️ Show Answer</button>
+      <div class="answer-box" id="ex5">✅ "The island has many <span class="answered-adj">scenic</span> beaches with crystal clear waters." — <strong>Adjective</strong> describing <em>beaches</em>.</div>
+    </div>
+  </div>
+
+  <!-- ============================================================ SLIDE 12: SUMMARY -->
+  <div class="slide" id="slide-12">
+    <div class="slide-title"><span class="icon">📋</span> Lesson Summary</div>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="summary-icon">🔵</div>
+        <h4>Adjectives (صفات)</h4>
+        <p>Describe nouns. Found in the email: wonderful, scenic, picturesque, comfortable, spectacular...</p>
+      </div>
+      <div class="summary-item">
+        <div class="summary-icon">🟢</div>
+        <h4>Adverbs (ظروف)</h4>
+        <p>Modify verbs, adjectives, or adverbs. Found in the email: absolutely, finally, really, so...</p>
+      </div>
+      <div class="summary-item">
+        <div class="summary-icon">✉️</div>
+        <h4>Email Structure</h4>
+        <p>Greeting → Journey → Place → Activities (going to) → Closing</p>
+      </div>
+      <div class="summary-item">
+        <div class="summary-icon">📅</div>
+        <h4>"Going to" for Plans</h4>
+        <p>Use "be going to + verb" for future plans: We're going to visit the museum.</p>
+      </div>
+      <div class="summary-item">
+        <div class="summary-icon">🗺️</div>
+        <h4>Planning Chart</h4>
+        <p>Always plan before you write! Use the chart to organize your email paragraphs.</p>
+      </div>
+      <div class="summary-item">
+        <div class="summary-icon">🎒</div>
+        <h4>Project</h4>
+        <p>Plan a picnic as a group and present it using pictures and brochures.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ SLIDE 13: CHALLENGE -->
+  <div class="slide" id="slide-13">
+    <div class="slide-title"><span class="icon">🚀</span> Challenge Question</div>
+    <div class="challenge-box">
+      <h3>🏆 Your Turn to Shine!</h3>
+      <p>Imagine you are visiting your <strong>dream destination</strong> anywhere in the world.<br>
+      Write <strong>3–4 sentences</strong> describing the place using at least <strong>3 adjectives</strong> and <strong>2 adverbs</strong>.<br>
+      <span style="font-size:13px; opacity:.85;">تخيل أنك تزور وجهة أحلامك في العالم. اكتب ٣–٤ جمل تصف المكان مستخدمًا ٣ صفات على الأقل وظرفين.</span></p>
+      <textarea class="challenge-input" rows="5" placeholder="Example: I am finally visiting the incredible city of Kyoto, Japan. It is an absolutely beautiful place with ancient temples and colorful gardens. The streets are incredibly peaceful and the food is wonderfully fresh..."></textarea>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <button class="reveal-btn show" onclick="toggleAnswer(this,'challenge-model')">👁️ Show Model Answer</button>
+      <div class="answer-box" id="challenge-model">
+        <strong>🌟 Model Answer:</strong><br><br>
+        I am <span class="answered-adv">finally</span> visiting the <span class="answered-adj">incredible</span> city of Kyoto, Japan. It is an <span class="answered-adv">absolutely</span> <span class="answered-adj">beautiful</span> place with <span class="answered-adj">ancient</span> temples and <span class="answered-adj">colorful</span> gardens. The streets are <span class="answered-adv">incredibly</span> <span class="answered-adj">peaceful</span> and the food is <span class="answered-adv">wonderfully</span> <span class="answered-adj">fresh</span>. I am <span class="answered-adv">really</span> excited to explore this <span class="answered-adj">historic</span> city!<br><br>
+        <strong>Adjectives used:</strong> incredible, beautiful, ancient, colorful, peaceful, fresh, historic<br>
+        <strong>Adverbs used:</strong> finally, absolutely, incredibly, wonderfully, really
+      </div>
+    </div>
+
+    <!-- FOOTER — last slide only -->
+    <div class="slide-footer">
+      <div class="brand">eduvorra</div>
+      <div class="author">عبدالحكيم صالح الحسون</div>
+      <div class="city">صُنع بحب في بريدة 💙</div>
+    </div>
+  </div>
+
+</div><!-- end slides-container -->
+
+<!-- Navigation Bar -->
+<div class="nav-bar">
+  <button class="nav-btn prev" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+  <span class="slide-counter" id="slideCounter">1 / 13</span>
+  <button class="nav-btn next" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────────────────────────────
+var currentSlide = 1;
+var totalSlides = 13;
+var isDark = false;
+var quizAnswered = {};
+
+// ─── THEME ────────────────────────────────────────────────────────────────────
+var themeBtn = document.getElementById('themeToggle');
+themeBtn.addEventListener('click', function() {
+  isDark = !isDark;
+  document.body.classList.toggle('dark', isDark);
+  themeBtn.textContent = isDark ? '☀️' : '🌙';
+});
+
+// ─── NAVIGATION ───────────────────────────────────────────────────────────────
+function changeSlide(dir) {
+  var next = currentSlide + dir;
+  if (next < 1 || next > totalSlides) return;
+  document.getElementById('slide-' + currentSlide).classList.remove('active');
+  currentSlide = next;
+  document.getElementById('slide-' + currentSlide).classList.add('active');
+  document.getElementById('slidesContainer').scrollTop = 0;
+  updateNav();
+}
+
+function updateNav() {
+  document.getElementById('slideCounter').textContent = currentSlide + ' / ' + totalSlides;
+  document.getElementById('prevBtn').disabled = (currentSlide === 1);
+  document.getElementById('nextBtn').disabled = (currentSlide === totalSlides);
+  var pct = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
+});
+
+// ─── REVEAL / HIDE ANSWERS ────────────────────────────────────────────────────
+function toggleAnswer(btn, id) {
+  var box = document.getElementById(id);
+  if (!box) return;
+  var isHidden = box.style.display !== 'block';
+  box.style.display = isHidden ? 'block' : 'none';
+  btn.innerHTML  = isHidden ? '🙈 Hide' : '👁️ Show Answer';
+  btn.className  = isHidden ? 'reveal-btn hide' : 'reveal-btn show';
+}
+
+// ─── QUIZ ─────────────────────────────────────────────────────────────────────
+function checkQuiz(el, result, qid) {
+  if (quizAnswered[qid]) return;
+  quizAnswered[qid] = true;
+  var opts = el.parentElement.querySelectorAll('.quiz-opt');
+  opts.forEach(function(o) { o.style.pointerEvents = 'none'; });
+  var fb = document.getElementById(qid + '-fb');
+  if (result === 'correct') {
+    el.classList.add('correct');
+    fb.textContent = '✅ Correct! أحسنت!';
+    fb.className = 'quiz-feedback show ok';
+  } else {
+    el.classList.add('wrong');
+    fb.textContent = '❌ Try again next time! حاول مرة أخرى.';
+    fb.className = 'quiz-feedback show bad';
+    // highlight correct
+    opts.forEach(function(o) {
+      if (o.getAttribute('onclick') && o.getAttribute('onclick').indexOf("'correct'") !== -1) {
+        o.classList.add('correct');
+      }
+    });
+  }
+}
+
+// ─── TTS ──────────────────────────────────────────────────────────────────────
+function speak(word) {
+  if (!window.speechSynthesis) return;
+  var u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-US';
+  u.rate = 0.88;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+updateNav();
+</script>
+</body>
+</html>

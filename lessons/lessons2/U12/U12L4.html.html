@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Stones of Al-Ula | Unit 12 | Super Goal 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f4f1eb;
+    --surface: #ffffff;
+    --surface2: #f0ece0;
+    --primary: #2d6a4f;
+    --primary-light: #52b788;
+    --accent: #d4a017;
+    --accent2: #c27c3e;
+    --text: #1a1a2e;
+    --text-muted: #5c5c6e;
+    --border: #d9d0bb;
+    --card-shadow: 0 4px 24px rgba(45,106,79,0.10);
+    --radius: 16px;
+    --header-h: 58px;
+  }
+  body.dark {
+    --bg: #0f1923;
+    --surface: #1a2535;
+    --surface2: #1e2d3d;
+    --primary: #52b788;
+    --primary-light: #74c69d;
+    --accent: #f4a261;
+    --accent2: #e9c46a;
+    --text: #e8e8f0;
+    --text-muted: #9aabbf;
+    --border: #2a3d52;
+    --card-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background .3s, color .3s;
+  }
+
+  /* ── HEADER ── */
+  .top-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--header-h);
+    background: var(--primary);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  .top-left { display: flex; flex-direction: column; gap: 1px; }
+  .top-left span { color: #fff; font-size: 12px; opacity: .85; font-family:'Nunito',sans-serif; }
+  .top-left strong { color: #fff; font-size: 14px; }
+  .top-right { display: flex; align-items: center; gap: 10px; }
+  .class-badge {
+    background: var(--accent); color: #1a1a2e;
+    border-radius: 20px; padding: 3px 14px;
+    font-size: 13px; font-weight: 700;
+  }
+  .theme-btn {
+    background: rgba(255,255,255,.18); border: none; border-radius: 50%;
+    width: 36px; height: 36px; cursor: pointer; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+  }
+  .theme-btn:hover { background: rgba(255,255,255,.32); }
+
+  /* ── PROGRESS ── */
+  .progress-bar {
+    position: fixed; top: var(--header-h); left: 0; right: 0; z-index: 99;
+    height: 4px; background: var(--border);
+  }
+  .progress-fill {
+    height: 100%; background: var(--accent);
+    transition: width .4s ease;
+  }
+
+  /* ── SLIDES ── */
+  .slides-wrap {
+    margin-top: calc(var(--header-h) + 4px);
+    min-height: calc(100vh - var(--header-h) - 4px);
+    padding: 28px 16px 80px;
+    display: flex; align-items: flex-start; justify-content: center;
+  }
+  .slide {
+    display: none;
+    width: 100%; max-width: 860px;
+    animation: fadeIn .45s ease;
+  }
+  .slide.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    padding: 28px 30px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    transition: background .3s, border .3s;
+  }
+  .card-green {
+    background: linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);
+    color: #fff; border: none;
+  }
+
+  /* ── OPENING SLIDE ── */
+  .opening-slide {
+    text-align: center;
+    padding: 50px 30px 40px;
+  }
+  .opening-slide .unit-tag {
+    display: inline-block;
+    background: var(--accent); color: #1a1a2e;
+    border-radius: 30px; padding: 5px 22px;
+    font-size: 14px; font-weight: 700; margin-bottom: 18px;
+  }
+  .opening-slide h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px,5vw,48px);
+    color: var(--primary);
+    line-height: 1.2; margin-bottom: 8px;
+  }
+  .opening-slide .arabic-title {
+    font-size: 22px; color: var(--accent2); margin-bottom: 24px;
+    font-weight: 700; direction: rtl;
+  }
+  .opening-slide .meta {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  .meta-chip {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 8px 18px; font-size: 13px;
+    font-weight: 600; color: var(--text-muted);
+  }
+  .opening-img {
+    width: 100%; max-height: 220px; object-fit: cover;
+    border-radius: 14px; margin-top: 24px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.14);
+  }
+
+  /* ── SECTION TITLES ── */
+  .slide-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px,3.5vw,28px);
+    color: var(--primary); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .slide-title .icon { font-size: 26px; }
+  .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-weight: 600; }
+
+  /* ── OBJECTIVES ── */
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .obj-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--surface2); border-radius: 10px; padding: 12px 16px;
+    border-left: 4px solid var(--primary-light);
+    font-size: 15px; line-height: 1.5;
+  }
+  .obj-list li .check { color: var(--primary); font-size: 18px; margin-top: 1px; flex-shrink:0; }
+
+  /* ── VOCAB ── */
+  .vocab-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 14px;
+  }
+  .vocab-card {
+    background: var(--surface2); border-radius: 12px; padding: 14px 16px;
+    border: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .vocab-word { font-size: 16px; font-weight: 700; color: var(--primary); }
+  .vocab-arabic { font-size: 14px; color: var(--accent2); direction: rtl; font-weight: 600; }
+  .vocab-def { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+  .tts-btn {
+    background: var(--primary); color: #fff; border: none; border-radius: 8px;
+    padding: 5px 10px; font-size: 12px; cursor: pointer; width: fit-content;
+    transition: background .2s;
+  }
+  .tts-btn:hover { background: var(--primary-light); }
+
+  /* ── EMAIL BOX ── */
+  .email-box {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .email-header {
+    background: var(--primary); color: #fff; padding: 12px 18px;
+    font-size: 13px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .email-body { padding: 18px; font-size: 14px; line-height: 1.8; color: var(--text); }
+  .email-body p { margin-bottom: 12px; }
+  .fyi-box {
+    background: linear-gradient(135deg,#fff8e7,#fef3c7);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 12px 16px; margin-top: 16px; font-size: 13px;
+    color: #7c5c00; line-height: 1.5;
+  }
+  body.dark .fyi-box { background: #2a2010; color: #e9c46a; border-color: #c27c3e; }
+  .fyi-box strong { color: var(--accent2); }
+
+  /* ── REVEAL SYSTEM ── */
+  .answer-block { margin-top: 12px; }
+  .reveal-btn {
+    background: transparent; border: 2px solid var(--primary);
+    color: var(--primary); border-radius: 8px; padding: 7px 16px;
+    font-size: 13px; cursor: pointer; font-weight: 700;
+    transition: all .2s; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .reveal-btn:hover { background: var(--primary); color: #fff; }
+  .answer-content {
+    display: none; margin-top: 10px;
+    background: #e8f5e9; border-left: 4px solid var(--primary);
+    border-radius: 8px; padding: 12px 16px; font-size: 14px;
+    color: var(--text);
+    animation: fadeIn .3s ease;
+  }
+  body.dark .answer-content { background: #1a2d1e; }
+  .answer-content.visible { display: block; }
+
+  /* ── ALL ANSWERS SECTION ── */
+  .all-answers-section {
+    margin-top: 24px; border-top: 2px dashed var(--border); padding-top: 18px;
+  }
+  .all-answers-section h4 { color: var(--primary); margin-bottom: 14px; font-size: 15px; }
+
+  /* ── MCQ ── */
+  .mcq-question { margin-bottom: 24px; }
+  .mcq-question p { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  .options-list { display: flex; flex-direction: column; gap: 8px; }
+  .option-btn {
+    background: var(--surface2); border: 2px solid var(--border);
+    border-radius: 10px; padding: 10px 16px; text-align: left;
+    cursor: pointer; font-size: 14px; font-family: 'Nunito', sans-serif;
+    color: var(--text); transition: all .2s;
+  }
+  .option-btn:hover { border-color: var(--primary); background: var(--surface); }
+  .option-btn.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+  .option-btn.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+  body.dark .option-btn.correct { background: #1a3d22; color: #74c69d; }
+  body.dark .option-btn.wrong { background: #3d1a1a; color: #f4a261; }
+  .feedback { margin-top: 8px; font-size: 13px; font-weight: 700; min-height: 18px; }
+  .feedback.ok { color: #28a745; }
+  .feedback.err { color: #dc3545; }
+
+  /* ── EXERCISES ── */
+  .ex-item {
+    background: var(--surface2); border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .ex-item label { font-size: 14px; font-weight: 600; display: block; margin-bottom: 8px; }
+  .ex-checkbox { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .ex-checkbox input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--primary); }
+  .ex-checkbox span { font-size: 14px; }
+  .check-ex-btn {
+    background: var(--primary); color: #fff; border: none; border-radius: 8px;
+    padding: 8px 18px; font-size: 13px; cursor: pointer; margin-top: 10px;
+    font-weight: 700; transition: background .2s;
+  }
+  .check-ex-btn:hover { background: var(--primary-light); }
+
+  /* ── INPUT FIELDS ── */
+  .q-input {
+    width: 100%; border: 2px solid var(--border); border-radius: 8px;
+    padding: 9px 14px; font-size: 14px; font-family:'Nunito',sans-serif;
+    background: var(--surface); color: var(--text);
+    transition: border .2s;
+  }
+  .q-input:focus { outline: none; border-color: var(--primary); }
+
+  /* ── SUMMARY CHIPS ── */
+  .summary-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 14px;
+  }
+  .summary-chip {
+    background: var(--surface2); border-radius: 12px; padding: 14px 16px;
+    border-left: 4px solid var(--primary-light); font-size: 14px; line-height: 1.5;
+  }
+
+  /* ── HOMEWORK ── */
+  .hw-img { width: 100%; border-radius: 12px; box-shadow: var(--card-shadow); margin-top: 12px; }
+  .hw-instruction {
+    background: var(--surface2); border-radius: 10px; padding: 12px 18px;
+    font-size: 14px; color: var(--text-muted); margin-top: 12px; font-weight: 600;
+    border-left: 4px solid var(--accent);
+  }
+
+  /* ── CHALLENGE ── */
+  .challenge-box {
+    background: linear-gradient(135deg,var(--primary),var(--primary-light));
+    border-radius: 16px; padding: 28px; color: #fff; text-align: center;
+  }
+  .challenge-box h3 { font-family:'Playfair Display',serif; font-size: 22px; margin-bottom: 12px; }
+  .challenge-box p { font-size: 15px; opacity: .9; line-height: 1.6; margin-bottom: 16px; }
+  .challenge-input {
+    width: 100%; border: none; border-radius: 10px; padding: 12px 16px;
+    font-size: 14px; font-family:'Nunito',sans-serif; margin-bottom: 10px;
+    color: var(--text);
+  }
+  .submit-btn {
+    background: var(--accent); color: #1a1a2e; border: none; border-radius: 10px;
+    padding: 10px 28px; font-size: 15px; font-weight: 700; cursor: pointer;
+    transition: background .2s;
+  }
+  .submit-btn:hover { background: var(--accent2); color: #fff; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center; padding: 32px 16px 16px;
+    color: var(--text-muted); font-size: 13px; line-height: 1.8; display: none;
+  }
+  .footer .brand { font-family:'Playfair Display',serif; font-size: 18px; color: var(--primary); }
+
+  /* ── NAV BUTTONS ── */
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 16px rgba(0,0,0,.08);
+  }
+  .nav-btn {
+    background: var(--primary); color: #fff; border: none; border-radius: 10px;
+    padding: 10px 24px; font-size: 14px; font-weight: 700; cursor: pointer;
+    font-family:'Nunito',sans-serif; display: flex; align-items: center; gap: 6px;
+    transition: background .2s, opacity .2s;
+  }
+  .nav-btn:hover { background: var(--primary-light); }
+  .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .slide-counter { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:600px){
+    .card { padding: 18px 16px; }
+    .vocab-grid { grid-template-columns: 1fr 1fr; }
+    .nav-btn { padding: 9px 16px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-left">
+    <span>Unit 12 &nbsp;|&nbsp; Page 107</span>
+    <strong>Super Goal 2</strong>
+  </div>
+  <div class="top-right">
+    <span class="class-badge">Second Intermediate | ثاني متوسط</span>
+    <button class="theme-btn" id="themeBtn" title="Toggle dark mode">🌙</button>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- SLIDES WRAPPER -->
+<div class="slides-wrap">
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 1 — OPENING
+  ══════════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="card opening-slide">
+      <div class="unit-tag">Unit 12 · Page 107 · Second Term</div>
+      <h1>The Stones of Al-Ula</h1>
+      <div class="arabic-title">قراءة – حجارة العُلا</div>
+      <div class="meta">
+        <div class="meta-chip">📚 Super Goal 2</div>
+        <div class="meta-chip">🏫 Second Intermediate</div>
+        <div class="meta-chip">📖 Reading Lesson</div>
+        <div class="meta-chip">🗓️ Second Term</div>
+      </div>
+      <!-- Al-Ula image placeholder using CSS art -->
+      <div style="margin-top:28px;border-radius:14px;overflow:hidden;height:180px;background:linear-gradient(160deg,#c2a06e 0%,#a0784a 40%,#6b4e2a 70%,#2d6a4f 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.18);">
+        <span style="font-size:56px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))">🏜️</span>
+        <span style="color:#fff;font-family:'Playfair Display',serif;font-size:22px;margin-left:16px;text-shadow:0 2px 6px rgba(0,0,0,.5)">Al-Ula, Saudi Arabia</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 2 — OBJECTIVES
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="card">
+      <div class="slide-title"><span class="icon">🎯</span>Lesson Objectives <span class="subtitle">أهداف الدرس</span></div>
+      <ul class="obj-list">
+        <li><span class="check">✅</span>Read and understand an email about Al-Ula (Mada'in Saleh)</li>
+        <li><span class="check">✅</span>Learn new vocabulary related to historical and archaeological sites</li>
+        <li><span class="check">✅</span>Identify key information and facts from a reading text</li>
+        <li><span class="check">✅</span>Answer comprehension questions based on the email</li>
+        <li><span class="check">✅</span>Complete the "After Reading" checklist activity</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 3 — BEFORE READING / VOCABULARY
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="card">
+      <div class="slide-title"><span class="icon">📖</span>Before Reading &amp; Key Vocabulary <span class="subtitle">قبل القراءة والمفردات</span></div>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:18px;">With a partner, write down what you know about Al-Hijr. Then learn these key words:</p>
+      <div class="vocab-grid">
+
+        <div class="vocab-card">
+          <div class="vocab-word">Archaeological</div>
+          <div class="vocab-arabic">أثري / تاريخي</div>
+          <div class="vocab-def">Related to the study of ancient civilizations through their remains.</div>
+          <button class="tts-btn" onclick="speak('Archaeological')">🔊 Listen</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">Monument</div>
+          <div class="vocab-arabic">نصب تذكاري / أثر</div>
+          <div class="vocab-def">A structure built to remember a person or event; an ancient building or site.</div>
+          <button class="tts-btn" onclick="speak('Monument')">🔊 Listen</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">Preservation</div>
+          <div class="vocab-arabic">حفظ / صون</div>
+          <div class="vocab-def">The act of keeping something in its original state.</div>
+          <button class="tts-btn" onclick="speak('Preservation')">🔊 Listen</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">Oasis</div>
+          <div class="vocab-arabic">واحة</div>
+          <div class="vocab-def">A green area with water in the middle of a desert.</div>
+          <button class="tts-btn" onclick="speak('Oasis')">🔊 Listen</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">Nabataeans</div>
+          <div class="vocab-arabic">الأنباط</div>
+          <div class="vocab-def">An ancient Arab people who settled in the area in the first century.</div>
+          <button class="tts-btn" onclick="speak('Nabataeans')">🔊 Listen</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">Inscription</div>
+          <div class="vocab-arabic">نقش / كتابة على الحجر</div>
+          <div class="vocab-def">Words carved or written on stone or rock.</div>
+          <button class="tts-btn" onclick="speak('Inscription')">🔊 Listen</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">Sundial</div>
+          <div class="vocab-arabic">ساعة شمسية</div>
+          <div class="vocab-def">An ancient device that tells the time using the shadow of the sun.</div>
+          <button class="tts-btn" onclick="speak('Sundial')">🔊 Listen</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">Spectacular</div>
+          <div class="vocab-arabic">رائع / مذهل</div>
+          <div class="vocab-def">Very impressive or dramatic in appearance.</div>
+          <button class="tts-btn" onclick="speak('Spectacular')">🔊 Listen</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 4 — THE EMAIL (READING TEXT)
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="card">
+      <div class="slide-title"><span class="icon">✉️</span>Reading: The Email <span class="subtitle">قراءة الرسالة الإلكترونية</span></div>
+      <div class="email-box">
+        <div class="email-header">
+          <span><strong>To:</strong> qassim_n@space.net</span>
+          <span><strong>Subject:</strong> School trip to Al-Ula</span>
+        </div>
+        <div class="email-body">
+          <p>Hi Qassim,</p>
+          <p>I'm writing this email from our hotel in Al-Ula. We arrived this evening after a long bus journey from Madinah. It's really too bad you couldn't join us on our school trip. We're going to learn so much about the historical sites that we can't learn in books.</p>
+          <p>It's quite busy here in town, with tourists from all over the world who have come to visit Mada'in Saleh. Tomorrow a guide is going to show us around the site. We're also going to visit the museum, Al-Ula oasis, and the old abandoned city.</p>
+          <p>The archaeological site lies about 20 km north of the town. It's also known as Al-Hijr because of the spectacular rock formations in the area. As you know, the site was settled by the Nabataeans in the first century. There are over 100 rock-carved monuments that are spread over an area of 13.4 kilometers, and due to the dry climate, they are in an excellent state of preservation. The site was included in UNESCO's World Heritage List in 2008 because of its cultural and architectural importance.</p>
+          <p>The desert around the oasis is covered by natural rock formations. Hundreds of curious shapes were carved by the wind into the soft sandstone, one of which resembles a giant elephant! The old city of Al-Deerah is going to be very interesting. It has over 500 houses from the 13th century, with stone foundations and mud-brick walls. Some of the stones were taken from the ruins of a Lihyanite* settlement and still carry the ancient inscriptions. There is also a unique sundial that the inhabitants used to determine the start of Ramadan.</p>
+          <p>Don't worry, I'll take lots of amazing pictures to show you!</p>
+          <p>Best wishes,<br/><strong>Adel</strong></p>
+          <div class="fyi-box">
+            <strong>FYI* Lihyan</strong> was an ancient civilization in northwestern Arabia that existed about 2,500 years ago.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 5 — EXPLANATION (KEY FACTS)
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="card">
+      <div class="slide-title"><span class="icon">💡</span>Key Facts from the Text <span class="subtitle">حقائق مهمة من النص</span></div>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:18px;">Click each button to reveal the fact one by one:</p>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <div>
+          <button class="reveal-btn" onclick="toggleAnswer('fact1',this)">👁️ Fact 1 — Location of the site</button>
+          <div class="answer-content" id="fact1">
+            📍 The archaeological site lies about <strong>20 km north</strong> of Al-Ula town. It is also known as <strong>Al-Hijr</strong>.
+          </div>
+        </div>
+
+        <div>
+          <button class="reveal-btn" onclick="toggleAnswer('fact2',this)">👁️ Fact 2 — Who settled it?</button>
+          <div class="answer-content" id="fact2">
+            🏛️ The site was settled by the <strong>Nabataeans</strong> in the <strong>first century</strong>. There are over <strong>100 rock-carved monuments</strong> spread over 13.4 km.
+          </div>
+        </div>
+
+        <div>
+          <button class="reveal-btn" onclick="toggleAnswer('fact3',this)">👁️ Fact 3 — UNESCO status</button>
+          <div class="answer-content" id="fact3">
+            🌍 The site was included in <strong>UNESCO's World Heritage List in 2008</strong> because of its cultural and architectural importance.
+          </div>
+        </div>
+
+        <div>
+          <button class="reveal-btn" onclick="toggleAnswer('fact4',this)">👁️ Fact 4 — Al-Deerah city</button>
+          <div class="answer-content" id="fact4">
+            🏘️ Al-Deerah has over <strong>500 houses from the 13th century</strong>, with stone foundations and mud-brick walls. Some stones carry ancient <strong>Lihyanite inscriptions</strong>.
+          </div>
+        </div>
+
+        <div>
+          <button class="reveal-btn" onclick="toggleAnswer('fact5',this)">👁️ Fact 5 — The Sundial</button>
+          <div class="answer-content" id="fact5">
+            🕰️ There is a unique <strong>sundial</strong> that the inhabitants used to determine the <strong>start of Ramadan</strong>.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- All answers together -->
+      <div class="all-answers-section">
+        <button class="reveal-btn" onclick="toggleAnswer('all-facts',this)">👁️ Show All Facts Together</button>
+        <div class="answer-content" id="all-facts">
+          <ol style="padding-left:18px;display:flex;flex-direction:column;gap:8px;font-size:14px;">
+            <li>📍 Site is <strong>20 km north</strong> of Al-Ula, also called <strong>Al-Hijr</strong>.</li>
+            <li>🏛️ Settled by <strong>Nabataeans</strong> (1st century), over <strong>100 monuments</strong> in 13.4 km.</li>
+            <li>🌍 Added to <strong>UNESCO World Heritage List in 2008</strong>.</li>
+            <li>🏘️ Al-Deerah has <strong>500+ houses (13th century)</strong>, ancient Lihyanite inscriptions.</li>
+            <li>🕰️ Unique <strong>sundial</strong> used to determine start of Ramadan.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 6 — PRACTICE (COMPREHENSION Qs)
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="card">
+      <div class="slide-title"><span class="icon">✍️</span>Practice: Comprehension Questions <span class="subtitle">أسئلة الفهم</span></div>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:18px;">Write your answer, then reveal the model answer:</p>
+
+      <div style="display:flex;flex-direction:column;gap:20px;">
+
+        <div class="ex-item">
+          <label>1. Why is Adel writing the email?</label>
+          <textarea class="q-input" rows="2" placeholder="Write your answer here..."></textarea>
+          <div class="answer-block">
+            <button class="reveal-btn" onclick="toggleAnswer('pq1',this)">👁️ Show Answer</button>
+            <div class="answer-content" id="pq1">
+              Adel is writing to tell his friend Qassim about the school trip to Al-Ula and to share information about the historical sites they are visiting.
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-item">
+          <label>2. Where is the archaeological site in relation to Al-Ula town?</label>
+          <textarea class="q-input" rows="2" placeholder="Write your answer here..."></textarea>
+          <div class="answer-block">
+            <button class="reveal-btn" onclick="toggleAnswer('pq2',this)">👁️ Show Answer</button>
+            <div class="answer-content" id="pq2">
+              The archaeological site lies about <strong>20 km north</strong> of Al-Ula town.
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-item">
+          <label>3. Why are the monuments in an excellent state of preservation?</label>
+          <textarea class="q-input" rows="2" placeholder="Write your answer here..."></textarea>
+          <div class="answer-block">
+            <button class="reveal-btn" onclick="toggleAnswer('pq3',this)">👁️ Show Answer</button>
+            <div class="answer-content" id="pq3">
+              Due to the <strong>dry climate</strong> in the area, the monuments are in an excellent state of preservation.
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-item">
+          <label>4. What was the sundial used for?</label>
+          <textarea class="q-input" rows="2" placeholder="Write your answer here..."></textarea>
+          <div class="answer-block">
+            <button class="reveal-btn" onclick="toggleAnswer('pq4',this)">👁️ Show Answer</button>
+            <div class="answer-content" id="pq4">
+              The sundial was used by the inhabitants to determine the <strong>start of Ramadan</strong>.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- All practice answers together -->
+      <div class="all-answers-section">
+        <button class="reveal-btn" onclick="toggleAnswer('all-pq',this)">👁️ Show All Answers Together</button>
+        <div class="answer-content" id="all-pq">
+          <ol style="padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:8px;">
+            <li>Adel is writing to tell Qassim about the school trip to Al-Ula.</li>
+            <li>The site is about <strong>20 km north</strong> of Al-Ula town.</li>
+            <li>Because of the <strong>dry climate</strong> in the area.</li>
+            <li>To determine the <strong>start of Ramadan</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 7 — QUIZ (MCQ)
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="card">
+      <div class="slide-title"><span class="icon">🧠</span>Interactive Quiz <span class="subtitle">اختبار تفاعلي</span></div>
+
+      <!-- Q1 -->
+      <div class="mcq-question">
+        <p>1. The archaeological site of Al-Ula is also known as:</p>
+        <div class="options-list">
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q1')">A. Al-Madinah</button>
+          <button class="option-btn" onclick="checkMCQ(this,'correct','q1')">B. Al-Hijr</button>
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q1')">C. Al-Deerah</button>
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q1')">D. Al-Ula Oasis</button>
+        </div>
+        <div class="feedback" id="fb-q1"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="mcq-question">
+        <p>2. The site was settled by the Nabataeans in the:</p>
+        <div class="options-list">
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q2')">A. 13th century</button>
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q2')">B. 5th century</button>
+          <button class="option-btn" onclick="checkMCQ(this,'correct','q2')">C. First century</button>
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q2')">D. 8th century</button>
+        </div>
+        <div class="feedback" id="fb-q2"></div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="mcq-question">
+        <p>3. When was the site added to UNESCO's World Heritage List?</p>
+        <div class="options-list">
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q3')">A. 1998</button>
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q3')">B. 2001</button>
+          <button class="option-btn" onclick="checkMCQ(this,'correct','q3')">C. 2008</button>
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q3')">D. 2015</button>
+        </div>
+        <div class="feedback" id="fb-q3"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="mcq-question">
+        <p>4. The Lihyan civilization existed about _____ years ago.</p>
+        <div class="options-list">
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q4')">A. 1,000</button>
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q4')">B. 1,500</button>
+          <button class="option-btn" onclick="checkMCQ(this,'correct','q4')">C. 2,500</button>
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q4')">D. 3,000</button>
+        </div>
+        <div class="feedback" id="fb-q4"></div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="mcq-question">
+        <p>5. The rock formation in the desert resembles a giant:</p>
+        <div class="options-list">
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q5')">A. Camel</button>
+          <button class="option-btn" onclick="checkMCQ(this,'correct','q5')">B. Elephant</button>
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q5')">C. Lion</button>
+          <button class="option-btn" onclick="checkMCQ(this,'wrong','q5')">D. Horse</button>
+        </div>
+        <div class="feedback" id="fb-q5"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 8 — EXERCISES (AFTER READING)
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="card">
+      <div class="slide-title"><span class="icon">📝</span>After Reading Exercise <span class="subtitle">تمرين بعد القراءة</span></div>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:20px;">
+        Mark the things that Adel is <strong>going to do</strong> in Al-Ula. Check the boxes you think are correct, then reveal the answers.
+      </p>
+
+      <div id="afterReadingExercise">
+        <div class="ex-item">
+          <div class="ex-checkbox"><input type="checkbox" id="a1"/><span>1. ride an elephant</span></div>
+          <div class="ex-checkbox"><input type="checkbox" id="a2"/><span>2. go rock climbing</span></div>
+          <div class="ex-checkbox"><input type="checkbox" id="a3"/><span>3. see amazing scenery</span></div>
+          <div class="ex-checkbox"><input type="checkbox" id="a4"/><span>4. visit tombs</span></div>
+          <div class="ex-checkbox"><input type="checkbox" id="a5"/><span>5. go to a museum</span></div>
+          <div class="ex-checkbox"><input type="checkbox" id="a6"/><span>6. carve sandstone</span></div>
+          <button class="check-ex-btn" onclick="checkAfterReading()">✅ Check My Answers</button>
+          <div id="ar-result" style="margin-top:12px;font-size:14px;display:none;"></div>
+        </div>
+      </div>
+
+      <div class="answer-block" style="margin-top:16px;">
+        <button class="reveal-btn" onclick="toggleAnswer('ar-model',this)">👁️ Show Model Answers</button>
+        <div class="answer-content" id="ar-model">
+          <p style="margin-bottom:8px;font-weight:700;">✅ Things Adel IS going to do:</p>
+          <ul style="padding-left:18px;font-size:14px;line-height:2;">
+            <li>✅ <strong>3. see amazing scenery</strong> — The desert has spectacular rock formations.</li>
+            <li>✅ <strong>4. visit tombs</strong> — The 100+ rock-carved monuments include tombs.</li>
+            <li>✅ <strong>5. go to a museum</strong> — "We're going to visit the museum."</li>
+          </ul>
+          <p style="margin-top:10px;font-weight:700;">❌ Things Adel is NOT going to do:</p>
+          <ul style="padding-left:18px;font-size:14px;line-height:2;">
+            <li>❌ 1. ride an elephant — Only a rock resembles an elephant.</li>
+            <li>❌ 2. go rock climbing — Not mentioned.</li>
+            <li>❌ 6. carve sandstone — The wind carved the rocks, not Adel.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 9 — SUMMARY
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="card">
+      <div class="slide-title"><span class="icon">📌</span>Lesson Summary <span class="subtitle">ملخص الدرس</span></div>
+      <div class="summary-grid">
+        <div class="summary-chip">📍 Al-Ula is a historical city in Saudi Arabia, 20 km from the archaeological site called <strong>Al-Hijr</strong>.</div>
+        <div class="summary-chip">🏛️ The site has <strong>100+ rock-carved monuments</strong>, settled by Nabataeans in the 1st century.</div>
+        <div class="summary-chip">🌍 Al-Ula was added to <strong>UNESCO's World Heritage List in 2008</strong> for cultural importance.</div>
+        <div class="summary-chip">🏘️ Al-Deerah city has <strong>500+ houses</strong> from the 13th century with Lihyanite inscriptions.</div>
+        <div class="summary-chip">🕰️ A unique <strong>sundial</strong> was used to determine the start of Ramadan.</div>
+        <div class="summary-chip">🐘 A rock formation in the desert resembles a <strong>giant elephant</strong>.</div>
+      </div>
+      <div style="margin-top:20px;background:var(--surface2);border-radius:12px;padding:16px 20px;border-left:4px solid var(--accent);">
+        <p style="font-size:14px;line-height:1.7;color:var(--text-muted);">
+          <strong style="color:var(--accent2);">Vocabulary to remember: </strong>
+          archaeological · monument · preservation · oasis · inscription · sundial · Nabataeans · spectacular
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 10 — HOMEWORK
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <div class="card">
+      <div class="slide-title"><span class="icon">📝</span>Homework / الواجب</div>
+      <div class="hw-instruction">📌 Complete the Reading &amp; Writing exercises on <strong>Page 236</strong> (Unit 12)</div>
+      <div style="margin-top:20px;background:var(--surface2);border-radius:12px;padding:18px 20px;">
+        <p style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--primary);">📖 Reading — Read the email and answer the questions:</p>
+        <ol style="padding-left:18px;font-size:14px;line-height:2.2;color:var(--text);">
+          <li>Who is going to go skiing in the summer? Where?</li>
+          <li>What is Saeed going to do on his vacation?</li>
+          <li>How long is Saeed going to climb before he reaches the rest house?</li>
+          <li>What is Saeed going to pack?</li>
+        </ol>
+        <p style="font-size:15px;font-weight:700;margin:16px 0 8px;color:var(--primary);">✍️ Writing — Write about YOUR vacation:</p>
+        <p style="font-size:14px;color:var(--text-muted);line-height:1.7;">
+          Imagine you are going to take a vacation. Write about it. Where are you going to go? Who is going to go with you? What are you going to do? Which kind of vacation is it going to be—adventurous or relaxing? How?
+        </p>
+        <div style="margin-top:12px;background:var(--surface);border-radius:10px;padding:14px 18px;border:2px dashed var(--border);">
+          <p style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:8px;">My ____________ Vacation</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="height:1px;background:var(--border);"></div>
+            <div style="height:1px;background:var(--border);"></div>
+            <div style="height:1px;background:var(--border);"></div>
+            <div style="height:1px;background:var(--border);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="answer-block" style="margin-top:18px;">
+        <button class="reveal-btn" onclick="toggleAnswer('hw-answers',this)">👁️ Show Model Answers</button>
+        <div class="answer-content" id="hw-answers">
+          <p style="font-weight:700;margin-bottom:8px;">Reading Answer Key:</p>
+          <ol style="padding-left:18px;font-size:14px;line-height:2;">
+            <li>Rashid is going to go skiing in the summer. He is going to ski in June.</li>
+            <li>Saeed is going to go on a river safari, climb Mount Kinabalu, and relax at the beach.</li>
+            <li>Saeed is going to hike for <strong>five hours</strong> before reaching the rest house.</li>
+            <li>Saeed is going to pack warm clothes: sweatpants, a sweater, hiking boots, shorts, and T-shirts.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 11 — CHALLENGE
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-11">
+    <div class="card">
+      <div class="challenge-box">
+        <h3>🏆 Challenge Question</h3>
+        <p>Imagine you are visiting Al-Ula. Write 3–4 sentences describing what you see and what you are going to do there. Use vocabulary from the lesson!</p>
+        <textarea class="challenge-input" rows="4" placeholder="Write your answer here..."></textarea>
+        <br/>
+        <button class="submit-btn" onclick="showChallengeFeedback()">Submit ✈️</button>
+        <div id="challenge-fb" style="margin-top:14px;font-size:14px;display:none;background:rgba(255,255,255,.15);border-radius:10px;padding:12px 16px;line-height:1.6;text-align:left;"></div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div class="answer-block">
+          <button class="reveal-btn" onclick="toggleAnswer('challenge-model',this)">👁️ Show Model Answer</button>
+          <div class="answer-content" id="challenge-model">
+            <em>"I am visiting Al-Ula in Saudi Arabia. I can see spectacular rock formations carved by the wind — one of them looks like a giant elephant! Tomorrow, I am going to visit the museum and the ancient Al-Deerah city. I am also going to see the 2,500-year-old Lihyanite inscriptions on the stone walls. It is going to be an amazing experience!"</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER — last slide only -->
+      <div class="footer" id="siteFooter" style="display:block;">
+        <div class="brand">eduvorra</div>
+        <div>عبدالحكيم صالح الحسون</div>
+        <div>صُنع بحب في بريدة 💚</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /slides-wrap -->
+
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Previous</button>
+  <span class="slide-counter" id="slideCounter">1 / 11</span>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
+</div>
+
+<script>
+  // ── STATE ──
+  let currentSlide = 1;
+  const totalSlides = 11;
+  let isDark = false;
+
+  // ── THEME ──
+  const themeBtn = document.getElementById('themeBtn');
+  themeBtn.addEventListener('click', () => {
+    isDark = !isDark;
+    document.body.classList.toggle('dark', isDark);
+    themeBtn.textContent = isDark ? '☀️' : '🌙';
+  });
+
+  // ── NAVIGATION ──
+  function navigate(dir) {
+    const next = currentSlide + dir;
+    if (next < 1 || next > totalSlides) return;
+    document.getElementById('slide-' + currentSlide).classList.remove('active');
+    currentSlide = next;
+    document.getElementById('slide-' + currentSlide).classList.add('active');
+    document.getElementById('prevBtn').disabled = currentSlide === 1;
+    document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+    document.getElementById('slideCounter').textContent = currentSlide + ' / ' + totalSlides;
+    document.getElementById('progressFill').style.width = ((currentSlide / totalSlides) * 100) + '%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Arrow keys
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') navigate(1);
+    if (e.key === 'ArrowLeft') navigate(-1);
+  });
+
+  // Init progress
+  document.getElementById('progressFill').style.width = ((1 / totalSlides) * 100) + '%';
+
+  // ── REVEAL SYSTEM ──
+  function toggleAnswer(id, btn) {
+    const el = document.getElementById(id);
+    const visible = el.classList.contains('visible');
+    el.classList.toggle('visible', !visible);
+    btn.textContent = visible ? '👁️ Show Answer' : '🙈 Hide';
+    if (btn.textContent.startsWith('👁️') && id.startsWith('fact')) btn.textContent = '👁️ ' + btn.getAttribute('data-label') || btn.textContent;
+  }
+
+  // ── MCQ ──
+  function checkMCQ(btn, result, group) {
+    const parent = btn.closest('.mcq-question');
+    const fb = parent.querySelector('.feedback');
+    const allBtns = parent.querySelectorAll('.option-btn');
+    allBtns.forEach(b => { b.classList.remove('correct','wrong'); b.disabled = true; });
+    if (result === 'correct') {
+      btn.classList.add('correct');
+      fb.textContent = '✅ Correct! Well done!';
+      fb.className = 'feedback ok';
+    } else {
+      btn.classList.add('wrong');
+      fb.textContent = '❌ Try again! Check the text.';
+      fb.className = 'feedback err';
+      allBtns.forEach(b => b.disabled = false);
+      btn.disabled = true;
+    }
+  }
+
+  // ── AFTER READING CHECK ──
+  const correctAfterReading = [false, false, true, true, true, false];
+  function checkAfterReading() {
+    const ids = ['a1','a2','a3','a4','a5','a6'];
+    const result = document.getElementById('ar-result');
+    let score = 0;
+    ids.forEach((id, i) => {
+      const checked = document.getElementById(id).checked;
+      if (checked === correctAfterReading[i]) score++;
+    });
+    result.style.display = 'block';
+    result.innerHTML = score === 6
+      ? '<span style="color:#28a745;font-weight:700;">🎉 Perfect! All 6 correct!</span>'
+      : `<span style="color:var(--accent2);font-weight:700;">You got ${score}/6. Try again or reveal the model answer below.</span>`;
+  }
+
+  // ── CHALLENGE FEEDBACK ──
+  function showChallengeFeedback() {
+    const fb = document.getElementById('challenge-fb');
+    fb.style.display = 'block';
+    fb.innerHTML = '🌟 Great effort! Make sure you used vocabulary like: <em>archaeological, monument, inscription, oasis, spectacular</em>. Check the model answer for guidance.';
+  }
+
+  // ── TEXT TO SPEECH ──
+  function speak(word) {
+    if ('speechSynthesis' in window) {
+      const u = new SpeechSynthesisUtterance(word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    } else {
+      alert('Text-to-speech not supported in this browser.');
+    }
+  }
+</script>
+</body>
+</html>

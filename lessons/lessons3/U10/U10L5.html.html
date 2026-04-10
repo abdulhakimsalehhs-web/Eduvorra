@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 10 – Writing | Third Intermediate</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --surface2: #e8eeff;
+    --primary: #3b5bdb;
+    --primary-light: #748ffc;
+    --accent: #f59f00;
+    --accent2: #20c997;
+    --danger: #fa5252;
+    --text: #1a1f3c;
+    --text2: #495057;
+    --text3: #868e96;
+    --border: #dee2f7;
+    --shadow: 0 4px 24px rgba(59,91,219,0.10);
+    --radius: 16px;
+    --header-h: 62px;
+    --footer-h: 70px;
+  }
+  [data-theme="dark"] {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --surface2: #252840;
+    --primary: #748ffc;
+    --primary-light: #91a7ff;
+    --accent: #fcc419;
+    --accent2: #38d9a9;
+    --danger: #ff6b6b;
+    --text: #e9ecef;
+    --text2: #ced4da;
+    --text3: #868e96;
+    --border: #2c2f52;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+    overflow: hidden;
+  }
+
+  /* ── THEME TOGGLE ── */
+  #themeBtn {
+    position: fixed; top: 14px; left: 16px; z-index: 9999;
+    background: var(--surface2); border: 2px solid var(--border);
+    border-radius: 50px; width: 44px; height: 44px;
+    font-size: 20px; cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+    transition: all 0.3s; box-shadow: var(--shadow);
+  }
+  #themeBtn:hover { transform: scale(1.1); }
+
+  /* ── HEADER ── */
+  .slide-header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--header-h);
+    background: var(--primary);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px 0 70px;
+    box-shadow: 0 2px 12px rgba(59,91,219,0.3);
+  }
+  .header-left { display: flex; gap: 10px; align-items: center; }
+  .header-tag {
+    background: rgba(255,255,255,0.18);
+    color: #fff; font-size: 13px; font-weight: 700;
+    border-radius: 8px; padding: 4px 12px; letter-spacing: 0.5px;
+  }
+  .header-right {
+    color: #fff; font-size: 14px; font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 4px 14px;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    position: fixed; top: var(--header-h); left: 0; right: 0; z-index: 99;
+    height: 4px; background: var(--border);
+  }
+  .progress-fill {
+    height: 100%; background: var(--accent);
+    transition: width 0.4s ease; border-radius: 0 2px 2px 0;
+  }
+
+  /* ── SLIDE CONTAINER ── */
+  .slides-wrap {
+    position: fixed;
+    top: calc(var(--header-h) + 4px);
+    bottom: var(--footer-h);
+    left: 0; right: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 24px 16px;
+  }
+  .slide {
+    display: none; max-width: 860px; margin: 0 auto;
+    animation: slideIn 0.4s ease;
+  }
+  .slide.active { display: block; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── NAVIGATION ── */
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    height: var(--footer-h);
+    background: var(--surface);
+    border-top: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; gap: 12px;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
+  }
+  .nav-btn {
+    background: var(--primary); color: #fff;
+    border: none; border-radius: 12px;
+    padding: 10px 28px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-btn:hover:not(:disabled) { background: var(--primary-light); transform: translateY(-2px); }
+  .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .slide-counter {
+    font-size: 13px; font-weight: 700; color: var(--text3);
+    background: var(--surface2); border-radius: 8px;
+    padding: 6px 14px; letter-spacing: 0.5px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface); border-radius: var(--radius);
+    padding: 24px; margin-bottom: 18px;
+    box-shadow: var(--shadow); border: 1px solid var(--border);
+  }
+  .card-title {
+    font-size: 17px; font-weight: 800; color: var(--primary);
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .card-title .icon { font-size: 22px; }
+
+  /* ── OPENING SLIDE ── */
+  .opening-card {
+    background: linear-gradient(135deg, var(--primary) 0%, #5c7cfa 60%, var(--primary-light) 100%);
+    border-radius: 24px; padding: 52px 36px; text-align: center;
+    color: #fff; box-shadow: 0 8px 40px rgba(59,91,219,0.35);
+    margin-top: 20px;
+  }
+  .opening-card .book-badge {
+    display: inline-block; background: rgba(255,255,255,0.2);
+    border-radius: 50px; padding: 6px 20px; font-size: 13px;
+    font-weight: 700; margin-bottom: 20px; letter-spacing: 1px;
+  }
+  .opening-card h1 { font-size: 42px; font-weight: 900; line-height: 1.1; margin-bottom: 8px; }
+  .opening-card .arabic { font-family: 'Tajawal', sans-serif; font-size: 26px; font-weight: 700; opacity: 0.9; margin-bottom: 28px; }
+  .opening-card .meta-row {
+    display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-top: 24px;
+  }
+  .meta-chip {
+    background: rgba(255,255,255,0.22); border-radius: 10px;
+    padding: 8px 20px; font-size: 14px; font-weight: 700;
+  }
+  .unit-divider {
+    width: 60px; height: 4px; background: rgba(255,255,255,0.5);
+    border-radius: 2px; margin: 20px auto;
+  }
+
+  /* ── OBJECTIVES ── */
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .obj-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--surface2); border-radius: 12px; padding: 14px 16px;
+    border-left: 4px solid var(--primary);
+  }
+  .obj-item .check { color: var(--accent2); font-size: 20px; flex-shrink: 0; }
+  .obj-item p { font-size: 15px; font-weight: 600; line-height: 1.5; }
+  .obj-item .ar { font-family: 'Tajawal', sans-serif; font-size: 13px; color: var(--text3); margin-top: 2px; }
+
+  /* ── GRAMMAR CORNER ── */
+  .writing-corner {
+    background: linear-gradient(135deg, #e8f4fd, #dbeafe);
+    border-radius: 14px; padding: 20px 22px; margin-bottom: 18px;
+    border: 2px solid #93c5fd;
+  }
+  [data-theme="dark"] .writing-corner { background: linear-gradient(135deg, #1e3a5f, #1e3254); border-color: #3b82f6; }
+  .writing-corner h3 {
+    font-size: 15px; font-weight: 800; color: var(--primary);
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .rule-item {
+    margin-bottom: 14px; padding-bottom: 14px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .rule-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .rule-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .rule-example {
+    font-size: 13.5px; color: var(--text2); background: var(--surface);
+    border-radius: 8px; padding: 8px 12px; font-style: italic;
+    border-left: 3px solid var(--primary);
+  }
+  .rule-example b { color: var(--primary); font-style: normal; }
+
+  /* ── VOCAB ── */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 12px; }
+  .vocab-card {
+    background: var(--surface2); border-radius: 12px; padding: 14px;
+    border: 1px solid var(--border); text-align: center;
+  }
+  .vocab-word { font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+  .vocab-meaning { font-size: 12px; color: var(--text3); font-family: 'Tajawal', sans-serif; margin-bottom: 8px; }
+  .tts-btn {
+    background: var(--primary); color: #fff; border: none;
+    border-radius: 8px; padding: 5px 14px; font-size: 12px;
+    cursor: pointer; font-weight: 700; transition: all 0.2s;
+  }
+  .tts-btn:hover { background: var(--primary-light); }
+
+  /* ── EXERCISES ── */
+  .exercise-title {
+    font-size: 16px; font-weight: 800; color: var(--primary);
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .sentence-item {
+    background: var(--surface2); border-radius: 10px; padding: 14px 16px;
+    margin-bottom: 10px; font-size: 15px; font-weight: 600;
+    border: 1px solid var(--border); display: flex; align-items: center;
+    gap: 10px; flex-wrap: wrap;
+  }
+  .sent-num { color: var(--primary); font-weight: 900; min-width: 22px; }
+  .blank-wrap { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .fill-blank {
+    border: none; border-bottom: 2px solid var(--primary);
+    background: transparent; font-family: 'Nunito', sans-serif;
+    font-size: 15px; font-weight: 700; color: var(--text);
+    min-width: 120px; padding: 2px 6px; outline: none;
+    text-align: center;
+  }
+  .fill-blank:focus { border-bottom-color: var(--accent); }
+  .fill-blank.correct { border-bottom-color: var(--accent2); color: var(--accent2); }
+  .fill-blank.wrong { border-bottom-color: var(--danger); color: var(--danger); }
+  .check-btn {
+    background: var(--accent); color: #1a1f3c; border: none;
+    border-radius: 8px; padding: 5px 14px; font-size: 12px;
+    cursor: pointer; font-weight: 800; transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .check-btn:hover { opacity: 0.85; }
+  .feedback { font-size: 12px; font-weight: 700; margin-top: 2px; }
+  .feedback.ok { color: var(--accent2); }
+  .feedback.err { color: var(--danger); }
+
+  /* ── REVEAL BUTTON ── */
+  .reveal-btn {
+    background: transparent; color: var(--primary);
+    border: 2px solid var(--primary); border-radius: 10px;
+    padding: 7px 16px; font-size: 13px; cursor: pointer;
+    font-weight: 700; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Nunito', sans-serif;
+    margin-top: 10px;
+  }
+  .reveal-btn:hover { background: var(--primary); color: #fff; }
+  .answer-box {
+    display: none; background: linear-gradient(135deg,#e8f5e9,#f0fff4);
+    border-radius: 10px; padding: 14px 16px; margin-top: 10px;
+    border: 2px solid var(--accent2); font-size: 14px; font-weight: 700;
+    color: #087f5b;
+  }
+  [data-theme="dark"] .answer-box { background: #0d3321; color: #38d9a9; }
+  .answer-box.visible { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── ALL ANSWERS BOX ── */
+  .all-answers-box {
+    display: none; background: var(--surface2); border-radius: 12px;
+    padding: 18px 20px; margin-top: 14px; border: 2px dashed var(--border);
+  }
+  .all-answers-box.visible { display: block; animation: fadeIn 0.3s; }
+  .all-answers-box h4 { font-size: 14px; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
+  .all-answers-box ol { padding-left: 20px; }
+  .all-answers-box li { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #087f5b; }
+  [data-theme="dark"] .all-answers-box li { color: var(--accent2); }
+
+  /* ── QUIZ ── */
+  .quiz-q { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt {
+    background: var(--surface2); border: 2px solid var(--border);
+    border-radius: 10px; padding: 12px 16px; cursor: pointer;
+    font-size: 14px; font-weight: 600; transition: all 0.2s;
+  }
+  .quiz-opt:hover { border-color: var(--primary); background: var(--surface); }
+  .quiz-opt.correct-opt { border-color: var(--accent2); background: #e8f5e9; color: #087f5b; }
+  .quiz-opt.wrong-opt { border-color: var(--danger); background: #fff5f5; color: var(--danger); }
+  [data-theme="dark"] .quiz-opt.correct-opt { background: #0d3321; }
+  [data-theme="dark"] .quiz-opt.wrong-opt { background: #3b0d0d; }
+  .quiz-feedback { font-size: 14px; font-weight: 800; margin-top: 10px; }
+  .quiz-feedback.ok { color: var(--accent2); }
+  .quiz-feedback.err { color: var(--danger); }
+
+  /* ── TABLE ── */
+  .behavior-table { width: 100%; border-collapse: collapse; border-radius: 12px; overflow: hidden; }
+  .behavior-table th {
+    background: var(--primary); color: #fff; padding: 12px 16px;
+    font-size: 14px; font-weight: 800; text-align: left;
+  }
+  .behavior-table td {
+    padding: 10px 16px; border-bottom: 1px solid var(--border);
+    background: var(--surface); font-size: 14px;
+  }
+  .behavior-table textarea {
+    width: 100%; border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px; font-family: 'Nunito', sans-serif; font-size: 13px;
+    background: var(--bg); color: var(--text); resize: vertical; min-height: 60px;
+  }
+  .behavior-table textarea:focus { outline: none; border-color: var(--primary); }
+
+  /* ── SUMMARY ── */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 14px; }
+  .summary-chip {
+    background: var(--surface2); border-radius: 12px; padding: 16px;
+    border: 1px solid var(--border); text-align: center;
+  }
+  .summary-chip .emoji { font-size: 28px; margin-bottom: 6px; }
+  .summary-chip h4 { font-size: 13px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+  .summary-chip p { font-size: 12px; color: var(--text2); }
+
+  /* ── CHALLENGE ── */
+  .challenge-box {
+    background: linear-gradient(135deg,#fff3bf,#ffe066);
+    border-radius: 14px; padding: 20px; border: 2px solid var(--accent);
+  }
+  [data-theme="dark"] .challenge-box { background: linear-gradient(135deg,#3d2c00,#4d3800); }
+  .challenge-box h3 { font-size: 16px; font-weight: 900; color: #7a4f00; margin-bottom: 10px; }
+  [data-theme="dark"] .challenge-box h3 { color: #ffd43b; }
+  .challenge-textarea {
+    width: 100%; background: rgba(255,255,255,0.7); border: 2px solid var(--accent);
+    border-radius: 10px; padding: 12px; font-family: 'Nunito', sans-serif;
+    font-size: 14px; color: var(--text); resize: vertical; min-height: 120px;
+  }
+  [data-theme="dark"] .challenge-textarea { background: rgba(0,0,0,0.3); color: var(--text); }
+
+  /* ── FOOTER (last slide only) ── */
+  .slide-footer {
+    text-align: center; padding: 18px 0 8px;
+    font-size: 13px; color: var(--text3);
+    border-top: 1px dashed var(--border); margin-top: 24px;
+  }
+  .slide-footer strong { color: var(--primary); font-weight: 800; }
+  .slide-footer .ar-name { font-family: 'Tajawal', sans-serif; font-size: 14px; }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--primary); color: #fff; border-radius: 8px;
+    padding: 4px 14px; font-size: 13px; font-weight: 800;
+    margin-bottom: 14px; letter-spacing: 0.5px;
+  }
+
+  /* ── HW SLIDE ── */
+  .hw-box {
+    background: var(--surface); border-radius: 14px; padding: 20px;
+    border: 2px dashed var(--primary); text-align: center;
+  }
+  .hw-box img { max-width: 100%; border-radius: 10px; margin: 14px 0; box-shadow: var(--shadow); }
+  .hw-instruction {
+    background: var(--surface2); border-radius: 10px; padding: 12px 16px;
+    font-size: 14px; font-weight: 700; color: var(--primary); margin-top: 10px;
+  }
+
+  /* ── PHRASAL VERB BOX ── */
+  .verb-box {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;
+  }
+  .verb-chip {
+    background: var(--primary); color: #fff; border-radius: 8px;
+    padding: 6px 16px; font-size: 13px; font-weight: 800;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .verb-chip:hover { background: var(--primary-light); }
+  .verb-chip.used { background: var(--text3); text-decoration: line-through; }
+
+  /* scrollbar */
+  .slides-wrap::-webkit-scrollbar { width: 6px; }
+  .slides-wrap::-webkit-scrollbar-track { background: transparent; }
+  .slides-wrap::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 10px; }
+
+  @media(max-width:600px){
+    .opening-card h1 { font-size: 28px; }
+    .opening-card .arabic { font-size: 20px; }
+    .slides-wrap { padding: 14px 10px; }
+    .nav-btn { padding: 10px 16px; font-size: 13px; }
+  }
+</style>
+</head>
+<body data-theme="light">
+
+<!-- Theme Toggle -->
+<button id="themeBtn" onclick="toggleTheme()">🌙</button>
+
+<!-- Header -->
+<div class="slide-header">
+  <div class="header-left">
+    <span class="header-tag">📘 Unit 10</span>
+    <span class="header-tag">📄 Page 118</span>
+  </div>
+  <div class="header-right">Third Intermediate • ثالث متوسط</div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- Slides Wrap -->
+<div class="slides-wrap" id="slidesWrap">
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 1 – OPENING
+  ══════════════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="opening-card">
+      <div class="book-badge">📗 Super Goal 3 &nbsp;|&nbsp; Second Term</div>
+      <div class="unit-divider"></div>
+      <div style="font-size:15px;font-weight:700;opacity:0.85;margin-bottom:6px;">Unit 10 &nbsp;·&nbsp; Page 118</div>
+      <h1>✍️ Writing</h1>
+      <div class="arabic">كتابة</div>
+      <div class="meta-row">
+        <span class="meta-chip">🏫 Third Intermediate</span>
+        <span class="meta-chip">📖 Who Used My Toothpaste?</span>
+        <span class="meta-chip">🗓 Second Term</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 2 – OBJECTIVES
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> Learning Objectives – الأهداف التعليمية</div>
+      <ul class="obj-list">
+        <li class="obj-item">
+          <span class="check">✅</span>
+          <div>
+            <p>Use relative clauses (who, that, which, whose, where) correctly in sentences.</p>
+            <div class="ar">استخدام الجمل الوصفية بشكل صحيح</div>
+          </div>
+        </li>
+        <li class="obj-item">
+          <span class="check">✅</span>
+          <div>
+            <p>Complete sentences with the correct relative pronoun.</p>
+            <div class="ar">إكمال الجمل بضمير الوصل المناسب</div>
+          </div>
+        </li>
+        <li class="obj-item">
+          <span class="check">✅</span>
+          <div>
+            <p>Identify and describe impolite behavior and its effects on others.</p>
+            <div class="ar">التعرف على السلوك غير المهذب وتأثيره</div>
+          </div>
+        </li>
+        <li class="obj-item">
+          <span class="check">✅</span>
+          <div>
+            <p>Write a short forum post about impolite behavior using relative clauses.</p>
+            <div class="ar">كتابة منشور قصير في منتدى حول السلوك غير اللائق</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 3 – KEY VOCABULARY
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="card">
+      <div class="card-title"><span class="icon">📚</span> Key Vocabulary – المفردات الأساسية</div>
+      <div class="vocab-grid">
+        <div class="vocab-card">
+          <div class="vocab-word">inconsiderate</div>
+          <div class="vocab-meaning">غير مراعٍ للآخرين</div>
+          <button class="tts-btn" onclick="speak('inconsiderate')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">impolite</div>
+          <div class="vocab-meaning">غير مؤدب</div>
+          <button class="tts-btn" onclick="speak('impolite')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">irritate</div>
+          <div class="vocab-meaning">يزعج / يستفز</div>
+          <button class="tts-btn" onclick="speak('irritate')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">advertisement</div>
+          <div class="vocab-meaning">إعلان</div>
+          <button class="tts-btn" onclick="speak('advertisement')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">litter</div>
+          <div class="vocab-meaning">يرمي القمامة</div>
+          <button class="tts-btn" onclick="speak('litter')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">nerves</div>
+          <div class="vocab-meaning">أعصاب / يزعج</div>
+          <button class="tts-btn" onclick="speak('nerves')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">rude</div>
+          <div class="vocab-meaning">وقح / غير مؤدب</div>
+          <button class="tts-btn" onclick="speak('rude')">🔊 Listen</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">possession</div>
+          <div class="vocab-meaning">ملكية / امتلاك</div>
+          <button class="tts-btn" onclick="speak('possession')">🔊 Listen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 4 – EXPLANATION: WRITING CORNER
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="card">
+      <div class="card-title"><span class="icon">📖</span> Grammar: Relative Clauses – الجمل الوصفية</div>
+      <div class="writing-corner">
+        <h3>📝 Writing Corner – الزاوية الكتابية</h3>
+        <p style="font-size:13.5px;font-weight:700;color:var(--primary);margin-bottom:14px;">
+          We use relative clauses to make clear which person or thing we are talking about.<br>
+          <span style="font-size:12px;font-weight:600;color:var(--text2);">نستخدم الجمل الوصفية لتوضيح الشخص أو الشيء الذي نتحدث عنه</span>
+        </p>
+
+        <div class="rule-item">
+          <div class="rule-title">1️⃣ Use <b>who</b> or <b>that</b> for people – للأشخاص</div>
+          <div class="rule-example">I can't stand people <b>who/that</b> cut in front of the line.</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:4px;">لا أطيق الأشخاص الذين يقتحمون الطابور</div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-title">2️⃣ Use <b>which</b> or <b>that</b> for things – للأشياء</div>
+          <div class="rule-example">It's annoying when salespeople try to sell you things <b>which/that</b> you don't need.</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:4px;">من المزعج أن يحاول البائعون بيعك أشياء لا تحتاجها</div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-title">3️⃣ Use <b>whose</b> to show possession – للملكية</div>
+          <div class="rule-example">I dislike people <b>whose</b> behavior is rude.</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:4px;">لا أحب الأشخاص الذين سلوكهم وقح</div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-title">4️⃣ Use <b>where</b> for places – للأماكن</div>
+          <div class="rule-example">It annoys me when people park their cars on sidewalks <b>where</b> pedestrians walk.</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:4px;">يزعجني أن يوقف الناس سياراتهم على الأرصفة التي يمشي فيها المشاة</div>
+        </div>
+      </div>
+
+      <!-- Quick Reference Table -->
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;font-size:13px;">
+          <thead>
+            <tr style="background:var(--primary);color:#fff;">
+              <th style="padding:10px 14px;">Relative Pronoun</th>
+              <th style="padding:10px 14px;">Used For</th>
+              <th style="padding:10px 14px;">Arabic</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:var(--surface2);">
+              <td style="padding:9px 14px;font-weight:800;color:var(--primary);">who / that</td>
+              <td style="padding:9px 14px;">People</td>
+              <td style="padding:9px 14px;font-family:'Tajawal',sans-serif;">للأشخاص</td>
+            </tr>
+            <tr style="background:var(--surface);">
+              <td style="padding:9px 14px;font-weight:800;color:var(--primary);">which / that</td>
+              <td style="padding:9px 14px;">Things</td>
+              <td style="padding:9px 14px;font-family:'Tajawal',sans-serif;">للأشياء</td>
+            </tr>
+            <tr style="background:var(--surface2);">
+              <td style="padding:9px 14px;font-weight:800;color:var(--primary);">whose</td>
+              <td style="padding:9px 14px;">Possession</td>
+              <td style="padding:9px 14px;font-family:'Tajawal',sans-serif;">للملكية</td>
+            </tr>
+            <tr style="background:var(--surface);">
+              <td style="padding:9px 14px;font-weight:800;color:var(--primary);">where</td>
+              <td style="padding:9px 14px;">Places</td>
+              <td style="padding:9px 14px;font-family:'Tajawal',sans-serif;">للأماكن</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 5 – EXERCISE A (Interactive Fill-in)
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="card">
+      <div class="section-label">📝 Exercise A</div>
+      <div class="exercise-title">Complete the sentences with <i>who, that, which, whose,</i> or <i>where</i>.</div>
+
+      <!-- Sentence 1 -->
+      <div class="sentence-item">
+        <span class="sent-num">1.</span>
+        <span>It's inconsiderate when passengers on the bus put their shopping bags</span>
+        <div class="blank-wrap">
+          <input class="fill-blank" id="a1" placeholder="___" oninput="checkA(1)" data-ans="where"/>
+          <span class="feedback" id="fb-a1"></span>
+        </div>
+        <span>other people want to sit.</span>
+        <button class="check-btn" onclick="revealA(1)">👁️</button>
+      </div>
+      <div class="answer-box" id="ans-a1">✅ Answer: <b>where</b> — (a place where people sit → use <i>where</i>)</div>
+
+      <!-- Sentence 2 -->
+      <div class="sentence-item">
+        <span class="sent-num">2.</span>
+        <span>I can't stand people</span>
+        <div class="blank-wrap">
+          <input class="fill-blank" id="a2" placeholder="___" oninput="checkA(2)" data-ans="who"/>
+          <span class="feedback" id="fb-a2"></span>
+        </div>
+        <span>throw litter in the street.</span>
+        <button class="check-btn" onclick="revealA(2)">👁️</button>
+      </div>
+      <div class="answer-box" id="ans-a2">✅ Answer: <b>who</b> or <b>that</b> — (people → use <i>who/that</i>)</div>
+
+      <!-- Sentence 3 -->
+      <div class="sentence-item">
+        <span class="sent-num">3.</span>
+        <span>I don't care for people</span>
+        <div class="blank-wrap">
+          <input class="fill-blank" id="a3" placeholder="___" oninput="checkA(3)" data-ans="whose"/>
+          <span class="feedback" id="fb-a3"></span>
+        </div>
+        <span>ring tone is too loud.</span>
+        <button class="check-btn" onclick="revealA(3)">👁️</button>
+      </div>
+      <div class="answer-box" id="ans-a3">✅ Answer: <b>whose</b> — (ring tone belongs to them → possession → use <i>whose</i>)</div>
+
+      <!-- Sentence 4 -->
+      <div class="sentence-item">
+        <span class="sent-num">4.</span>
+        <span>It irritates me when people don't put things back</span>
+        <div class="blank-wrap">
+          <input class="fill-blank" id="a4" placeholder="___" oninput="checkA(4)" data-ans="where"/>
+          <span class="feedback" id="fb-a4"></span>
+        </div>
+        <span>they found them.</span>
+        <button class="check-btn" onclick="revealA(4)">👁️</button>
+      </div>
+      <div class="answer-box" id="ans-a4">✅ Answer: <b>where</b> — (a place where they found them → use <i>where</i>)</div>
+
+      <!-- Sentence 5 -->
+      <div class="sentence-item">
+        <span class="sent-num">5.</span>
+        <span>It gets on my nerves when people say things</span>
+        <div class="blank-wrap">
+          <input class="fill-blank" id="a5" placeholder="___" oninput="checkA(5)" data-ans="that"/>
+          <span class="feedback" id="fb-a5"></span>
+        </div>
+        <span>aren't true.</span>
+        <button class="check-btn" onclick="revealA(5)">👁️</button>
+      </div>
+      <div class="answer-box" id="ans-a5">✅ Answer: <b>that</b> or <b>which</b> — (things → use <i>that/which</i>)</div>
+
+      <!-- Sentence 6 -->
+      <div class="sentence-item">
+        <span class="sent-num">6.</span>
+        <span>I hate those advertisements</span>
+        <div class="blank-wrap">
+          <input class="fill-blank" id="a6" placeholder="___" oninput="checkA(6)" data-ans="that"/>
+          <span class="feedback" id="fb-a6"></span>
+        </div>
+        <span>continuously pop up on my computer screen.</span>
+        <button class="check-btn" onclick="revealA(6)">👁️</button>
+      </div>
+      <div class="answer-box" id="ans-a6">✅ Answer: <b>that</b> or <b>which</b> — (advertisements → things → use <i>that/which</i>)</div>
+
+      <!-- Sentence 7 -->
+      <div class="sentence-item">
+        <span class="sent-num">7.</span>
+        <span>It bothers me when I have coffee with a friend</span>
+        <div class="blank-wrap">
+          <input class="fill-blank" id="a7" placeholder="___" oninput="checkA(7)" data-ans="who"/>
+          <span class="feedback" id="fb-a7"></span>
+        </div>
+        <span>is constantly texting on his phone.</span>
+        <button class="check-btn" onclick="revealA(7)">👁️</button>
+      </div>
+      <div class="answer-box" id="ans-a7">✅ Answer: <b>who</b> or <b>that</b> — (friend = person → use <i>who/that</i>)</div>
+
+      <!-- Sentence 8 -->
+      <div class="sentence-item">
+        <span class="sent-num">8.</span>
+        <span>Car alarms</span>
+        <div class="blank-wrap">
+          <input class="fill-blank" id="a8" placeholder="___" oninput="checkA(8)" data-ans="that"/>
+          <span class="feedback" id="fb-a8"></span>
+        </div>
+        <span>go off in the middle of the night are really annoying.</span>
+        <button class="check-btn" onclick="revealA(8)">👁️</button>
+      </div>
+      <div class="answer-box" id="ans-a8">✅ Answer: <b>that</b> or <b>which</b> — (car alarms = things → use <i>that/which</i>)</div>
+
+      <!-- ALL ANSWERS TOGETHER -->
+      <button class="reveal-btn" onclick="toggleAllA()">👁️ Show All Answers — عرض جميع الإجابات</button>
+      <div class="all-answers-box" id="all-ans-a">
+        <h4>✅ All Answers – Exercise A</h4>
+        <ol>
+          <li>where</li>
+          <li>who / that</li>
+          <li>whose</li>
+          <li>where</li>
+          <li>that / which</li>
+          <li>that / which</li>
+          <li>who / that</li>
+          <li>that / which</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 6 – EXERCISE B (Table)
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="card">
+      <div class="section-label">📊 Exercise B</div>
+      <div class="exercise-title">Complete the chart with notes on impolite behavior and how it affects others.</div>
+      <p style="font-size:13px;color:var(--text3);margin-bottom:14px;">اكتب سلوكاً غير لائق في العمود الأول وتأثيره على الآخرين في العمود الثاني.</p>
+
+      <div style="overflow-x:auto;">
+        <table class="behavior-table">
+          <thead>
+            <tr>
+              <th>🚫 Impolite Behavior<br><span style="font-size:11px;font-weight:600;">السلوك غير المهذب</span></th>
+              <th>💥 Effects<br><span style="font-size:11px;font-weight:600;">التأثير</span></th>
+            </tr>
+          </thead>
+          <tbody id="behaviorBody">
+          </tbody>
+        </table>
+      </div>
+
+      <button class="reveal-btn" onclick="toggleBAnswers()">👁️ Show Example Answers – عرض إجابات نموذجية</button>
+      <div class="all-answers-box" id="all-ans-b">
+        <h4>✅ Example Answers – Exercise B</h4>
+        <ol>
+          <li><b>Throwing litter in the street</b> → Makes the environment dirty and unpleasant for everyone.</li>
+          <li><b>Texting while having coffee with a friend</b> → Makes the friend feel ignored and unimportant.</li>
+          <li><b>Playing loud music</b> → Disturbs others who are trying to rest or concentrate.</li>
+          <li><b>Talking loudly on the phone in public</b> → Annoys people nearby who have to listen.</li>
+          <li><b>Cutting in line</b> → Makes people who waited feel disrespected.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 7 – EXERCISE C (Forum Writing)
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="card">
+      <div class="section-label">✍️ Exercise C</div>
+      <div class="exercise-title">Write five entries for an Internet forum about impolite behavior and how it affects others.</div>
+      <p style="font-size:13px;color:var(--text3);margin-bottom:16px;">اكتب خمسة مقاطع لمنتدى على الإنترنت حول السلوك غير اللائق وكيف يؤثر على الآخرين. استخدم ملاحظاتك من الجدول والأفكار من الوحدة.</p>
+
+      <div style="background:var(--surface2);border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid var(--border);">
+        <p style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:8px;">💡 Tips for Writing – نصائح للكتابة</p>
+        <ul style="font-size:13px;color:var(--text2);padding-left:18px;line-height:2;">
+          <li>Use relative clauses: <i>who, that, which, whose, where</i></li>
+          <li>Express your feelings: <i>It annoys me when… / I can't stand people who…</i></li>
+          <li>Describe the effect: <i>This makes others feel… / It causes…</i></li>
+        </ul>
+      </div>
+
+      <div id="forumEntries">
+        <div style="margin-bottom:12px;" v-for="i in 5">
+          <label style="font-size:13px;font-weight:700;color:var(--primary);display:block;margin-bottom:4px;">Entry 1:</label>
+          <textarea style="width:100%;border:2px solid var(--border);border-radius:10px;padding:10px;font-family:'Nunito',sans-serif;font-size:13px;background:var(--bg);color:var(--text);resize:vertical;min-height:70px;" placeholder="Write your forum entry here... e.g., It really bothers me when people who are on public transport talk loudly on their phones. This is very inconsiderate and makes other passengers uncomfortable." onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+      </div>
+
+      <button class="reveal-btn" onclick="toggleCAnswers()">👁️ Show Model Answers – عرض إجابات نموذجية</button>
+      <div class="all-answers-box" id="all-ans-c">
+        <h4>✅ Model Forum Entries – Exercise C</h4>
+        <ol style="padding-left:18px;line-height:2;">
+          <li>It really bothers me when people <b>who</b> are on public transport talk loudly on their phones. This is very inconsiderate and disturbs everyone around them.</li>
+          <li>I can't stand people <b>whose</b> dogs run free in parks <b>where</b> children play. It makes parents feel unsafe about letting their children enjoy the park.</li>
+          <li>One thing <b>that</b> really annoys me is when drivers park in places <b>where</b> they block traffic. This causes long delays for everyone.</li>
+          <li>I hate advertisements <b>that</b> pop up on my screen while I'm working. They interrupt my concentration and slow my computer down.</li>
+          <li>It gets on my nerves when people say things <b>that</b> aren't true just to get attention. This destroys trust between people and makes communication difficult.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 8 – QUIZ
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="card">
+      <div class="card-title"><span class="icon">🧠</span> Interactive Quiz – اختبر نفسك</div>
+
+      <!-- Q1 -->
+      <div style="margin-bottom:22px;">
+        <div class="quiz-q">1. I can't stand people _____ cut in front of the line.</div>
+        <div class="quiz-opts" id="q1opts">
+          <div class="quiz-opt" onclick="checkQuiz(1,this,'wrong')">which</div>
+          <div class="quiz-opt" onclick="checkQuiz(1,this,'correct')">who</div>
+          <div class="quiz-opt" onclick="checkQuiz(1,this,'wrong')">whose</div>
+          <div class="quiz-opt" onclick="checkQuiz(1,this,'wrong')">where</div>
+        </div>
+        <div class="quiz-feedback" id="qf1"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div style="margin-bottom:22px;">
+        <div class="quiz-q">2. I hate advertisements _____ pop up on my screen.</div>
+        <div class="quiz-opts" id="q2opts">
+          <div class="quiz-opt" onclick="checkQuiz(2,this,'wrong')">who</div>
+          <div class="quiz-opt" onclick="checkQuiz(2,this,'wrong')">whose</div>
+          <div class="quiz-opt" onclick="checkQuiz(2,this,'correct')">that</div>
+          <div class="quiz-opt" onclick="checkQuiz(2,this,'wrong')">where</div>
+        </div>
+        <div class="quiz-feedback" id="qf2"></div>
+      </div>
+
+      <!-- Q3 -->
+      <div style="margin-bottom:22px;">
+        <div class="quiz-q">3. I don't care for people _____ ring tone is too loud.</div>
+        <div class="quiz-opts" id="q3opts">
+          <div class="quiz-opt" onclick="checkQuiz(3,this,'wrong')">who</div>
+          <div class="quiz-opt" onclick="checkQuiz(3,this,'correct')">whose</div>
+          <div class="quiz-opt" onclick="checkQuiz(3,this,'wrong')">which</div>
+          <div class="quiz-opt" onclick="checkQuiz(3,this,'wrong')">where</div>
+        </div>
+        <div class="quiz-feedback" id="qf3"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div style="margin-bottom:22px;">
+        <div class="quiz-q">4. Put things back _____ you found them.</div>
+        <div class="quiz-opts" id="q4opts">
+          <div class="quiz-opt" onclick="checkQuiz(4,this,'wrong')">which</div>
+          <div class="quiz-opt" onclick="checkQuiz(4,this,'wrong')">who</div>
+          <div class="quiz-opt" onclick="checkQuiz(4,this,'wrong')">that</div>
+          <div class="quiz-opt" onclick="checkQuiz(4,this,'correct')">where</div>
+        </div>
+        <div class="quiz-feedback" id="qf4"></div>
+      </div>
+
+      <!-- Q5 -->
+      <div style="margin-bottom:10px;">
+        <div class="quiz-q">5. I dislike people _____ behavior is rude.</div>
+        <div class="quiz-opts" id="q5opts">
+          <div class="quiz-opt" onclick="checkQuiz(5,this,'wrong')">who</div>
+          <div class="quiz-opt" onclick="checkQuiz(5,this,'correct')">whose</div>
+          <div class="quiz-opt" onclick="checkQuiz(5,this,'wrong')">which</div>
+          <div class="quiz-opt" onclick="checkQuiz(5,this,'wrong')">where</div>
+        </div>
+        <div class="quiz-feedback" id="qf5"></div>
+      </div>
+
+      <!-- Score -->
+      <div id="quizScore" style="display:none;margin-top:16px;padding:14px 18px;background:var(--surface2);border-radius:12px;text-align:center;font-size:16px;font-weight:800;color:var(--primary);border:2px solid var(--primary);"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 9 – SUMMARY
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span> Lesson Summary – ملخص الدرس</div>
+      <div class="summary-grid">
+        <div class="summary-chip">
+          <div class="emoji">👤</div>
+          <h4>who / that</h4>
+          <p>Used for <b>people</b> – للأشخاص</p>
+        </div>
+        <div class="summary-chip">
+          <div class="emoji">📦</div>
+          <h4>which / that</h4>
+          <p>Used for <b>things</b> – للأشياء</p>
+        </div>
+        <div class="summary-chip">
+          <div class="emoji">🔑</div>
+          <h4>whose</h4>
+          <p>Used for <b>possession</b> – للملكية</p>
+        </div>
+        <div class="summary-chip">
+          <div class="emoji">📍</div>
+          <h4>where</h4>
+          <p>Used for <b>places</b> – للأماكن</p>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;background:var(--surface2);border-radius:12px;padding:16px;border:1px solid var(--border);">
+        <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:10px;">🔑 Key Sentence Starters – عبارات مفيدة</p>
+        <ul style="font-size:13.5px;color:var(--text2);padding-left:18px;line-height:2.2;">
+          <li>It annoys me when people <i>who</i>…</li>
+          <li>I can't stand people <i>whose</i>…</li>
+          <li>I hate things <i>that/which</i>…</li>
+          <li>It bothers me in places <i>where</i>…</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 10 – HOMEWORK
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <div class="card">
+      <div class="card-title"><span class="icon">📝</span> Homework – الواجب المنزلي</div>
+      <div class="hw-box">
+        <div style="font-size:16px;font-weight:800;color:var(--primary);margin-bottom:8px;">📄 Workbook – Page 236</div>
+        <div class="hw-instruction">
+          📌 Complete the exercises on <b>Page 236</b> — Exercises E & F (Phrasal Verbs)
+        </div>
+
+        <div style="margin-top:18px;">
+          <div class="card-title" style="margin-bottom:12px;"><span class="icon">🔤</span> Exercise E – Rewrite conversations (change position of phrasal verbs)</div>
+          
+          <div style="background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:14px;border:1px solid var(--border);">
+            <p style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:10px;">Conversation 1:</p>
+            <p style="font-size:13px;margin-bottom:6px;"><b>Son:</b> But I <i>did</i> clean my room up.</p>
+            <p style="font-size:13px;margin-bottom:10px;"><b>Dad:</b> Really? It looks like you messed your room up.</p>
+            <button class="reveal-btn" onclick="toggleReveal('hw-e1')">👁️ Show Answers</button>
+            <div class="answer-box" id="hw-e1">
+              ✅ Son: But I <b>did clean up</b> my room. <br>
+              ✅ Dad: Really? It looks like you <b>messed up</b> your room.
+            </div>
+          </div>
+
+          <div style="background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:14px;border:1px solid var(--border);">
+            <p style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:10px;">Conversation 2:</p>
+            <p style="font-size:13px;margin-bottom:6px;"><b>Son:</b> OK, Mom. I put the dishes away.</p>
+            <p style="font-size:13px;margin-bottom:6px;"><b>Mom:</b> Are you sure you put away all the dishes?</p>
+            <p style="font-size:13px;margin-bottom:10px;"><b>Son:</b> Oh, I didn't notice those plates in the dishwasher. I'll put the plates away now.</p>
+            <button class="reveal-btn" onclick="toggleReveal('hw-e2')">👁️ Show Answers</button>
+            <div class="answer-box" id="hw-e2">
+              ✅ Son: OK, Mom. I <b>put away</b> the dishes.<br>
+              ✅ Mom: Are you sure you <b>put all the dishes away</b>?<br>
+              ✅ Son: Oh, I didn't notice those plates in the dishwasher. I'll <b>put away</b> the plates now.
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <div class="card-title" style="margin-bottom:12px;"><span class="icon">📦</span> Exercise F – Complete with phrasal verb + correct pronoun</div>
+          <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid var(--border);">
+            <div class="verb-box" style="margin-bottom:14px;">
+              <span class="verb-chip">clean up</span>
+              <span class="verb-chip" style="text-decoration:line-through;background:var(--text3);">throw away ✓</span>
+              <span class="verb-chip">hang up</span>
+              <span class="verb-chip">put away</span>
+              <span class="verb-chip">turn off</span>
+              <span class="verb-chip">take out</span>
+            </div>
+            <p style="font-size:12px;color:var(--text3);margin-bottom:12px;font-style:italic;">Example: I used to save empty plastic bottles, but now I'm going to <u>throw them away</u>.</p>
+            
+            <div style="font-size:14px;font-weight:600;line-height:2.4;">
+              <p>1. The trash can in the kitchen is full of garbage, so I'm going to ___________.</p>
+              <p>2. I used to leave the light on in my bedroom when I wasn't there. Now I ___________ when I leave my bedroom.</p>
+              <p>3. I used to leave the clean dishes in the dishwasher. Now I'm going to ___________ after they're washed.</p>
+              <p>4. I have just ironed my clothes. I'm going to ___________, so they don't get wrinkled.</p>
+              <p>5. The apartment is very dirty now, but I'm going to ___________.</p>
+            </div>
+            <button class="reveal-btn" onclick="toggleReveal('hw-f')">👁️ Show All Answers</button>
+            <div class="answer-box" id="hw-f">
+              ✅ 1. <b>take it out</b><br>
+              ✅ 2. <b>turn it off</b><br>
+              ✅ 3. <b>put them away</b><br>
+              ✅ 4. <b>hang them up</b><br>
+              ✅ 5. <b>clean it up</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 11 – CHALLENGE
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-11">
+    <div class="card">
+      <div class="card-title"><span class="icon">🏆</span> Challenge Question – تحدي</div>
+      <div class="challenge-box">
+        <h3>🌟 Think & Write!</h3>
+        <p style="font-size:14px;font-weight:600;color:var(--text2);margin-bottom:14px;">
+          Write a short paragraph (5–6 sentences) for an online forum titled: <br>
+          <b style="color:#7a4f00;">"The Most Annoying Behavior I've Ever Seen"</b><br>
+          <span style="font-family:'Tajawal',sans-serif;font-size:13px;">اكتب فقرة قصيرة لمنتدى بعنوان: "أكثر تصرف مزعج رأيته في حياتي"</span>
+        </p>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:10px;">Use at least 3 different relative pronouns (who, that, which, whose, where)</p>
+        <textarea class="challenge-textarea" placeholder="Start writing here... e.g., One of the most annoying behaviors I've seen is people who talk loudly on their phones in quiet places where others are trying to concentrate..."></textarea>
+      </div>
+
+      <button class="reveal-btn" onclick="toggleReveal('challenge-ans')">👁️ Show Model Answer</button>
+      <div class="answer-box" id="challenge-ans">
+        <b>Model Answer:</b><br><br>
+        One of the most annoying behaviors I've ever seen is people <b>who</b> use their phones while driving. Cars are places <b>where</b> the driver should focus completely on the road. People <b>whose</b> attention is on their phones are putting everyone in danger. The pedestrians <b>that</b> are crossing the road are at serious risk. It's a habit <b>which</b> must be stopped immediately. I truly believe that anyone <b>who</b> drives and texts deserves a heavy fine.
+      </div>
+
+      <!-- FOOTER – LAST SLIDE ONLY -->
+      <div class="slide-footer">
+        <strong>eduvorra</strong><br>
+        <span class="ar-name">عبدالحكيم صالح الحسون</span><br>
+        <span style="font-size:12px;">صُنع بحب في بريدة ❤️</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end slides-wrap -->
+
+<!-- Navigation Bar -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>← Previous</button>
+  <span class="slide-counter" id="slideCounter">1 / 11</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+// ── STATE (memory only – no storage) ──
+let currentSlide = 1;
+const totalSlides = 11;
+let isDark = false;
+let quizAnswered = [false,false,false,false,false];
+let quizCorrect = 0;
+let allAVisible = false;
+let allBVisible = false;
+let allCVisible = false;
+
+// ── THEME ──
+function toggleTheme(){
+  isDark = !isDark;
+  document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+}
+
+// ── NAVIGATION ──
+function changeSlide(dir){
+  const ns = currentSlide + dir;
+  if(ns < 1 || ns > totalSlides) return;
+  document.getElementById('slide-'+currentSlide).classList.remove('active');
+  currentSlide = ns;
+  document.getElementById('slide-'+currentSlide).classList.add('active');
+  document.getElementById('prevBtn').disabled = currentSlide === 1;
+  document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+  document.getElementById('slideCounter').textContent = currentSlide + ' / ' + totalSlides;
+  document.getElementById('progressFill').style.width = ((currentSlide/totalSlides)*100)+'%';
+  document.getElementById('slidesWrap').scrollTop = 0;
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'ArrowRight') changeSlide(1);
+  if(e.key === 'ArrowLeft')  changeSlide(-1);
+});
+
+// ── TTS ──
+function speak(word){
+  if('speechSynthesis' in window){
+    const u = new SpeechSynthesisUtterance(word);
+    u.lang = 'en-US'; u.rate = 0.85;
+    speechSynthesis.speak(u);
+  }
+}
+
+// ── EXERCISE A: per-item check ──
+const aAnswers = {
+  1:['where'],2:['who','that'],3:['whose'],4:['where'],
+  5:['that','which'],6:['that','which'],7:['who','that'],8:['that','which']
+};
+function checkA(n){
+  const inp = document.getElementById('a'+n);
+  const fb  = document.getElementById('fb-a'+n);
+  const val = inp.value.trim().toLowerCase();
+  if(val === '') { inp.className='fill-blank'; fb.textContent=''; return; }
+  if(aAnswers[n].includes(val)){
+    inp.className='fill-blank correct'; fb.textContent='✅ Correct!'; fb.className='feedback ok';
+  } else {
+    inp.className='fill-blank wrong'; fb.textContent='❌ Try again'; fb.className='feedback err';
+  }
+}
+function revealA(n){
+  const box = document.getElementById('ans-a'+n);
+  const isVis = box.classList.contains('visible');
+  box.classList.toggle('visible');
+}
+function toggleAllA(){
+  const box = document.getElementById('all-ans-a');
+  const btn = box.previousElementSibling;
+  allAVisible = !allAVisible;
+  box.classList.toggle('visible', allAVisible);
+  btn.innerHTML = allAVisible ? '🙈 Hide All Answers' : '👁️ Show All Answers — عرض جميع الإجابات';
+}
+function toggleBAnswers(){
+  const box = document.getElementById('all-ans-b');
+  allBVisible = !allBVisible;
+  box.classList.toggle('visible', allBVisible);
+}
+function toggleCAnswers(){
+  const box = document.getElementById('all-ans-c');
+  allCVisible = !allCVisible;
+  box.classList.toggle('visible', allCVisible);
+}
+
+// ── BUILD BEHAVIOR TABLE ──
+(function buildTable(){
+  const body = document.getElementById('behaviorBody');
+  for(let i=0;i<5;i++){
+    const tr = document.createElement('tr');
+    tr.style.background = i%2===0 ? 'var(--surface)' : 'var(--surface2)';
+    tr.innerHTML = `
+      <td><textarea placeholder="e.g., Throwing litter in the street..."></textarea></td>
+      <td><textarea placeholder="e.g., Makes the environment dirty..."></textarea></td>
+    `;
+    body.appendChild(tr);
+  }
+})();
+
+// ── QUIZ ──
+function checkQuiz(qNum, el, result){
+  const opts = document.getElementById('q'+qNum+'opts').querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.style.pointerEvents='none');
+  const fb = document.getElementById('qf'+qNum);
+  if(result === 'correct'){
+    el.classList.add('correct-opt');
+    fb.textContent = '✅ Correct! أحسنت!';
+    fb.className = 'quiz-feedback ok';
+    if(!quizAnswered[qNum-1]) { quizCorrect++; quizAnswered[qNum-1]=true; }
+  } else {
+    el.classList.add('wrong-opt');
+    fb.textContent = '❌ Wrong! Try again next time.';
+    fb.className = 'quiz-feedback err';
+    opts.forEach(o => {
+      if(o.getAttribute('onclick') && o.getAttribute('onclick').includes("'correct'"))
+        o.classList.add('correct-opt');
+    });
+    if(!quizAnswered[qNum-1]) { quizAnswered[qNum-1]=true; }
+  }
+  const done = quizAnswered.filter(Boolean).length;
+  if(done === 5){
+    const sc = document.getElementById('quizScore');
+    sc.style.display='block';
+    const pct = Math.round((quizCorrect/5)*100);
+    let msg = pct===100?'🌟 Perfect Score! ممتاز!' : pct>=80?'👍 Great Work! أحسنت!' : pct>=60?'👌 Good Effort! جيد!' : '📚 Keep Practicing! استمر!';
+    sc.textContent = `Your Score: ${quizCorrect}/5 (${pct}%) — ${msg}`;
+  }
+}
+
+// ── GENERIC REVEAL ──
+function toggleReveal(id){
+  const box = document.getElementById(id);
+  const isVis = box.classList.contains('visible');
+  box.classList.toggle('visible');
+  const btn = box.previousElementSibling;
+  if(btn && btn.classList.contains('reveal-btn')){
+    btn.innerHTML = isVis ? '👁️ Show Answer' : '🙈 Hide';
+  }
+}
+
+// ── INIT ──
+document.getElementById('progressFill').style.width = (1/totalSlides*100)+'%';
+</script>
+</body>
+</html>

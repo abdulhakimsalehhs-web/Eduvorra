@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Form, Meaning and Function – Unit 10</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --surface2: #e8eeff;
+    --primary: #4361ee;
+    --primary-dark: #3249c8;
+    --accent: #f72585;
+    --accent2: #4cc9f0;
+    --accent3: #7209b7;
+    --text: #1a1a2e;
+    --text-sub: #555577;
+    --border: #d0d8ff;
+    --correct: #06d6a0;
+    --wrong: #ef233c;
+    --card: #ffffff;
+    --shadow: 0 4px 24px rgba(67,97,238,0.10);
+    --header-bg: #4361ee;
+    --header-text: #ffffff;
+    --badge-bg: #e8eeff;
+    --badge-text: #4361ee;
+    --progress-bg: #d0d8ff;
+    --progress-fill: #4361ee;
+    --btn-next: #4361ee;
+    --btn-prev: #e8eeff;
+    --btn-prev-text: #4361ee;
+    --footer-bg: #1a1a2e;
+    --footer-text: #ffffff;
+  }
+  body.dark {
+    --bg: #0d0d1a;
+    --surface: #16213e;
+    --surface2: #1a1a2e;
+    --primary: #4361ee;
+    --accent: #f72585;
+    --accent2: #4cc9f0;
+    --text: #e8eeff;
+    --text-sub: #a0a8cc;
+    --border: #2a2a4a;
+    --card: #1e1e3a;
+    --shadow: 0 4px 24px rgba(0,0,0,0.40);
+    --header-bg: #16213e;
+    --header-text: #e8eeff;
+    --badge-bg: #1a1a2e;
+    --badge-text: #4cc9f0;
+    --progress-bg: #2a2a4a;
+    --progress-fill: #4cc9f0;
+    --btn-next: #4361ee;
+    --btn-prev: #1e1e3a;
+    --btn-prev-text: #a0a8cc;
+    --footer-bg: #0d0d1a;
+    --footer-text: #a0a8cc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* THEME TOGGLE */
+  #themeBtn {
+    position: fixed;
+    bottom: 70px;
+    right: 16px;
+    z-index: 9999;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    box-shadow: var(--shadow);
+  }
+  #themeBtn:hover { transform: scale(1.12); }
+
+  /* HEADER */
+  .slide-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--header-bg);
+    color: var(--header-text);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    height: 52px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .header-left { font-size: 13px; font-weight: 700; opacity: .92; line-height: 1.4; }
+  .header-right { font-size: 13px; font-weight: 700; opacity: .92; font-family: 'Tajawal', sans-serif; }
+  .header-center { font-size: 13px; font-weight: 800; letter-spacing: .5px; }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    position: fixed;
+    top: 52px; left: 0; right: 0;
+    height: 4px;
+    background: var(--progress-bg);
+    z-index: 99;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent2);
+    transition: width 0.4s ease;
+  }
+
+  /* SLIDE WRAPPER */
+  #slideWrap {
+    margin-top: 56px;
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 24px 12px 100px;
+  }
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 800px;
+    animation: fadeSlide 0.35s ease;
+  }
+  .slide.active { display: block; }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 24px 26px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title .icon { font-size: 20px; }
+
+  /* OPENING SLIDE */
+  .opening-card {
+    background: linear-gradient(135deg, #4361ee 0%, #7209b7 60%, #f72585 100%);
+    border-radius: 24px;
+    padding: 50px 32px 40px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 8px 40px rgba(67,97,238,0.25);
+    margin-bottom: 0;
+    border: none;
+  }
+  .opening-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    border-radius: 30px;
+    padding: 5px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 22px;
+    color: #fff;
+  }
+  .opening-title-en {
+    font-size: clamp(22px, 5vw, 34px);
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  .opening-title-ar {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(16px, 4vw, 22px);
+    font-weight: 700;
+    margin-bottom: 28px;
+    opacity: 0.92;
+  }
+  .opening-meta {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .opening-chip {
+    background: rgba(255,255,255,0.18);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .opening-term {
+    margin-top: 18px;
+    font-size: 13px;
+    opacity: 0.78;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  /* OBJECTIVES */
+  .obj-list { list-style: none; padding: 0; }
+  .obj-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px; color: var(--text); line-height: 1.6;
+  }
+  .obj-list li:last-child { border-bottom: none; }
+  .obj-icon { font-size: 18px; margin-top: 1px; }
+
+  /* GRAMMAR BOX */
+  .grammar-box {
+    background: linear-gradient(120deg, #e8eeff 0%, #f0f4ff 100%);
+    border-left: 5px solid var(--primary);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    transition: background 0.3s;
+  }
+  body.dark .grammar-box {
+    background: linear-gradient(120deg, #1e1e3a 0%, #16213e 100%);
+  }
+  .grammar-box h3 {
+    font-size: 15px; font-weight: 800; color: var(--primary);
+    margin-bottom: 8px;
+  }
+  .grammar-box p, .grammar-box .rule-line {
+    font-size: 13.5px; color: var(--text); line-height: 1.75; margin-bottom: 6px;
+  }
+  .grammar-box .rule-line:last-child { margin-bottom: 0; }
+  .highlight { color: var(--primary); font-weight: 800; }
+  .highlight-r { color: var(--accent); font-weight: 800; }
+
+  /* FORMULA ROW */
+  .formula-row {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    margin: 8px 0;
+  }
+  .formula-box {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+  .formula-plus { font-weight: 900; color: var(--text-sub); }
+
+  /* EXAMPLE CARD */
+  .example-wrap { margin-bottom: 10px; }
+  .example-trigger {
+    background: var(--surface2);
+    border: 1.5px dashed var(--border);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 13.5px;
+    color: var(--text-sub);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  body.dark .example-trigger { background: #1a1a2e; }
+  .example-trigger:hover { border-color: var(--primary); color: var(--primary); }
+  .example-answer {
+    display: none;
+    background: var(--surface2);
+    border: 1.5px solid var(--correct);
+    border-radius: 0 0 10px 10px;
+    padding: 12px 16px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--correct);
+    animation: fadeIn 0.25s;
+  }
+  body.dark .example-answer { background: #1a2a1a; }
+  .example-answer.shown { display: block; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* VOCAB */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .vocab-card {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+    border: 1.5px solid var(--border);
+    transition: all 0.2s;
+  }
+  body.dark .vocab-card { background: #1a1a2e; }
+  .vocab-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .vocab-word { font-size: 14px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+  .vocab-ar { font-family: 'Tajawal', sans-serif; font-size: 13px; color: var(--text-sub); margin-bottom: 8px; }
+  .tts-btn {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .tts-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+  /* EXERCISE */
+  .ex-item {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .ex-item:last-child { border-bottom: none; }
+  .ex-num { font-weight: 800; color: var(--primary); margin-right: 6px; }
+  .ex-q { font-size: 14px; line-height: 1.7; margin-bottom: 10px; }
+  .blank-input {
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    background: transparent;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    width: 100px;
+    outline: none;
+    padding: 2px 4px;
+    text-align: center;
+  }
+  .blank-input:focus { border-color: var(--accent); }
+  .ex-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
+  .show-ans-btn {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 5px;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .show-ans-btn:hover { opacity: .88; transform: scale(1.04); }
+  .show-ans-btn.hide-btn { background: var(--text-sub); }
+  .answer-reveal {
+    display: none;
+    background: #e6faf5;
+    color: #069668;
+    border: 1.5px solid var(--correct);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13.5px;
+    font-weight: 800;
+    margin-top: 8px;
+    animation: fadeIn 0.25s;
+  }
+  body.dark .answer-reveal { background: #0d2a1e; color: #06d6a0; }
+  .answer-reveal.shown { display: block; }
+
+  /* ALL ANSWERS BOX */
+  .all-answers-box {
+    background: var(--surface2);
+    border: 2px dashed var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-top: 18px;
+  }
+  body.dark .all-answers-box { background: #16213e; }
+  .all-answers-box h4 { font-size: 14px; font-weight: 800; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .all-answers-content { display: none; }
+  .all-answers-content.shown { display: block; }
+  .all-answers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .ans-chip {
+    background: #e6faf5;
+    color: #069668;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex; gap: 6px; align-items: center;
+  }
+  body.dark .ans-chip { background: #0d2a1e; color: #06d6a0; }
+
+  /* MCQ QUIZ */
+  .mcq-item { margin-bottom: 20px; }
+  .mcq-q { font-size: 14px; font-weight: 700; margin-bottom: 10px; line-height: 1.6; }
+  .mcq-options { display: flex; flex-direction: column; gap: 8px; }
+  .mcq-opt {
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex; align-items: center; gap: 10px;
+    user-select: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    color: var(--text);
+  }
+  body.dark .mcq-opt { background: #1a1a2e; }
+  .mcq-opt:hover:not(.locked) { border-color: var(--primary); background: var(--badge-bg); }
+  .mcq-opt.correct { background: #e6faf5; border-color: var(--correct); color: #069668; }
+  .mcq-opt.wrong   { background: #ffe5e8; border-color: var(--wrong); color: var(--wrong); }
+  body.dark .mcq-opt.correct { background: #0d2a1e; color: #06d6a0; }
+  body.dark .mcq-opt.wrong   { background: #2a0d0d; color: #ef233c; }
+  .mcq-feedback { margin-top: 8px; font-size: 13px; font-weight: 700; display: none; }
+  .mcq-feedback.shown { display: block; }
+
+  /* PRACTICE fill-in */
+  .practice-item { margin-bottom: 16px; }
+  .practice-q { font-size: 14px; line-height: 1.8; margin-bottom: 8px; }
+  .practice-input {
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    background: transparent;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px; font-weight: 700;
+    width: 120px; outline: none;
+    padding: 2px 6px; text-align: center;
+  }
+  .practice-input:focus { border-color: var(--accent); }
+  .check-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 7px 18px;
+    font-size: 13px; font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+    margin-top: 6px;
+  }
+  .check-btn:hover { opacity: .88; }
+  .fb-msg { font-size: 13px; font-weight: 800; margin-top: 6px; display: none; }
+  .fb-msg.ok { color: var(--correct); display: block; }
+  .fb-msg.err { color: var(--wrong); display: block; }
+
+  /* SUMMARY */
+  .summary-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .sum-key { font-weight: 800; color: var(--primary); min-width: 80px; }
+  .sum-val { color: var(--text); line-height: 1.6; }
+
+  /* CHALLENGE */
+  .challenge-input {
+    width: 100%;
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-family: 'Nunito', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    margin-top: 10px;
+    resize: vertical;
+    min-height: 60px;
+  }
+  .challenge-input:focus { border-color: var(--accent); }
+  .check-challenge-btn {
+    background: var(--accent3);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 22px;
+    font-size: 13.5px; font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+    margin-top: 10px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .check-challenge-btn:hover { opacity: .88; transform: scale(1.03); }
+
+  /* NAVIGATION */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    z-index: 200;
+    box-shadow: 0 -2px 16px rgba(0,0,0,0.08);
+    transition: background 0.3s;
+  }
+  .nav-btn {
+    border: none;
+    border-radius: 30px;
+    padding: 10px 26px;
+    font-size: 14px; font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .nav-btn:hover:not(:disabled) { transform: scale(1.05); }
+  .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .btn-prev { background: var(--btn-prev); color: var(--btn-prev-text); border: 2px solid var(--border); }
+  .btn-next { background: var(--btn-next); color: #fff; box-shadow: 0 2px 12px rgba(67,97,238,0.25); }
+  .slide-counter { font-size: 13px; font-weight: 700; color: var(--text-sub); text-align: center; }
+
+  /* SECTION TITLE */
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 20px;
+    padding: 5px 16px;
+    font-size: 12.5px; font-weight: 800;
+    margin-bottom: 16px;
+    letter-spacing: .5px;
+  }
+
+  /* HW SLIDE */
+  .hw-img-wrap {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .hw-img-wrap img { width: 100%; display: block; }
+
+  /* FOOTER */
+  .slide-footer {
+    margin-top: 32px;
+    background: var(--footer-bg);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    color: var(--footer-text);
+  }
+  .footer-brand { font-size: 22px; font-weight: 900; letter-spacing: 1px; color: var(--accent2); }
+  .footer-name { font-family: 'Tajawal', sans-serif; font-size: 15px; margin: 6px 0; opacity: .85; }
+  .footer-made { font-family: 'Tajawal', sans-serif; font-size: 13px; opacity: .6; }
+
+  /* BADGE */
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--badge-bg);
+    color: var(--badge-text);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px; font-weight: 700;
+    border: 1.5px solid var(--border);
+  }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1.5px solid var(--border); margin: 16px 0; }
+
+  /* NOTE BOX */
+  .note-box {
+    background: #fff8e6;
+    border-left: 4px solid #f4a100;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 12px;
+    color: #7a4a00;
+  }
+  body.dark .note-box { background: #2a1f00; color: #f4c74a; }
+
+  @media (max-width: 520px) {
+    .card { padding: 16px 14px; }
+    .opening-card { padding: 36px 16px 28px; }
+    .nav-btn { padding: 9px 16px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<button id="themeBtn" title="Toggle dark/light mode">🌙</button>
+
+<!-- HEADER -->
+<div class="slide-header">
+  <div class="header-left">Unit 10<br/>Page 119</div>
+  <div class="header-center" id="headerTitle">Form, Meaning and Function</div>
+  <div class="header-right">ثالث متوسط</div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressBar"></div>
+</div>
+
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <button class="nav-btn btn-prev" id="prevBtn" onclick="navigate(-1)">← Previous</button>
+  <div class="slide-counter" id="slideCounter">1 / 10</div>
+  <button class="nav-btn btn-next" id="nextBtn" onclick="navigate(1)">Next →</button>
+</div>
+
+<!-- SLIDE WRAPPER -->
+<div id="slideWrap">
+
+<!-- ===== SLIDE 1: OPENING ===== -->
+<div class="slide active" id="slide-1">
+  <div class="opening-card">
+    <div class="opening-badge">📘 Super Goal 3 &nbsp;|&nbsp; Second Term</div>
+    <div class="opening-title-en">Form, Meaning and Function</div>
+    <div class="opening-title-ar">جمل المبالغة والتأكيد</div>
+    <div class="opening-meta">
+      <div class="opening-chip">📖 Unit 10</div>
+      <div class="opening-chip">📄 Page 119</div>
+      <div class="opening-chip">🎓 Third Intermediate</div>
+    </div>
+    <div class="opening-term">الفصل الدراسي الثاني &nbsp;|&nbsp; Second Term</div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 2: OBJECTIVES ===== -->
+<div class="slide" id="slide-2">
+  <div class="section-tag">🎯 Lesson Objectives</div>
+  <div class="card">
+    <div class="card-title"><span class="icon">🎯</span> By the end of this lesson, students will be able to:</div>
+    <ul class="obj-list">
+      <li><span class="obj-icon">✅</span> Use <b>can't</b> and <b>must</b> to make deductions and speculate about the present.</li>
+      <li><span class="obj-icon">✅</span> Understand the difference between <b>must</b> (certainty) and <b>can't</b> (impossibility).</li>
+      <li><span class="obj-icon">✅</span> Use <b>so…that</b> and <b>such…that</b> to show cause and effect.</li>
+      <li><span class="obj-icon">✅</span> Identify the correct structure: <b>so + adj/adv + that</b> vs <b>such + a + adj + noun + that</b>.</li>
+      <li><span class="obj-icon">✅</span> Complete fill-in-the-blank sentences using the four structures accurately.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">📝</span> Key Structures</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="badge">🔵 must</span>
+      <span class="badge">🔴 can't</span>
+      <span class="badge">🟢 so…that</span>
+      <span class="badge">🟠 such…that</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 3: EXPLANATION – CAN'T / MUST ===== -->
+<div class="slide" id="slide-3">
+  <div class="section-tag">📖 Explanation — Part 1</div>
+
+  <div class="grammar-box">
+    <h3>🔵 Can't / Must — Deduction & Speculation</h3>
+    <p class="rule-line">Use <span class="highlight">must</span> when you are <b>sure</b> something is true (logical deduction).</p>
+    <p class="rule-line">Use <span class="highlight-r">can't</span> when you think something is <b>impossible</b>.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">💡</span> Rule Formulas</div>
+    <div class="formula-row">
+      <div class="formula-box">Subject</div>
+      <span class="formula-plus">+</span>
+      <div class="formula-box" style="background:var(--accent2);color:#1a1a2e;">must / can't</div>
+      <span class="formula-plus">+</span>
+      <div class="formula-box" style="background:#7209b7;">base verb</div>
+    </div>
+    <hr class="divider"/>
+    <div class="note-box">
+      📌 <b>must</b> = أنا متأكد / I'm sure it's true<br/>
+      📌 <b>can't</b> = مستحيل / It's impossible
+    </div>
+
+    <div class="card-title" style="margin-top:12px;"><span class="icon">✏️</span> Examples (click to reveal)</div>
+
+    <div class="example-wrap">
+      <div class="example-trigger" onclick="toggleEx(this)">
+        <span>It _____ be rain. There isn't a cloud in the sky.</span>
+        <span>👁️ Show</span>
+      </div>
+      <div class="example-answer">✅ It <b>can't</b> be rain. → (impossible — no clouds)</div>
+    </div>
+
+    <div class="example-wrap">
+      <div class="example-trigger" onclick="toggleEx(this)">
+        <span>It _____ be the neighbor. She's watering the plants on her balcony.</span>
+        <span>👁️ Show</span>
+      </div>
+      <div class="example-answer">✅ It <b>must</b> be the neighbor. → (certain — she's on the balcony)</div>
+    </div>
+
+    <div class="example-wrap">
+      <div class="example-trigger" onclick="toggleEx(this)">
+        <span>He's laughing. He _____ be serious.</span>
+        <span>👁️ Show</span>
+      </div>
+      <div class="example-answer">✅ He <b>can't</b> be serious. → (impossible — he's laughing)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 4: EXPLANATION – SO/SUCH ===== -->
+<div class="slide" id="slide-4">
+  <div class="section-tag">📖 Explanation — Part 2</div>
+
+  <div class="grammar-box">
+    <h3>🟢 So…That / Such…That — Cause & Effect</h3>
+    <p class="rule-line"><span class="highlight">So</span> and <span class="highlight">such</span> make the meaning of an adjective or adverb <b>stronger</b>.</p>
+    <p class="rule-line">They are used to show <b>cause and effect</b>.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📐</span> Structure 1: so + adjective/adverb + that</div>
+    <div class="formula-row">
+      <div class="formula-box" style="background:var(--correct);color:#fff;">so</div>
+      <span class="formula-plus">+</span>
+      <div class="formula-box" style="background:#555;color:#fff;">adjective / adverb</div>
+      <span class="formula-plus">+</span>
+      <div class="formula-box" style="background:var(--accent);">that</div>
+    </div>
+    <div class="example-wrap" style="margin-top:12px;">
+      <div class="example-trigger" onclick="toggleEx(this)">
+        <span>He is _____ fast _____ he won the race.</span>
+        <span>👁️ Show</span>
+      </div>
+      <div class="example-answer">✅ He is <b>so</b> fast <b>that</b> he won the race.</div>
+    </div>
+    <div class="example-wrap">
+      <div class="example-trigger" onclick="toggleEx(this)">
+        <span>He ran _____ fast _____ he won the race.</span>
+        <span>👁️ Show</span>
+      </div>
+      <div class="example-answer">✅ He ran <b>so</b> fast <b>that</b> he won the race.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📐</span> Structure 2: so + many/much + noun + that</div>
+    <div class="formula-row">
+      <div class="formula-box" style="background:var(--correct);color:#fff;">so</div>
+      <span class="formula-plus">+</span>
+      <div class="formula-box" style="background:#e67e22;color:#fff;">many / much</div>
+      <span class="formula-plus">+</span>
+      <div class="formula-box" style="background:#555;color:#fff;">noun</div>
+      <span class="formula-plus">+</span>
+      <div class="formula-box" style="background:var(--accent);">that</div>
+    </div>
+    <div class="example-wrap" style="margin-top:12px;">
+      <div class="example-trigger" onclick="toggleEx(this)">
+        <span>He has _____ many books _____ he can hardly carry them.</span>
+        <span>👁️ Show</span>
+      </div>
+      <div class="example-answer">✅ He has <b>so</b> many books <b>that</b> he can hardly carry them.</div>
+    </div>
+    <div class="example-wrap">
+      <div class="example-trigger" onclick="toggleEx(this)">
+        <span>I have _____ much homework _____ I can't go out tonight.</span>
+        <span>👁️ Show</span>
+      </div>
+      <div class="example-answer">✅ I have <b>so</b> much homework <b>that</b> I can't go out tonight.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📐</span> Structure 3: such + a/an + adjective + noun + that</div>
+    <div class="formula-row">
+      <div class="formula-box" style="background:#7209b7;color:#fff;">such</div>
+      <span class="formula-plus">+</span>
+      <div class="formula-box" style="background:#555;color:#fff;">a / an</div>
+      <span class="formula-plus">+</span>
+      <div class="formula-box" style="background:#555;color:#fff;">adjective</div>
+      <span class="formula-plus">+</span>
+      <div class="formula-box" style="background:#555;color:#fff;">noun</div>
+      <span class="formula-plus">+</span>
+      <div class="formula-box" style="background:var(--accent);">that</div>
+    </div>
+    <div class="note-box" style="margin-top:10px;">📌 <b>such</b> = يُستخدم قبل اسم (noun phrase) — <b>so</b> يُستخدم قبل صفة أو ظرف فقط</div>
+    <div class="example-wrap" style="margin-top:12px;">
+      <div class="example-trigger" onclick="toggleEx(this)">
+        <span>It was _____ a difficult test _____ none of the students did well.</span>
+        <span>👁️ Show</span>
+      </div>
+      <div class="example-answer">✅ It was <b>such</b> a difficult test <b>that</b> none of the students did well.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 5: PRACTICE ===== -->
+<div class="slide" id="slide-5">
+  <div class="section-tag">✏️ Practice</div>
+  <div class="card">
+    <div class="card-title"><span class="icon">🖊️</span> Choose: <b>so</b> or <b>such</b>?</div>
+    <div class="note-box">💡 Tip: Use <b>so</b> before adjective/adverb | Use <b>such</b> before a noun phrase (a + adj + noun)</div>
+
+    <!-- Practice 1 -->
+    <div class="practice-item">
+      <div class="practice-q"><b>1.</b> It was _____ an interesting movie that I watched it twice.</div>
+      <input class="practice-input" id="p1" placeholder="so / such" oninput="checkPractice('p1','such','fb1')"/>
+      <div class="fb-msg" id="fb1"></div>
+      <button class="check-btn" onclick="checkPractice('p1','such','fb1')">Check ✓</button>
+    </div>
+
+    <!-- Practice 2 -->
+    <div class="practice-item">
+      <div class="practice-q"><b>2.</b> She spoke _____ quickly that I couldn't understand her.</div>
+      <input class="practice-input" id="p2" placeholder="so / such" oninput="checkPractice('p2','so','fb2')"/>
+      <div class="fb-msg" id="fb2"></div>
+      <button class="check-btn" onclick="checkPractice('p2','so','fb2')">Check ✓</button>
+    </div>
+
+    <!-- Practice 3 -->
+    <div class="practice-item">
+      <div class="practice-q"><b>3.</b> He has _____ much energy that he never gets tired.</div>
+      <input class="practice-input" id="p3" placeholder="so / such" oninput="checkPractice('p3','so','fb3')"/>
+      <div class="fb-msg" id="fb3"></div>
+      <button class="check-btn" onclick="checkPractice('p3','so','fb3')">Check ✓</button>
+    </div>
+
+    <!-- Practice 4 -->
+    <div class="practice-item">
+      <div class="practice-q"><b>4.</b> It was _____ a hot day that we stayed indoors.</div>
+      <input class="practice-input" id="p4" placeholder="so / such" oninput="checkPractice('p4','such','fb4')"/>
+      <div class="fb-msg" id="fb4"></div>
+      <button class="check-btn" onclick="checkPractice('p4','such','fb4')">Check ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 6: QUIZ ===== -->
+<div class="slide" id="slide-6">
+  <div class="section-tag">🧠 Quick Quiz</div>
+  <div class="card">
+    <div class="card-title"><span class="icon">🧠</span> Choose the correct answer</div>
+
+    <!-- Q1 -->
+    <div class="mcq-item">
+      <div class="mcq-q">1. He's wearing a winter coat. It _____ be cold outside.</div>
+      <div class="mcq-options">
+        <div class="mcq-opt" onclick="pickMCQ(this,'wrong','q1')">❌ can't</div>
+        <div class="mcq-opt" onclick="pickMCQ(this,'correct','q1')">✅ must</div>
+        <div class="mcq-opt" onclick="pickMCQ(this,'wrong','q1')">❌ so</div>
+      </div>
+      <div class="mcq-feedback" id="q1fb"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="mcq-item">
+      <div class="mcq-q">2. That _____ be true! I saw him in the office five minutes ago.</div>
+      <div class="mcq-options">
+        <div class="mcq-opt" onclick="pickMCQ(this,'correct','q2')">✅ can't</div>
+        <div class="mcq-opt" onclick="pickMCQ(this,'wrong','q2')">❌ must</div>
+        <div class="mcq-opt" onclick="pickMCQ(this,'wrong','q2')">❌ such</div>
+      </div>
+      <div class="mcq-feedback" id="q2fb"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="mcq-item">
+      <div class="mcq-q">3. She is _____ kind that everyone loves her. (adjective only — no noun)</div>
+      <div class="mcq-options">
+        <div class="mcq-opt" onclick="pickMCQ(this,'wrong','q3')">❌ such</div>
+        <div class="mcq-opt" onclick="pickMCQ(this,'correct','q3')">✅ so</div>
+        <div class="mcq-opt" onclick="pickMCQ(this,'wrong','q3')">❌ must</div>
+      </div>
+      <div class="mcq-feedback" id="q3fb"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="mcq-item">
+      <div class="mcq-q">4. It was _____ a long trip that we all fell asleep.</div>
+      <div class="mcq-options">
+        <div class="mcq-opt" onclick="pickMCQ(this,'wrong','q4')">❌ so</div>
+        <div class="mcq-opt" onclick="pickMCQ(this,'correct','q4')">✅ such</div>
+        <div class="mcq-opt" onclick="pickMCQ(this,'wrong','q4')">❌ can't</div>
+      </div>
+      <div class="mcq-feedback" id="q4fb"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 7: EXERCISES FROM BOOK ===== -->
+<div class="slide" id="slide-7">
+  <div class="section-tag">📋 Book Exercises — Page 119</div>
+
+  <!-- Exercise A -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🅰️</span> Exercise A: Complete with <b>can't</b> or <b>must</b></div>
+
+    <div class="ex-item">
+      <div class="ex-q"><span class="ex-num">1.</span> Badria couldn't sleep last night. She <input class="blank-input" id="a1" placeholder="?"/> be tired.</div>
+      <div class="ex-actions">
+        <button class="show-ans-btn" onclick="toggleAns('a1ans',this)">👁️ Show Answer</button>
+      </div>
+      <div class="answer-reveal" id="a1ans">✅ <b>must</b> — She didn't sleep, so logically she must be tired.</div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-q"><span class="ex-num">2.</span> Ahmed's just joking. He <input class="blank-input" id="a2" placeholder="?"/> be serious.</div>
+      <div class="ex-actions">
+        <button class="show-ans-btn" onclick="toggleAns('a2ans',this)">👁️ Show Answer</button>
+      </div>
+      <div class="answer-reveal" id="a2ans">✅ <b>can't</b> — He is joking, so he can't be serious.</div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-q"><span class="ex-num">3.</span> You haven't eaten all day. You <input class="blank-input" id="a3" placeholder="?"/> be hungry.</div>
+      <div class="ex-actions">
+        <button class="show-ans-btn" onclick="toggleAns('a3ans',this)">👁️ Show Answer</button>
+      </div>
+      <div class="answer-reveal" id="a3ans">✅ <b>must</b> — Not eating all day means you must be hungry.</div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-q"><span class="ex-num">4.</span> Look how tall he is! He <input class="blank-input" id="a4" placeholder="?"/> be over two meters tall.</div>
+      <div class="ex-actions">
+        <button class="show-ans-btn" onclick="toggleAns('a4ans',this)">👁️ Show Answer</button>
+      </div>
+      <div class="answer-reveal" id="a4ans">✅ <b>must</b> — He looks very tall, so he must be over two meters.</div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-q"><span class="ex-num">5.</span> It <input class="blank-input" id="a5" placeholder="?"/> be six o'clock already. Where does the time go?</div>
+      <div class="ex-actions">
+        <button class="show-ans-btn" onclick="toggleAns('a5ans',this)">👁️ Show Answer</button>
+      </div>
+      <div class="answer-reveal" id="a5ans">✅ <b>must</b> — Expressing surprise/certainty about the time.</div>
+    </div>
+
+    <div class="ex-item">
+      <div class="ex-q"><span class="ex-num">6.</span> That's impossible. It <input class="blank-input" id="a6" placeholder="?"/> be true.</div>
+      <div class="ex-actions">
+        <button class="show-ans-btn" onclick="toggleAns('a6ans',this)">👁️ Show Answer</button>
+      </div>
+      <div class="answer-reveal" id="a6ans">✅ <b>can't</b> — "Impossible" means we use can't.</div>
+    </div>
+
+    <!-- All answers A -->
+    <div class="all-answers-box">
+      <h4>📋 All Answers — Exercise A</h4>
+      <button class="show-ans-btn" onclick="toggleAllAns('allA',this)">👁️ Show All Answers</button>
+      <div class="all-answers-content" id="allA">
+        <div class="all-answers-grid">
+          <div class="ans-chip">1. must</div>
+          <div class="ans-chip">2. can't</div>
+          <div class="ans-chip">3. must</div>
+          <div class="ans-chip">4. must</div>
+          <div class="ans-chip">5. must</div>
+          <div class="ans-chip">6. can't</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exercise B -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🅱️</span> Exercise B: Complete with <b>can't, must, so,</b> or <b>such</b></div>
+    <div class="note-box">📌 Complete the conversation with can't, must, so, or such. Then practice with a partner.</div>
+
+    <div style="background:var(--surface2);border-radius:12px;padding:16px;margin-bottom:14px;font-size:13.5px;line-height:2.1;" id="convBox">
+      <b style="color:var(--primary);">A:</b> This <span style="color:var(--accent);font-weight:800;">(1)</span> <input class="blank-input" id="b1" placeholder="?"/> be your apartment!<br/>
+      <b style="color:var(--primary);">B:</b> Don't you recognize it?<br/>
+      <b style="color:var(--primary);">A:</b> Not at all. It was <span style="color:var(--accent);font-weight:800;">(2)</span> <input class="blank-input" id="b2" placeholder="?"/> run down that I wondered why you wanted to buy it.<br/>
+      <b style="color:var(--primary);">B:</b> Well, it was <span style="color:var(--accent);font-weight:800;">(3)</span> <input class="blank-input" id="b3" placeholder="?"/> cheap that I could afford it. And it has <span style="color:var(--accent);font-weight:800;">(4)</span> <input class="blank-input" id="b4" placeholder="?"/> a beautiful view of the harbor.<br/>
+      <b style="color:var(--primary);">A:</b> But…<br/>
+      <b style="color:var(--primary);">B:</b> I know. It was <span style="color:var(--accent);font-weight:800;">(5)</span> <input class="blank-input" id="b5" placeholder="?"/> a mess that I couldn't stand it. The paint was <span style="color:var(--accent);font-weight:800;">(6)</span> <input class="blank-input" id="b6" placeholder="?"/> old that it was coming off the walls, and the floors… There were just <span style="color:var(--accent);font-weight:800;">(7)</span> <input class="blank-input" id="b7" placeholder="?"/> many things to fix that I took some time off work to renovate.<br/>
+      <b style="color:var(--primary);">A:</b> You did this yourself? You <span style="color:var(--accent);font-weight:800;">(8)</span> <input class="blank-input" id="b8" placeholder="?"/> be joking. You did <span style="color:var(--accent);font-weight:800;">(9)</span> <input class="blank-input" id="b9" placeholder="?"/> a good job that it looks professional.<br/>
+      <b style="color:var(--primary);">B:</b> Thanks. I just have one complaint. I worked <span style="color:var(--accent);font-weight:800;">(10)</span> <input class="blank-input" id="b10" placeholder="?"/> hard that I'm exhausted. I need another week off to rest.
+    </div>
+
+    <!-- Individual reveals for B -->
+    <div class="ex-actions" style="flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+      <button class="show-ans-btn" onclick="toggleAns('b1ans',this)">👁️ (1)</button>
+      <button class="show-ans-btn" onclick="toggleAns('b2ans',this)">👁️ (2)</button>
+      <button class="show-ans-btn" onclick="toggleAns('b3ans',this)">👁️ (3)</button>
+      <button class="show-ans-btn" onclick="toggleAns('b4ans',this)">👁️ (4)</button>
+      <button class="show-ans-btn" onclick="toggleAns('b5ans',this)">👁️ (5)</button>
+      <button class="show-ans-btn" onclick="toggleAns('b6ans',this)">👁️ (6)</button>
+      <button class="show-ans-btn" onclick="toggleAns('b7ans',this)">👁️ (7)</button>
+      <button class="show-ans-btn" onclick="toggleAns('b8ans',this)">👁️ (8)</button>
+      <button class="show-ans-btn" onclick="toggleAns('b9ans',this)">👁️ (9)</button>
+      <button class="show-ans-btn" onclick="toggleAns('b10ans',this)">👁️ (10)</button>
+    </div>
+
+    <div class="answer-reveal" id="b1ans">✅ (1) <b>must</b> — The speaker is certain / sure about it.</div>
+    <div class="answer-reveal" id="b2ans">✅ (2) <b>so</b> — so + adjective (run down) + that</div>
+    <div class="answer-reveal" id="b3ans">✅ (3) <b>so</b> — so + adjective (cheap) + that</div>
+    <div class="answer-reveal" id="b4ans">✅ (4) <b>such</b> — such + a + adjective (beautiful) + noun (view) + that</div>
+    <div class="answer-reveal" id="b5ans">✅ (5) <b>such</b> — such + a + noun phrase (mess) + that</div>
+    <div class="answer-reveal" id="b6ans">✅ (6) <b>so</b> — so + adjective (old) + that</div>
+    <div class="answer-reveal" id="b7ans">✅ (7) <b>so</b> — so + many + noun (things) + that</div>
+    <div class="answer-reveal" id="b8ans">✅ (8) <b>must</b> — Expressing certainty / logical conclusion</div>
+    <div class="answer-reveal" id="b9ans">✅ (9) <b>such</b> — such + a + adjective (good) + noun (job) + that</div>
+    <div class="answer-reveal" id="b10ans">✅ (10) <b>so</b> — so + adverb (hard) + that</div>
+
+    <!-- All answers B -->
+    <div class="all-answers-box">
+      <h4>📋 All Answers — Exercise B</h4>
+      <button class="show-ans-btn" onclick="toggleAllAns('allB',this)">👁️ Show All Answers</button>
+      <div class="all-answers-content" id="allB">
+        <div class="all-answers-grid">
+          <div class="ans-chip">1. must</div>
+          <div class="ans-chip">2. so</div>
+          <div class="ans-chip">3. so</div>
+          <div class="ans-chip">4. such</div>
+          <div class="ans-chip">5. such</div>
+          <div class="ans-chip">6. so</div>
+          <div class="ans-chip">7. so</div>
+          <div class="ans-chip">8. must</div>
+          <div class="ans-chip">9. such</div>
+          <div class="ans-chip">10. so</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 8: SUMMARY ===== -->
+<div class="slide" id="slide-8">
+  <div class="section-tag">📌 Summary</div>
+  <div class="card">
+    <div class="card-title"><span class="icon">📌</span> What We Learned Today</div>
+    <div class="summary-row">
+      <div class="sum-key">must</div>
+      <div class="sum-val">Used when you are <b>sure</b> something is true. (certainty / deduction)<br/><i style="color:var(--text-sub);">She must be tired. (أنا متأكد أنها متعبة)</i></div>
+    </div>
+    <div class="summary-row">
+      <div class="sum-key">can't</div>
+      <div class="sum-val">Used when you think something is <b>impossible</b>.<br/><i style="color:var(--text-sub);">He can't be serious. (مستحيل يكون جاداً)</i></div>
+    </div>
+    <div class="summary-row">
+      <div class="sum-key">so…that</div>
+      <div class="sum-val"><b>so</b> + adj/adv + <b>that</b> — OR — <b>so</b> + many/much + noun + <b>that</b><br/><i style="color:var(--text-sub);">She is so kind that everyone loves her.</i></div>
+    </div>
+    <div class="summary-row">
+      <div class="sum-key">such…that</div>
+      <div class="sum-val"><b>such</b> + a/an + adj + noun + <b>that</b><br/><i style="color:var(--text-sub);">It was such a difficult test that no one passed.</i></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🔑</span> Quick Rule Reminder</div>
+    <div class="note-box">
+      🔵 <b>so</b> = before adjective / adverb / many / much<br/>
+      🟣 <b>such</b> = before (a/an) + adjective + noun<br/>
+      🟢 <b>must</b> = I'm sure it's true (certainty)<br/>
+      🔴 <b>can't</b> = It's impossible
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 9: HOMEWORK ===== -->
+<div class="slide" id="slide-9">
+  <div class="section-tag">📝 Homework / الواجب</div>
+  <div class="card">
+    <div class="card-title"><span class="icon">📝</span> Homework — Page 237</div>
+    <div class="note-box">📌 Complete the exercises on page 237 — Reading: "Living with a College Roommate and Enjoying It"</div>
+    <div class="hw-img-wrap">
+      <img src="/mnt/user-data/uploads/1775814638557_image.png" alt="Homework Page 237" onerror="this.style.display='none';document.getElementById('hwFallback').style.display='block'"/>
+    </div>
+    <div id="hwFallback" style="display:none;padding:16px;color:var(--text-sub);font-size:13px;text-align:center;">📖 Please refer to page 237 in your textbook.</div>
+
+    <div class="card-title" style="margin-top:16px;"><span class="icon">❓</span> Answer these questions after reading (page 237):</div>
+    <ol style="padding-left:18px;font-size:14px;line-height:2.2;color:var(--text);">
+      <li>What happened to the college students who had problems with their roommates?</li>
+      <li>What should you do before you become roommates with a friend?</li>
+      <li>What should you do before you become roommates with someone that you don't know?</li>
+      <li>What are some things you and a roommate should make rules about?</li>
+    </ol>
+
+    <div class="all-answers-box" style="margin-top:16px;">
+      <h4>📋 Answer Key — Page 237</h4>
+      <button class="show-ans-btn" onclick="toggleAllAns('hwAnswers',this)">👁️ Show Model Answers</button>
+      <div class="all-answers-content" id="hwAnswers">
+        <div style="font-size:13.5px;line-height:1.9;padding-top:10px;">
+          <p style="margin-bottom:8px;"><b>1.</b> They were not happy at school and got sick more often than other students.</p>
+          <p style="margin-bottom:8px;"><b>2.</b> You should discuss the situation carefully with your friend before you decide to live together.</p>
+          <p style="margin-bottom:8px;"><b>3.</b> You should talk to your potential roommate and be honest about your habits and the things that irritate you.</p>
+          <p><b>4.</b> You should make rules about sharing chores, sharing food, having guests, and making noise.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 10: CHALLENGE ===== -->
+<div class="slide" id="slide-10">
+  <div class="section-tag">🌟 Challenge Question</div>
+  <div class="card">
+    <div class="card-title"><span class="icon">🌟</span> Think & Write</div>
+    <p style="font-size:14px;line-height:1.8;margin-bottom:14px;">
+      Look at the picture. A person is walking in the rain without an umbrella and is shivering.<br/>
+      Write <b>2 sentences</b> using <b>must/can't</b> and <b>2 sentences</b> using <b>so…that / such…that</b> about this situation.
+    </p>
+    <div class="note-box">💡 Example starter: "She must be cold. It can't be comfortable. It is so cold that…"</div>
+    <textarea class="challenge-input" id="challengeAnswer" placeholder="Write your sentences here...&#10;1. (must/can't)&#10;2. (must/can't)&#10;3. (so...that)&#10;4. (such...that)"></textarea>
+    <button class="check-challenge-btn" onclick="showChallengeModel()">🔍 See Model Answer</button>
+
+    <div class="answer-reveal" id="challengeModel" style="margin-top:12px;">
+      <b>Model Answer:</b><br/>
+      1. She <b>must</b> be freezing cold. (certainty)<br/>
+      2. She <b>can't</b> be enjoying the rain. (impossibility)<br/>
+      3. It is <b>so</b> cold <b>that</b> she is shivering.<br/>
+      4. It was <b>such</b> a rainy day <b>that</b> nobody went outside.
+    </div>
+  </div>
+
+  <!-- FOOTER — last slide only -->
+  <div class="slide-footer">
+    <div class="footer-brand">eduvorra</div>
+    <div class="footer-name">عبدالحكيم صالح الحسون</div>
+    <div class="footer-made">صُنع بحب في بريدة 💙</div>
+  </div>
+</div>
+
+</div><!-- end slideWrap -->
+
+<script>
+  // ============ STATE ============
+  let currentSlide = 1;
+  const totalSlides = 10;
+  let isDark = false;
+
+  // ============ NAVIGATION ============
+  function navigate(dir) {
+    const next = currentSlide + dir;
+    if (next < 1 || next > totalSlides) return;
+    document.getElementById('slide-' + currentSlide).classList.remove('active');
+    currentSlide = next;
+    document.getElementById('slide-' + currentSlide).classList.add('active');
+    updateNav();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateNav() {
+    document.getElementById('prevBtn').disabled = currentSlide === 1;
+    document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+    document.getElementById('slideCounter').textContent = currentSlide + ' / ' + totalSlides;
+    const pct = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  // Arrow key navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') navigate(1);
+    if (e.key === 'ArrowLeft')  navigate(-1);
+  });
+
+  // ============ THEME TOGGLE ============
+  document.getElementById('themeBtn').addEventListener('click', function() {
+    isDark = !isDark;
+    document.body.classList.toggle('dark', isDark);
+    this.textContent = isDark ? '☀️' : '🌙';
+  });
+
+  // ============ EXAMPLE TOGGLE ============
+  function toggleEx(trigger) {
+    const answer = trigger.nextElementSibling;
+    const isShown = answer.classList.contains('shown');
+    answer.classList.toggle('shown', !isShown);
+    const span = trigger.querySelector('span:last-child');
+    span.textContent = isShown ? '👁️ Show' : '🙈 Hide';
+  }
+
+  // ============ ANSWER REVEAL ============
+  function toggleAns(id, btn) {
+    const el = document.getElementById(id);
+    const shown = el.classList.contains('shown');
+    el.classList.toggle('shown', !shown);
+    btn.textContent = shown ? '👁️ Show Answer' : '🙈 Hide';
+    btn.classList.toggle('hide-btn', !shown);
+  }
+
+  function toggleAllAns(id, btn) {
+    const el = document.getElementById(id);
+    const shown = el.classList.contains('shown');
+    el.classList.toggle('shown', !shown);
+    btn.textContent = shown ? '👁️ Show All Answers' : '🙈 Hide All';
+    btn.classList.toggle('hide-btn', !shown);
+  }
+
+  // ============ MCQ ============
+  const mcqDone = {};
+  function pickMCQ(opt, type, qid) {
+    if (mcqDone[qid]) return;
+    mcqDone[qid] = true;
+    opt.classList.add(type);
+    const fb = document.getElementById(qid + 'fb');
+    if (type === 'correct') {
+      fb.textContent = '✅ Correct! Well done!';
+      fb.style.color = 'var(--correct)';
+    } else {
+      fb.textContent = '❌ Try again. Check the rule!';
+      fb.style.color = 'var(--wrong)';
+    }
+    fb.classList.add('shown');
+    // Lock all options
+    opt.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(o => o.classList.add('locked'));
+  }
+
+  // ============ PRACTICE CHECK ============
+  function checkPractice(inputId, correctAnswer, fbId) {
+    const val = document.getElementById(inputId).value.trim().toLowerCase();
+    const fb = document.getElementById(fbId);
+    if (!val) { fb.className = 'fb-msg'; return; }
+    if (val === correctAnswer.toLowerCase()) {
+      fb.textContent = '✅ Correct! Great job!';
+      fb.className = 'fb-msg ok';
+    } else {
+      fb.textContent = '❌ Try again. Hint: ' + (correctAnswer === 'so' ? 'so + adjective/adverb' : 'such + a/an + adj + noun');
+      fb.className = 'fb-msg err';
+    }
+  }
+
+  // ============ CHALLENGE ============
+  function showChallengeModel() {
+    const el = document.getElementById('challengeModel');
+    el.classList.add('shown');
+  }
+
+  // ============ TTS ============
+  function speak(word) {
+    if ('speechSynthesis' in window) {
+      const u = new SpeechSynthesisUtterance(word);
+      u.lang = 'en-US';
+      speechSynthesis.speak(u);
+    }
+  }
+
+  // ============ INIT ============
+  updateNav();
+</script>
+</body>
+</html>

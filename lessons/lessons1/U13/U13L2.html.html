@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 13 – What Are You Going To Wear There?</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --surface2: #e8eeff;
+    --primary: #3b5bdb;
+    --primary-light: #4c6ef5;
+    --accent: #f76707;
+    --accent2: #0ca678;
+    --text: #1a1d2e;
+    --text2: #495057;
+    --text3: #868e96;
+    --border: #dee2f5;
+    --shadow: rgba(59,91,219,0.12);
+    --card: #ffffff;
+    --header-bg: #3b5bdb;
+    --header-text: #ffffff;
+    --correct: #0ca678;
+    --wrong: #e03131;
+    --quiz-option: #eef0ff;
+    --quiz-hover: #dbe4ff;
+    --radius: 16px;
+    --transition: 0.35s cubic-bezier(.4,0,.2,1);
+  }
+  .dark {
+    --bg: #0d1117;
+    --surface: #161b27;
+    --surface2: #1c2333;
+    --primary: #4c6ef5;
+    --primary-light: #748ffc;
+    --accent: #ff922b;
+    --accent2: #20c997;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --text3: #6e7681;
+    --border: #2d3748;
+    --shadow: rgba(0,0,0,0.4);
+    --card: #1c2333;
+    --header-bg: #1c2333;
+    --header-text: #e6edf3;
+    --quiz-option: #1c2333;
+    --quiz-hover: #2d3748;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); transition: background var(--transition), color var(--transition); }
+  
+  /* THEME TOGGLE */
+  #themeBtn {
+    position: fixed; top: 58px; left: 16px; z-index: 1000;
+    background: var(--surface); border: 2px solid var(--border);
+    border-radius: 50px; padding: 5px 14px; cursor: pointer;
+    font-size: 16px; color: var(--text); transition: all var(--transition);
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+  #themeBtn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  /* HEADER */
+  .slide-header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+    background: var(--header-bg); color: var(--header-text);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 24px; box-shadow: 0 3px 16px rgba(0,0,0,0.18);
+    min-height: 52px;
+  }
+  .slide-header .left { font-size: 13px; font-weight: 700; opacity: .92; line-height: 1.5; }
+  .slide-header .right { font-size: 13px; font-weight: 700; text-align: right; opacity: .92; font-family: 'Tajawal', sans-serif; }
+  .slide-header .left span, .slide-header .right span { display: block; }
+
+  /* MAIN WRAPPER */
+  #app {
+    padding-top: 64px; padding-bottom: 100px;
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  }
+
+  /* SLIDES */
+  .slide { display: none; width: 100%; max-width: 860px; padding: 24px 16px; animation: fadeUp .45s ease both; }
+  .slide.active { display: block; }
+  @keyframes fadeUp { from { opacity:0; transform: translateY(28px); } to { opacity:1; transform: translateY(0); } }
+
+  /* CARDS */
+  .card {
+    background: var(--card); border-radius: var(--radius);
+    box-shadow: 0 4px 24px var(--shadow); padding: 28px;
+    margin-bottom: 20px; border: 1px solid var(--border);
+    transition: background var(--transition);
+  }
+  .card-title {
+    font-size: 20px; font-weight: 900; color: var(--primary);
+    margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+  }
+  .card-title .emoji { font-size: 24px; }
+
+  /* OPENING SLIDE */
+  .opening-slide {
+    min-height: 78vh; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center; gap: 20px;
+  }
+  .opening-badge {
+    background: var(--primary); color: #fff;
+    border-radius: 50px; padding: 8px 22px;
+    font-size: 13px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .opening-title {
+    font-size: clamp(26px, 5vw, 42px); font-weight: 900; color: var(--text);
+    line-height: 1.2;
+  }
+  .opening-arabic {
+    font-family: 'Tajawal', sans-serif; font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 700; color: var(--accent); direction: rtl;
+  }
+  .opening-meta {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .meta-pill {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 50px; padding: 7px 18px; font-size: 13px; font-weight: 700;
+    color: var(--text2);
+  }
+  .opening-decoration {
+    width: 80px; height: 5px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 5px;
+  }
+
+  /* OBJECTIVES */
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .obj-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--surface2); border-radius: 12px; padding: 14px 16px;
+    font-size: 15px; font-weight: 600; color: var(--text);
+    border-left: 4px solid var(--primary);
+  }
+  .obj-list li .ico { font-size: 20px; flex-shrink: 0; }
+
+  /* GRAMMAR TABLE */
+  .grammar-section { margin-bottom: 20px; }
+  .grammar-label {
+    font-size: 13px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--text3); margin-bottom: 10px;
+  }
+  .gram-table {
+    width: 100%; border-collapse: collapse; font-size: 14px; border-radius: 10px; overflow: hidden;
+  }
+  .gram-table th {
+    background: var(--primary); color: #fff; padding: 10px 14px;
+    font-weight: 800; text-align: left;
+  }
+  .gram-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); }
+  .gram-table tr:nth-child(even) td { background: var(--surface2); }
+  .gram-table tr:last-child td { border-bottom: none; }
+  .neg { color: var(--wrong); font-weight: 800; }
+  .pos { color: var(--correct); font-weight: 800; }
+  .bold { font-weight: 800; }
+
+  /* EXAMPLE REVEAL */
+  .example-block {
+    background: var(--surface2); border-radius: 12px; padding: 16px 18px;
+    margin-bottom: 14px; border: 1px solid var(--border);
+  }
+  .example-q { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  .answer-box {
+    display: none; background: var(--primary); color: #fff;
+    border-radius: 10px; padding: 12px 16px; font-size: 15px;
+    font-weight: 700; margin-top: 10px; line-height: 1.6;
+  }
+  .answer-box.shown { display: block; animation: popIn .3s ease both; }
+  @keyframes popIn { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
+  .reveal-btn {
+    background: var(--primary); color: #fff; border: none;
+    border-radius: 50px; padding: 8px 18px; font-size: 13px; font-weight: 800;
+    cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Nunito', sans-serif;
+  }
+  .reveal-btn:hover { background: var(--primary-light); transform: translateY(-1px); }
+  .reveal-btn.hide-btn { background: var(--text3); }
+
+  /* TIME EXPRESSIONS */
+  .time-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  .time-pill {
+    background: var(--accent); color: #fff;
+    border-radius: 50px; padding: 6px 16px; font-size: 14px; font-weight: 800;
+    font-style: italic;
+  }
+
+  /* EXERCISE */
+  .exercise-item {
+    background: var(--surface2); border-radius: 12px; padding: 16px 18px;
+    margin-bottom: 14px; border: 1px solid var(--border);
+  }
+  .exercise-item .q-num { font-size: 12px; font-weight: 900; color: var(--text3); margin-bottom: 6px; }
+  .exercise-item .q-text { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+  .exercise-input {
+    width: 100%; background: var(--surface); border: 2px solid var(--border);
+    border-radius: 10px; padding: 10px 14px; font-size: 15px;
+    font-family: 'Nunito', sans-serif; color: var(--text);
+    transition: border-color .2s;
+  }
+  .exercise-input:focus { outline: none; border-color: var(--primary); }
+
+  /* QUIZ */
+  .quiz-q { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 16px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .quiz-option {
+    background: var(--quiz-option); border: 2px solid var(--border);
+    border-radius: 12px; padding: 13px 18px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all .2s; color: var(--text);
+    font-family: 'Nunito', sans-serif; text-align: left;
+  }
+  .quiz-option:hover { background: var(--quiz-hover); border-color: var(--primary); }
+  .quiz-option.correct { background: #d3f9d8; border-color: var(--correct); color: var(--correct); }
+  .quiz-option.wrong { background: #ffe3e3; border-color: var(--wrong); color: var(--wrong); }
+  .quiz-feedback { font-size: 14px; font-weight: 800; padding: 10px 14px; border-radius: 10px; display: none; }
+  .quiz-feedback.show { display: block; animation: popIn .3s ease; }
+  .quiz-feedback.ok { background: #d3f9d8; color: var(--correct); }
+  .quiz-feedback.no { background: #ffe3e3; color: var(--wrong); }
+
+  /* PROGRESS */
+  #progressBar {
+    position: fixed; bottom: 64px; left: 50%; transform: translateX(-50%);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 50px; padding: 5px 16px; font-size: 12px; font-weight: 800;
+    color: var(--text2); z-index: 900; box-shadow: 0 2px 10px var(--shadow);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .prog-track { width: 120px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width .4s ease; }
+
+  /* NAVIGATION */
+  #navBar {
+    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 14px; z-index: 900;
+  }
+  .nav-btn {
+    background: var(--primary); color: #fff; border: none;
+    border-radius: 50px; padding: 12px 28px; font-size: 15px; font-weight: 800;
+    cursor: pointer; transition: all .2s; box-shadow: 0 4px 14px var(--shadow);
+    font-family: 'Nunito', sans-serif; display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn:hover { background: var(--primary-light); transform: translateY(-2px); }
+  .nav-btn:disabled { background: var(--text3); cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* SECTION HEADER */
+  .sec-header {
+    font-size: 22px; font-weight: 900; color: var(--text);
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 3px solid var(--primary);
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  /* SUMMARY CHIPS */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 14px; }
+  .summary-card {
+    background: var(--surface2); border-radius: 12px; padding: 18px;
+    border: 1px solid var(--border); text-align: center;
+  }
+  .summary-card .s-icon { font-size: 28px; margin-bottom: 8px; }
+  .summary-card .s-title { font-size: 14px; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+  .summary-card .s-body { font-size: 13px; font-weight: 600; color: var(--text2); line-height: 1.6; }
+
+  /* FOOTER */
+  .lesson-footer {
+    text-align: center; padding: 28px 16px 10px;
+    font-size: 13px; color: var(--text3); font-weight: 600;
+    border-top: 1px solid var(--border); margin-top: 10px; line-height: 2;
+  }
+  .lesson-footer .brand { font-size: 18px; font-weight: 900; color: var(--primary); }
+  .lesson-footer .arabic { font-family:'Tajawal',sans-serif; direction:rtl; }
+
+  /* VOCAB TTS */
+  .vocab-row {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    gap: 10px; background: var(--surface2); border-radius: 12px; padding: 12px 16px;
+    margin-bottom: 10px; border: 1px solid var(--border);
+  }
+  .vocab-word { font-size: 16px; font-weight: 900; color: var(--primary); }
+  .vocab-meaning { font-size: 14px; font-weight: 600; color: var(--text2); font-family:'Tajawal',sans-serif; direction:rtl; }
+  .tts-btn {
+    background: var(--primary); color:#fff; border:none; border-radius:50px;
+    padding:6px 14px; font-size:13px; font-weight:800; cursor:pointer;
+    font-family:'Nunito',sans-serif; transition:all .2s; display:flex; align-items:center; gap:5px;
+  }
+  .tts-btn:hover { background:var(--primary-light); }
+
+  /* CHALLENGE */
+  .challenge-box {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: var(--radius); padding: 28px; text-align: center;
+    color: #fff; margin-bottom: 20px;
+  }
+  .challenge-box h3 { font-size: 22px; font-weight: 900; margin-bottom: 10px; }
+  .challenge-box p { font-size: 15px; font-weight: 600; opacity: .92; line-height: 1.7; }
+
+  /* HOMEWORK */
+  .hw-img { width:100%; border-radius:12px; border:2px solid var(--border); margin-top:14px; }
+  .hw-instr {
+    background: var(--accent); color:#fff; border-radius:10px;
+    padding:12px 18px; font-size:15px; font-weight:800; margin-bottom:14px;
+    display:flex; align-items:center; gap:10px;
+  }
+
+  /* PRACTICE FILL */
+  .prac-input {
+    border: none; border-bottom: 2px solid var(--primary);
+    background: transparent; color: var(--text);
+    font-size: 15px; font-family:'Nunito',sans-serif; font-weight:700;
+    width: 260px; outline:none; padding: 2px 4px;
+  }
+
+  /* RESPONSIVE */
+  @media(max-width:600px){
+    .card { padding:18px 14px; }
+    .slide { padding:16px 10px; }
+    .nav-btn { padding:10px 18px; font-size:13px; }
+    .opening-title { font-size:24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="slide-header">
+  <div class="left">
+    <span id="hUnit">Unit 13</span>
+    <span id="hPage">Pages 120–121</span>
+  </div>
+  <div class="right">
+    <span>First Intermediate</span>
+    <span>الفصل الدراسي الثاني</span>
+  </div>
+</div>
+
+<!-- THEME TOGGLE -->
+<button id="themeBtn" onclick="toggleTheme()">🌙</button>
+
+<div id="app">
+
+<!-- ───────── SLIDE 1: OPENING ───────── -->
+<div class="slide active" id="slide-1">
+  <div class="opening-slide">
+    <div class="opening-badge">Super Goal 1 · Unit 13</div>
+    <div class="opening-decoration"></div>
+    <div class="opening-title">Grammar</div>
+    <div class="opening-arabic">قواعد</div>
+    <div class="opening-decoration"></div>
+    <div class="opening-meta">
+      <div class="meta-pill">📖 Pages 120–121</div>
+      <div class="meta-pill">🏫 First Intermediate</div>
+      <div class="meta-pill">📚 Grammar: be + going to</div>
+      <div class="meta-pill">🗓️ Second Term</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── SLIDE 2: OBJECTIVES ───────── -->
+<div class="slide" id="slide-2">
+  <div class="card">
+    <div class="card-title"><span class="emoji">🎯</span> Learning Objectives / أهداف الدرس</div>
+    <ul class="obj-list">
+      <li><span class="ico">✅</span> Use <b>be + going to</b> to talk about future plans (استخدام المستقبل)</li>
+      <li><span class="ico">✅</span> Make <b>affirmative</b> and <b>negative</b> sentences about future clothing</li>
+      <li><span class="ico">✅</span> Form <b>questions</b> and give <b>short answers</b> with going to</li>
+      <li><span class="ico">✅</span> Use <b>future time expressions</b>: tomorrow, next week, next month</li>
+      <li><span class="ico">✅</span> Unscramble sentences &amp; discuss clothing choices for different places</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ───────── SLIDE 3: VOCABULARY ───────── -->
+<div class="slide" id="slide-3">
+  <div class="card">
+    <div class="card-title"><span class="emoji">📘</span> Key Vocabulary / المفردات الأساسية</div>
+    <p style="font-size:13px;color:var(--text3);margin-bottom:16px;font-weight:600;">Click 🔊 to hear pronunciation</p>
+
+    <div class="vocab-row">
+      <div><div class="vocab-word">jeans</div><div class="vocab-meaning">بنطال الجينز</div></div>
+      <button class="tts-btn" onclick="speak('jeans')">🔊 Hear</button>
+    </div>
+    <div class="vocab-row">
+      <div><div class="vocab-word">uniform</div><div class="vocab-meaning">زي موحد / يونيفورم</div></div>
+      <button class="tts-btn" onclick="speak('uniform')">🔊 Hear</button>
+    </div>
+    <div class="vocab-row">
+      <div><div class="vocab-word">sandals</div><div class="vocab-meaning">صندل (حذاء مفتوح)</div></div>
+      <button class="tts-btn" onclick="speak('sandals')">🔊 Hear</button>
+    </div>
+    <div class="vocab-row">
+      <div><div class="vocab-word">sneakers</div><div class="vocab-meaning">حذاء رياضي</div></div>
+      <button class="tts-btn" onclick="speak('sneakers')">🔊 Hear</button>
+    </div>
+    <div class="vocab-row">
+      <div><div class="vocab-word">suit</div><div class="vocab-meaning">بدلة رسمية</div></div>
+      <button class="tts-btn" onclick="speak('suit')">🔊 Hear</button>
+    </div>
+    <div class="vocab-row">
+      <div><div class="vocab-word">tie</div><div class="vocab-meaning">ربطة عنق</div></div>
+      <button class="tts-btn" onclick="speak('tie')">🔊 Hear</button>
+    </div>
+    <div class="vocab-row">
+      <div><div class="vocab-word">shorts</div><div class="vocab-meaning">شورت (بنطال قصير)</div></div>
+      <button class="tts-btn" onclick="speak('shorts')">🔊 Hear</button>
+    </div>
+    <div class="vocab-row">
+      <div><div class="vocab-word">light clothes</div><div class="vocab-meaning">ملابس خفيفة</div></div>
+      <button class="tts-btn" onclick="speak('light clothes')">🔊 Hear</button>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── SLIDE 4: GRAMMAR EXPLANATION ───────── -->
+<div class="slide" id="slide-4">
+  <div class="card">
+    <div class="card-title"><span class="emoji">📐</span> Grammar: Future — <em>be + going to</em></div>
+    <p style="font-size:14px;color:var(--text2);font-weight:600;margin-bottom:18px;">
+      نستخدم <b>be + going to</b> للتعبير عن خطط المستقبل (future plans).
+    </p>
+
+    <div class="grammar-section">
+      <div class="grammar-label">✅ Affirmative (+)</div>
+      <table class="gram-table">
+        <thead><tr><th>Subject</th><th></th><th>Verb</th></tr></thead>
+        <tbody>
+          <tr><td class="bold">I'm</td><td rowspan="5" class="bold pos">going to</td><td rowspan="5">wear jeans.</td></tr>
+          <tr><td class="bold">You're</td></tr>
+          <tr><td class="bold">He's / She's</td></tr>
+          <tr><td class="bold">We're</td></tr>
+          <tr><td class="bold">They're</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grammar-section">
+      <div class="grammar-label">❌ Negative (–)</div>
+      <table class="gram-table">
+        <thead><tr><th>Subject</th><th></th><th>Verb</th></tr></thead>
+        <tbody>
+          <tr><td class="bold">I'm <span class="neg">not</span></td><td rowspan="5" class="bold pos">going to</td><td rowspan="5">wear jeans.</td></tr>
+          <tr><td class="bold">You <span class="neg">aren't</span></td></tr>
+          <tr><td class="bold">He / She <span class="neg">isn't</span></td></tr>
+          <tr><td class="bold">We <span class="neg">aren't</span></td></tr>
+          <tr><td class="bold">They <span class="neg">aren't</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grammar-section">
+      <div class="grammar-label">❓ Questions (?)</div>
+      <table class="gram-table">
+        <thead><tr><th>Question</th><th>Short Answer (+)</th><th>Short Answer (–)</th></tr></thead>
+        <tbody>
+          <tr><td><b>Are</b> you going to wear jeans?</td><td>Yes, I <b class="pos">am</b>.</td><td>No, I'm <b class="neg">not</b>.</td></tr>
+          <tr><td><b>Is</b> he/she going to wear jeans?</td><td>Yes, he/she <b class="pos">is</b>.</td><td>No, he/she <b class="neg">isn't</b>.</td></tr>
+          <tr><td><b>Are</b> we/they going to wear jeans?</td><td>Yes, we/they <b class="pos">are</b>.</td><td>No, we/they <b class="neg">aren't</b>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grammar-section">
+      <div class="grammar-label">🕐 Time Expressions for the Future</div>
+      <div class="time-pills">
+        <div class="time-pill">tomorrow</div>
+        <div class="time-pill">next week</div>
+        <div class="time-pill">next month</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── SLIDE 5: EXAMPLES ───────── -->
+<div class="slide" id="slide-5">
+  <div class="card">
+    <div class="card-title"><span class="emoji">💡</span> Examples — Click to Reveal</div>
+    <p style="font-size:13px;color:var(--text3);margin-bottom:18px;font-weight:600;">الأمثلة مخفية — اضغط "👁️ Show Answer" لكشف كل إجابة</p>
+
+    <div class="example-block">
+      <div class="example-q">Q: What <b>are you going to wear</b> to school <b>tomorrow</b>?</div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">A: I'm going to wear my uniform.</div>
+    </div>
+
+    <div class="example-block">
+      <div class="example-q">Q: <b>Is</b> she <b>going to go</b> shopping for clothes <b>next week</b>?</div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">A: Yes, she is.</div>
+    </div>
+
+    <div class="example-block">
+      <div class="example-q">Make a negative sentence: He / wear / a suit / tomorrow</div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">He <b>isn't going to wear</b> a suit tomorrow.</div>
+    </div>
+
+    <div class="example-block">
+      <div class="example-q">Q: <b>Are</b> they <b>going to go</b> to the beach <b>next month</b>?</div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">A: No, they aren't.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── SLIDE 6: EXERCISE A (UNSCRAMBLE) ───────── -->
+<div class="slide" id="slide-6">
+  <div class="card">
+    <div class="card-title"><span class="emoji">🔀</span> Exercise A — Unscramble the Sentences</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:18px;font-weight:600;">Rearrange the words to make correct sentences. Click 👁️ to check your answer.</p>
+
+    <div class="example-block">
+      <div class="example-q"><b>1.</b> She / going / a new dress / is / to buy</div>
+      <div style="margin-bottom:8px;"><input class="exercise-input" placeholder="Write your answer here…"/></div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">She is going to buy a new dress.</div>
+    </div>
+
+    <div class="example-block">
+      <div class="example-q"><b>2.</b> jeans / are / to the park / They / to wear / going</div>
+      <div style="margin-bottom:8px;"><input class="exercise-input" placeholder="Write your answer here…"/></div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">They are going to wear jeans to the park.</div>
+    </div>
+
+    <div class="example-block">
+      <div class="example-q"><b>3.</b> a new pair of sneakers / to shop for / going / I'm</div>
+      <div style="margin-bottom:8px;"><input class="exercise-input" placeholder="Write your answer here…"/></div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">I'm going to shop for a new pair of sneakers.</div>
+    </div>
+
+    <div class="example-block">
+      <div class="example-q"><b>4.</b> to wear / sandals / is / to the beach / He / going</div>
+      <div style="margin-bottom:8px;"><input class="exercise-input" placeholder="Write your answer here…"/></div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">He is going to wear sandals to the beach.</div>
+    </div>
+
+    <div class="example-block">
+      <div class="example-q"><b>5.</b> are / for Dad / We / going / a tie / to buy</div>
+      <div style="margin-bottom:8px;"><input class="exercise-input" placeholder="Write your answer here…"/></div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">We are going to buy a tie for Dad.</div>
+    </div>
+
+    <div class="example-block">
+      <div class="example-q"><b>6.</b> to need / going / for work / are / a suit / You</div>
+      <div style="margin-bottom:8px;"><input class="exercise-input" placeholder="Write your answer here…"/></div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">You are going to need a suit for work.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── SLIDE 7: EXERCISE B (ASK & ANSWER) ───────── -->
+<div class="slide" id="slide-7">
+  <div class="card">
+    <div class="card-title"><span class="emoji">💬</span> Exercise B — Ask and Answer</div>
+    <div style="background:var(--surface2);border-radius:12px;padding:16px 18px;margin-bottom:20px;border:1px solid var(--border);">
+      <p style="font-weight:800;font-size:15px;margin-bottom:6px;">Model Dialogue:</p>
+      <p style="font-size:14px;color:var(--text2);font-weight:600;">
+        <b>A:</b> What do you usually wear on a plane?<br>
+        <b>B:</b> I usually wear a T-shirt and jeans.
+      </p>
+    </div>
+    <p style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;">Now ask and answer for each place. Click 👁️ for a suggested answer.</p>
+
+    <div class="example-block">
+      <div class="example-q"><b>1.</b> What do you usually wear <b>at home</b>?</div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Sample Answer</button>
+      <div class="answer-box">I usually wear comfortable clothes / pajamas at home.</div>
+    </div>
+    <div class="example-block">
+      <div class="example-q"><b>2.</b> What do you usually wear <b>to school</b>?</div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Sample Answer</button>
+      <div class="answer-box">I usually wear my school uniform to school.</div>
+    </div>
+    <div class="example-block">
+      <div class="example-q"><b>3.</b> What do you usually wear <b>to a football game</b>?</div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Sample Answer</button>
+      <div class="answer-box">I usually wear jeans and a T-shirt / a sports jersey to a football game.</div>
+    </div>
+    <div class="example-block">
+      <div class="example-q"><b>4.</b> What do you usually wear <b>to the beach</b>?</div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Sample Answer</button>
+      <div class="answer-box">I usually wear light clothes and sandals to the beach.</div>
+    </div>
+    <div class="example-block">
+      <div class="example-q"><b>5.</b> What do you usually wear <b>in cold weather</b>?</div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Sample Answer</button>
+      <div class="answer-box">I usually wear a coat and warm clothes in cold weather.</div>
+    </div>
+    <div class="example-block">
+      <div class="example-q"><b>6.</b> What do you usually wear <b>in hot weather</b>?</div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Sample Answer</button>
+      <div class="answer-box">I usually wear light and loose clothes in hot weather.</div>
+    </div>
+    <div class="example-block">
+      <div class="example-q"><b>7.</b> Your idea! What do YOU wear to a special place?</div>
+      <input class="exercise-input" placeholder="Write your own answer here…" style="margin-top:8px;"/>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── SLIDE 8: EXERCISE C (VACATION) ───────── -->
+<div class="slide" id="slide-8">
+  <div class="card">
+    <div class="card-title"><span class="emoji">🌍</span> Exercise C — Vacation Destinations</div>
+    <div style="background:var(--surface2);border-radius:12px;padding:16px 18px;margin-bottom:20px;border:1px solid var(--border);">
+      <p style="font-weight:800;font-size:15px;margin-bottom:8px;">Model Dialogue — Hussain / Jeddah:</p>
+      <p style="font-size:14px;color:var(--text2);font-weight:600;line-height:1.9;">
+        <b>A:</b> Where is Hussain going to go on vacation?<br>
+        <b>B:</b> He's going to go to Jeddah.<br>
+        <b>A:</b> What's he going to take?<br>
+        <b>B:</b> He's going to take light clothes.
+      </p>
+    </div>
+    <p style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;">Now do the same for each person. Click 👁️ to reveal the answer.</p>
+
+    <div class="example-block">
+      <div class="example-q">🏛️ <b>1. Tom and Sam / Moscow</b><br><small style="color:var(--text3);">Ask: Where are Tom and Sam going to go? What are they going to take?</small></div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">
+        A: Where are Tom and Sam going to go on vacation?<br>
+        B: They're going to go to Moscow.<br>
+        A: What are they going to take?<br>
+        B: They're going to take warm clothes / a heavy coat.
+      </div>
+    </div>
+
+    <div class="example-block">
+      <div class="example-q">🏛️ <b>2. Bob / Mexico</b><br><small style="color:var(--text3);">Ask: Where is Bob going to go? What is he going to take?</small></div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">
+        A: Where is Bob going to go on vacation?<br>
+        B: He's going to go to Mexico.<br>
+        A: What is he going to take?<br>
+        B: He's going to take light clothes and shorts.
+      </div>
+    </div>
+
+    <div class="example-block">
+      <div class="example-q">🌴 <b>3. Mel / Tahiti</b><br><small style="color:var(--text3);">Ask: Where is Mel going to go? What is she going to take?</small></div>
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Answer</button>
+      <div class="answer-box">
+        A: Where is Mel going to go on vacation?<br>
+        B: She's going to go to Tahiti.<br>
+        A: What is she going to take?<br>
+        B: She's going to take light clothes and sandals.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── SLIDE 9: INTERACTIVE QUIZ ───────── -->
+<div class="slide" id="slide-9">
+  <div class="card">
+    <div class="card-title"><span class="emoji">🧩</span> Quick Quiz — Test Yourself!</div>
+    <p style="font-size:13px;color:var(--text3);margin-bottom:20px;font-weight:600;">Choose the best answer for each question.</p>
+
+    <!-- Q1 -->
+    <div class="example-block">
+      <div class="quiz-q">1. She _____ going to wear a dress tomorrow.</div>
+      <div class="quiz-options">
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">are</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct')">is</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">am</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">be</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="example-block">
+      <div class="quiz-q">2. _____ you going to buy new sneakers next week?</div>
+      <div class="quiz-options">
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">Is</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct')">Are</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">Am</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">Were</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="example-block">
+      <div class="quiz-q">3. They _____ going to wear sandals. (negative)</div>
+      <div class="quiz-options">
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">isn't</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct')">aren't</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">not</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">don't</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="example-block">
+      <div class="quiz-q">4. Is he going to wear a suit? — Yes, _____.</div>
+      <div class="quiz-options">
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">he are</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">he isn't</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct')">he is</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">he goes</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="example-block">
+      <div class="quiz-q">5. "Next month" is a _____ time expression.</div>
+      <div class="quiz-options">
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">past</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">present</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct')">future</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">continuous</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="example-block">
+      <div class="quiz-q">6. I _____ going to go shopping tomorrow.</div>
+      <div class="quiz-options">
+        <button class="quiz-option" onclick="checkQ(this,'correct')">'m</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">are</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">is</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong')">isn't</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── SLIDE 10: SUMMARY ───────── -->
+<div class="slide" id="slide-10">
+  <div class="card">
+    <div class="card-title"><span class="emoji">📌</span> Summary / ملخص الدرس</div>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="s-icon">✅</div>
+        <div class="s-title">Affirmative</div>
+        <div class="s-body">Subject + <b>am/is/are</b> + going to + verb<br><em>She's going to wear jeans.</em></div>
+      </div>
+      <div class="summary-card">
+        <div class="s-icon">❌</div>
+        <div class="s-title">Negative</div>
+        <div class="s-body">Subject + <b>am not / isn't / aren't</b> + going to + verb<br><em>He isn't going to wear shorts.</em></div>
+      </div>
+      <div class="summary-card">
+        <div class="s-icon">❓</div>
+        <div class="s-title">Question</div>
+        <div class="s-body"><b>Am/Is/Are</b> + subject + going to + verb?<br><em>Are you going to wear a suit?</em></div>
+      </div>
+      <div class="summary-card">
+        <div class="s-icon">⚡</div>
+        <div class="s-title">Short Answers</div>
+        <div class="s-body">Yes, I <b>am</b>. / No, I'm <b>not</b>.<br>Yes, he <b>is</b>. / No, he <b>isn't</b>.<br>Yes, they <b>are</b>. / No, they <b>aren't</b>.</div>
+      </div>
+      <div class="summary-card">
+        <div class="s-icon">🕐</div>
+        <div class="s-title">Time Words</div>
+        <div class="s-body"><em>tomorrow · next week · next month</em></div>
+      </div>
+      <div class="summary-card">
+        <div class="s-icon">👕</div>
+        <div class="s-title">Vocabulary</div>
+        <div class="s-body">jeans · shorts · sandals · sneakers · suit · tie · uniform · light clothes</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── SLIDE 11: HOMEWORK ───────── -->
+<div class="slide" id="slide-11">
+  <div class="card">
+    <div class="card-title"><span class="emoji">📝</span> Homework / الواجب المنزلي</div>
+    <div class="hw-instr">📌 Complete the exercises on page 242 in your workbook.</div>
+    <p style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:14px;">
+      Look at each pair of photos and write one affirmative sentence and one negative sentence using <b>be + going to</b>.
+    </p>
+
+    <div style="background:var(--surface2);border-radius:12px;padding:16px 18px;margin-bottom:16px;border:1px solid var(--border);">
+      <p style="font-weight:800;font-size:14px;margin-bottom:8px;">📖 Example (from the page):</p>
+      <p style="font-size:14px;color:var(--text2);font-weight:600;">
+        Mark <em>is going to wear jeans.</em><br>
+        He <em>isn't going to wear shorts.</em>
+      </p>
+    </div>
+
+    <div style="background:var(--surface2);border-radius:12px;padding:16px 18px;border:1px solid var(--border);">
+      <p style="font-weight:800;font-size:14px;margin-bottom:12px;">✏️ Your turn — complete for each person:</p>
+      <ol style="font-size:14px;font-weight:700;color:var(--text2);line-height:2.4;padding-left:20px;">
+        <li>Amina and her mother ___________________________<br>&nbsp;&nbsp;They ___________________________</li>
+        <li>Stephanie ___________________________<br>&nbsp;&nbsp;She ___________________________</li>
+        <li>Adnan ___________________________<br>&nbsp;&nbsp;He ___________________________</li>
+        <li>Steve ___________________________<br>&nbsp;&nbsp;He ___________________________</li>
+        <li>Tom ___________________________<br>&nbsp;&nbsp;He ___________________________</li>
+      </ol>
+    </div>
+
+    <div style="margin-top:16px;background:var(--surface2);border-radius:12px;padding:16px 18px;border:1px solid var(--border);">
+      <p style="font-weight:800;font-size:13px;color:var(--accent);margin-bottom:4px;">💡 Tip / نصيحة:</p>
+      <p style="font-size:13px;font-weight:600;color:var(--text2);">
+        Look at the ✅ photo for the affirmative sentence and the ❌ crossed photo for the negative sentence.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── SLIDE 12: CHALLENGE ───────── -->
+<div class="slide" id="slide-12">
+  <div class="challenge-box">
+    <h3>🏆 Challenge Question</h3>
+    <p>Write <b>5 sentences</b> about your plans for <em>next weekend</em>.<br>Use <b>be + going to</b> — at least 2 must be negative!<br><br>
+    <em>اكتب 5 جمل عن خططك لعطلة نهاية الأسبوع القادم باستخدام going to</em></p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="emoji">✍️</span> Write Your Sentences Here</div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <input class="exercise-input" placeholder="1. I'm going to …"/>
+      <input class="exercise-input" placeholder="2. I'm going to …"/>
+      <input class="exercise-input" placeholder="3. I'm not going to …"/>
+      <input class="exercise-input" placeholder="4. I'm not going to …"/>
+      <input class="exercise-input" placeholder="5. I'm going to …"/>
+    </div>
+
+    <div style="margin-top:24px;background:var(--surface2);border-radius:12px;padding:16px 18px;border:1px solid var(--border);">
+      <button class="reveal-btn" onclick="toggleAnswer(this)">👁️ Show Sample Sentences</button>
+      <div class="answer-box">
+        1. I'm going to visit my grandparents next weekend.<br>
+        2. I'm going to play football with my friends.<br>
+        3. I'm not going to watch TV all day.<br>
+        4. I'm not going to wear my school uniform.<br>
+        5. I'm going to buy new sneakers next week.
+      </div>
+    </div>
+
+    <div class="lesson-footer">
+      <div class="brand">eduvorra</div>
+      <div>عبدالحكيم صالح الحسون</div>
+      <div class="arabic">صُنع بحب في بريدة ❤️</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #app -->
+
+<!-- PROGRESS BAR -->
+<div id="progressBar">
+  <span id="slideLabel">1 / 12</span>
+  <div class="prog-track"><div class="prog-fill" id="progFill" style="width:8.33%"></div></div>
+</div>
+
+<!-- NAVIGATION -->
+<div id="navBar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Previous</button>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
+</div>
+
+<script>
+  // ── STATE ──
+  var currentSlide = 1;
+  var totalSlides = 12;
+  var isDark = false;
+
+  // ── THEME ──
+  function toggleTheme(){
+    isDark = !isDark;
+    document.body.classList.toggle('dark', isDark);
+    document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+  }
+
+  // ── NAVIGATION ──
+  function navigate(dir){
+    var next = currentSlide + dir;
+    if(next < 1 || next > totalSlides) return;
+    document.getElementById('slide-' + currentSlide).classList.remove('active');
+    currentSlide = next;
+    var el = document.getElementById('slide-' + currentSlide);
+    el.classList.add('active');
+    // Re-trigger animation
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = '';
+    updateNav();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function updateNav(){
+    document.getElementById('prevBtn').disabled = currentSlide === 1;
+    document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+    document.getElementById('slideLabel').textContent = currentSlide + ' / ' + totalSlides;
+    document.getElementById('progFill').style.width = ((currentSlide / totalSlides) * 100) + '%';
+  }
+
+  // ── KEYBOARD ──
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight') navigate(1);
+    if(e.key === 'ArrowLeft') navigate(-1);
+  });
+
+  // ── REVEAL ANSWERS ──
+  function toggleAnswer(btn){
+    var box = btn.nextElementSibling;
+    if(box.classList.contains('shown')){
+      box.classList.remove('shown');
+      btn.innerHTML = '👁️ Show Answer';
+      btn.classList.remove('hide-btn');
+    } else {
+      box.classList.add('shown');
+      btn.innerHTML = '🙈 Hide';
+      btn.classList.add('hide-btn');
+    }
+  }
+
+  // ── QUIZ ──
+  function checkQ(btn, result){
+    var block = btn.closest('.example-block');
+    var opts = block.querySelectorAll('.quiz-option');
+    var fb = block.querySelector('.quiz-feedback');
+    // Disable all
+    opts.forEach(function(o){ o.disabled = true; o.style.cursor='default'; });
+    btn.classList.add(result);
+    fb.classList.add('show');
+    if(result === 'correct'){
+      fb.classList.add('ok'); fb.classList.remove('no');
+      fb.textContent = '✅ Correct! Well done!';
+    } else {
+      fb.classList.add('no'); fb.classList.remove('ok');
+      fb.textContent = '❌ Try Again! Look at the grammar table.';
+      // Highlight correct
+      opts.forEach(function(o){
+        if(o.getAttribute('onclick').includes("'correct'")) o.classList.add('correct');
+      });
+    }
+  }
+
+  // ── TTS ──
+  function speak(word){
+    if('speechSynthesis' in window){
+      var u = new SpeechSynthesisUtterance(word);
+      u.lang = 'en-US'; u.rate = 0.85; u.pitch = 1;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    }
+  }
+
+  updateNav();
+</script>
+</body>
+</html>

@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 10 – Reading: Who Used My Toothpaste?</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Tajawal:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --surface2: #e8eeff;
+    --primary: #3b5bdb;
+    --primary-light: #748ffc;
+    --accent: #f76707;
+    --accent2: #2f9e44;
+    --text: #1a1f36;
+    --text2: #4a5568;
+    --text3: #718096;
+    --border: #d0d7f0;
+    --shadow: 0 4px 24px rgba(59,91,219,0.10);
+    --radius: 18px;
+    --header-h: 60px;
+    --correct: #2f9e44;
+    --wrong: #e03131;
+    --reveal-bg: #fff9db;
+    --reveal-border: #ffd43b;
+    --card-hover: #eef2ff;
+  }
+  [data-theme="dark"] {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --surface2: #252840;
+    --primary: #748ffc;
+    --primary-light: #a5b4fc;
+    --accent: #ff922b;
+    --accent2: #51cf66;
+    --text: #e8ecff;
+    --text2: #b0bcd4;
+    --text3: #7a8aaa;
+    --border: #2d3355;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --reveal-bg: #2a2510;
+    --reveal-border: #997a00;
+    --card-hover: #1e2240;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; }
+
+  /* ── HEADER ── */
+  #top-bar {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
+    background: var(--surface); border-bottom: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; z-index: 1000; box-shadow: var(--shadow);
+  }
+  .top-left { display: flex; flex-direction: column; }
+  .top-left .unit-label { font-size: 13px; color: var(--text3); font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+  .top-left .page-label { font-size: 12px; color: var(--primary); font-weight: 800; }
+  .top-right { font-size: 13px; font-weight: 800; color: var(--accent); font-family: 'Tajawal', sans-serif; }
+  .top-center { font-size: 13px; font-weight: 700; color: var(--text3); }
+
+  /* Theme toggle */
+  #theme-btn {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 1100;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 50px;
+    width: 46px;
+    height: 46px;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    transition: all .3s;
+  }
+  #theme-btn:hover { background: var(--primary); color: #fff; transform: scale(1.1); }
+
+  /* ── SLIDES ── */
+  #slides-wrapper { padding-top: var(--header-h); min-height: 100vh; }
+  .slide { display: none; min-height: calc(100vh - var(--header-h)); padding: 28px 16px 100px; animation: fadeIn .4s ease; }
+  .slide.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  /* ── PROGRESS ── */
+  #progress-bar-wrap { position: fixed; bottom: 70px; left: 0; right: 0; height: 4px; background: var(--border); z-index: 900; }
+  #progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width .4s; }
+
+  /* ── NAVIGATION ── */
+  #nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 64px;
+    background: var(--surface); border-top: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    z-index: 1000; padding: 0 16px;
+  }
+  .nav-btn {
+    background: var(--primary); color: #fff; border: none;
+    border-radius: 50px; padding: 10px 28px; font-size: 15px; font-weight: 800;
+    cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 6px;
+    font-family: 'Nunito', sans-serif;
+  }
+  .nav-btn:hover { background: var(--accent); transform: scale(1.04); }
+  .nav-btn:disabled { opacity: .35; cursor: default; transform: none; }
+  #slide-counter { font-size: 13px; font-weight: 700; color: var(--text3); min-width: 80px; text-align: center; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface); border-radius: var(--radius); padding: 24px;
+    box-shadow: var(--shadow); border: 1.5px solid var(--border); margin-bottom: 18px;
+    transition: background .3s;
+  }
+  .card:hover { background: var(--card-hover); }
+  .card-title {
+    font-size: 20px; font-weight: 900; color: var(--primary); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title .icon { font-size: 22px; }
+
+  /* ── OPENING SLIDE ── */
+  .opening-wrap {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: calc(100vh - 140px); text-align: center; gap: 20px;
+  }
+  .opening-unit-badge {
+    background: var(--primary); color: #fff; font-size: 14px; font-weight: 800;
+    padding: 6px 20px; border-radius: 50px; letter-spacing: 1px;
+  }
+  .opening-title-en {
+    font-size: clamp(26px, 5vw, 42px); font-weight: 900; color: var(--text);
+    line-height: 1.2;
+  }
+  .opening-title-ar {
+    font-size: 22px; font-weight: 700; color: var(--text2); font-family: 'Tajawal', sans-serif;
+  }
+  .opening-sub { font-size: 14px; color: var(--text3); font-weight: 600; }
+  .opening-book { font-size: 13px; color: var(--primary-light); font-weight: 700; }
+  .opening-pages {
+    background: var(--surface2); border-radius: 50px; padding: 8px 24px;
+    font-size: 14px; font-weight: 800; color: var(--accent); border: 2px solid var(--border);
+  }
+  .opening-deco {
+    font-size: 80px; animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  .term-badge {
+    background: var(--accent2); color: #fff; font-size: 13px; font-weight: 800;
+    padding: 5px 18px; border-radius: 50px;
+  }
+
+  /* ── OBJECTIVES ── */
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .obj-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--surface2); border-radius: 12px; padding: 14px 16px;
+    font-size: 15px; font-weight: 700; border: 1.5px solid var(--border);
+    transition: transform .2s;
+  }
+  .obj-item:hover { transform: translateX(6px); }
+  .obj-num {
+    background: var(--primary); color: #fff; width: 28px; height: 28px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 900; flex-shrink: 0;
+  }
+
+  /* ── VOCABULARY ── */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .vocab-card {
+    background: var(--surface2); border-radius: 14px; padding: 16px;
+    border: 1.5px solid var(--border); display: flex; flex-direction: column; gap: 8px;
+  }
+  .vocab-word { font-size: 18px; font-weight: 900; color: var(--primary); }
+  .vocab-meaning { font-size: 13px; color: var(--text2); font-weight: 600; }
+  .vocab-ar { font-size: 14px; color: var(--accent); font-family: 'Tajawal', sans-serif; font-weight: 700; }
+  .tts-btn {
+    background: var(--primary); color: #fff; border: none; border-radius: 50px;
+    padding: 6px 14px; font-size: 12px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 5px; width: fit-content;
+    font-family: 'Nunito', sans-serif; transition: background .2s;
+  }
+  .tts-btn:hover { background: var(--accent); }
+
+  /* ── READING TEXT ── */
+  .reading-item {
+    background: var(--surface2); border-radius: 10px; padding: 12px 16px;
+    font-size: 14px; color: var(--text); border-left: 4px solid var(--primary);
+    margin-bottom: 8px; line-height: 1.6; font-weight: 600;
+  }
+  .reading-item:nth-child(even) { border-left-color: var(--accent); }
+
+  /* ── REVEAL SYSTEM ── */
+  .reveal-wrap { margin-top: 10px; }
+  .reveal-btn {
+    background: var(--primary); color: #fff; border: none; border-radius: 50px;
+    padding: 8px 20px; font-size: 13px; font-weight: 800; cursor: pointer;
+    font-family: 'Nunito', sans-serif; transition: all .2s; display: inline-flex;
+    align-items: center; gap: 6px;
+  }
+  .reveal-btn:hover { background: var(--accent); }
+  .answer-box {
+    display: none; margin-top: 10px;
+    background: var(--reveal-bg); border: 2px solid var(--reveal-border);
+    border-radius: 12px; padding: 14px 16px; font-size: 14px; font-weight: 700;
+    color: var(--text); animation: fadeIn .3s ease;
+  }
+  .answer-box.visible { display: block; }
+  .hide-btn {
+    background: var(--text3); color: #fff; border: none; border-radius: 50px;
+    padding: 6px 14px; font-size: 12px; font-weight: 800; cursor: pointer;
+    font-family: 'Nunito', sans-serif; margin-top: 8px; display: inline-flex;
+    align-items: center; gap: 5px;
+  }
+  .hide-btn:hover { background: var(--wrong); }
+
+  /* All answers box */
+  .all-answers-section {
+    margin-top: 24px; border-radius: var(--radius);
+    border: 2px dashed var(--reveal-border); padding: 20px;
+    background: var(--reveal-bg);
+  }
+  .all-answers-title {
+    font-size: 15px; font-weight: 900; color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .all-answers-content { display: none; animation: fadeIn .3s ease; }
+  .all-answers-content.visible { display: block; }
+  .ans-row { font-size: 14px; font-weight: 700; color: var(--text); padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .ans-row:last-child { border-bottom: none; }
+  .ans-label { color: var(--text3); font-size: 13px; }
+
+  /* ── MCQ ── */
+  .mcq-wrap { display: flex; flex-direction: column; gap: 18px; }
+  .mcq-item { background: var(--surface); border-radius: 14px; padding: 18px; border: 1.5px solid var(--border); }
+  .mcq-q { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 12px; }
+  .mcq-options { display: flex; flex-direction: column; gap: 8px; }
+  .mcq-opt {
+    background: var(--surface2); border: 2px solid var(--border); border-radius: 10px;
+    padding: 10px 16px; font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: all .2s; text-align: left; width: 100%; font-family: 'Nunito', sans-serif;
+    color: var(--text);
+  }
+  .mcq-opt:hover { border-color: var(--primary); background: var(--card-hover); }
+  .mcq-opt.correct { background: #d3f9d8; border-color: var(--correct); color: var(--correct); }
+  .mcq-opt.wrong { background: #ffe3e3; border-color: var(--wrong); color: var(--wrong); }
+  .mcq-feedback { font-size: 13px; font-weight: 800; margin-top: 10px; padding: 8px 14px; border-radius: 8px; display: none; }
+  .mcq-feedback.show { display: block; }
+  .mcq-feedback.ok { background: #d3f9d8; color: var(--correct); }
+  .mcq-feedback.no { background: #ffe3e3; color: var(--wrong); }
+
+  /* ── EXERCISES ── */
+  .ex-section { margin-bottom: 28px; }
+  .ex-title {
+    font-size: 16px; font-weight: 900; color: var(--accent); margin-bottom: 14px;
+    padding-bottom: 8px; border-bottom: 2px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .match-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .match-num { font-size: 15px; font-weight: 900; color: var(--primary); min-width: 22px; }
+  .match-word { font-size: 14px; font-weight: 800; color: var(--text); background: var(--surface2); padding: 6px 14px; border-radius: 8px; border: 1.5px solid var(--border); }
+  .match-select {
+    border: 2px solid var(--border); border-radius: 8px; padding: 6px 12px;
+    font-size: 14px; font-weight: 700; background: var(--surface); color: var(--text);
+    cursor: pointer; font-family: 'Nunito', sans-serif; transition: border-color .2s;
+  }
+  .match-select:focus { border-color: var(--primary); outline: none; }
+  .match-select.correct-sel { border-color: var(--correct); background: #d3f9d8; color: var(--correct); }
+  .match-select.wrong-sel { border-color: var(--wrong); background: #ffe3e3; }
+
+  .tf-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .tf-num { font-size: 14px; font-weight: 900; color: var(--primary); min-width: 22px; padding-top: 2px; }
+  .tf-q { font-size: 14px; font-weight: 700; color: var(--text); flex: 1; line-height: 1.5; }
+  .tf-btns { display: flex; gap: 6px; margin-top: 6px; }
+  .tf-btn {
+    border: 2px solid var(--border); border-radius: 8px; padding: 5px 14px;
+    font-size: 13px; font-weight: 800; cursor: pointer; font-family: 'Nunito', sans-serif;
+    background: var(--surface2); color: var(--text); transition: all .2s;
+  }
+  .tf-btn:hover { border-color: var(--primary); }
+  .tf-btn.sel-correct { background: #d3f9d8; border-color: var(--correct); color: var(--correct); }
+  .tf-btn.sel-wrong { background: #ffe3e3; border-color: var(--wrong); color: var(--wrong); }
+  .tf-feedback { font-size: 12px; font-weight: 800; margin-top: 4px; display: none; }
+  .tf-feedback.show { display: block; }
+
+  .expr-input {
+    width: 100%; border: 2px solid var(--border); border-radius: 10px;
+    padding: 10px 14px; font-size: 14px; font-weight: 700; background: var(--surface);
+    color: var(--text); font-family: 'Nunito', sans-serif; margin-bottom: 10px;
+    transition: border-color .2s;
+  }
+  .expr-input:focus { border-color: var(--primary); outline: none; }
+
+  .check-btn {
+    background: var(--accent2); color: #fff; border: none; border-radius: 50px;
+    padding: 9px 22px; font-size: 14px; font-weight: 800; cursor: pointer;
+    font-family: 'Nunito', sans-serif; transition: background .2s;
+  }
+  .check-btn:hover { background: var(--primary); }
+
+  /* ── SUMMARY ── */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  .sum-card {
+    background: var(--surface2); border-radius: 14px; padding: 16px;
+    border: 1.5px solid var(--border); text-align: center; font-size: 14px; font-weight: 700;
+  }
+  .sum-card .sum-icon { font-size: 28px; margin-bottom: 8px; }
+  .sum-card .sum-label { color: var(--text3); font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+
+  /* ── CHALLENGE ── */
+  .challenge-box {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: var(--radius); padding: 28px; color: #fff; text-align: center;
+  }
+  .challenge-box .ch-icon { font-size: 48px; margin-bottom: 12px; }
+  .challenge-box h2 { font-size: 22px; font-weight: 900; margin-bottom: 10px; }
+  .challenge-box p { font-size: 15px; opacity: .9; margin-bottom: 18px; line-height: 1.6; }
+  .challenge-input {
+    width: 100%; border: none; border-radius: 12px; padding: 12px 16px;
+    font-size: 15px; font-weight: 700; font-family: 'Nunito', sans-serif;
+    background: rgba(255,255,255,0.2); color: #fff; backdrop-filter: blur(4px);
+    margin-bottom: 10px;
+  }
+  .challenge-input::placeholder { color: rgba(255,255,255,0.6); }
+  .challenge-input:focus { outline: 2px solid #fff; }
+  .ch-reveal-btn {
+    background: #fff; color: var(--primary); border: none; border-radius: 50px;
+    padding: 10px 24px; font-size: 14px; font-weight: 900; cursor: pointer;
+    font-family: 'Nunito', sans-serif; transition: transform .2s;
+  }
+  .ch-reveal-btn:hover { transform: scale(1.05); }
+  .ch-answer-box {
+    display: none; margin-top: 14px; background: rgba(255,255,255,0.15);
+    border-radius: 12px; padding: 14px; font-size: 14px; font-weight: 700;
+    border: 2px solid rgba(255,255,255,0.4); line-height: 1.6;
+  }
+  .ch-answer-box.visible { display: block; }
+
+  /* ── FOOTER (last slide only) ── */
+  .footer-area { margin-top: 40px; padding: 28px; text-align: center; }
+  .footer-brand { font-size: 20px; font-weight: 900; color: var(--primary); letter-spacing: 1px; }
+  .footer-name { font-size: 15px; font-weight: 700; color: var(--text2); font-family: 'Tajawal', sans-serif; margin-top: 4px; }
+  .footer-love { font-size: 13px; color: var(--text3); font-family: 'Tajawal', sans-serif; margin-top: 4px; }
+
+  /* ── SLIDE TITLE ── */
+  .slide-title {
+    font-size: clamp(20px, 4vw, 28px); font-weight: 900; color: var(--primary);
+    margin-bottom: 22px; display: flex; align-items: center; gap: 10px;
+    padding-bottom: 12px; border-bottom: 3px solid var(--border);
+  }
+  .slide-title .slide-icon { font-size: 26px; }
+
+  /* ── MAX WIDTH ── */
+  .slide-inner { max-width: 820px; margin: 0 auto; }
+
+  /* ── PRACTICE ── */
+  .practice-item { background: var(--surface2); border-radius: 12px; padding: 16px; margin-bottom: 14px; border: 1.5px solid var(--border); }
+  .practice-q { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 10px; line-height: 1.5; }
+  .practice-input {
+    width: 100%; border: 2px solid var(--border); border-radius: 10px;
+    padding: 10px 14px; font-size: 14px; font-weight: 700; background: var(--surface);
+    color: var(--text); font-family: 'Nunito', sans-serif; transition: border-color .2s;
+  }
+  .practice-input:focus { border-color: var(--primary); outline: none; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .vocab-grid { grid-template-columns: 1fr 1fr; }
+    .nav-btn { padding: 10px 18px; font-size: 14px; }
+    .slide { padding: 20px 12px 90px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="top-bar">
+  <div class="top-left">
+    <span class="unit-label">Unit 10 · Who Used My Toothpaste?</span>
+    <span class="page-label">Pages 116 – 117</span>
+  </div>
+  <div class="top-center" id="top-slide-title">Opening</div>
+  <div class="top-right">Third Intermediate</div>
+</div>
+
+<!-- THEME TOGGLE -->
+<button id="theme-btn" onclick="toggleTheme()" title="Toggle dark/light mode">🌙</button>
+
+<!-- SLIDES -->
+<div id="slides-wrapper">
+
+  <!-- ══════════════════════════════════
+       SLIDE 1: OPENING
+  ══════════════════════════════════ -->
+  <div class="slide active" id="slide-1" data-title="Welcome">
+    <div class="slide-inner">
+      <div class="opening-wrap">
+        <div class="opening-deco">📚</div>
+        <div class="opening-unit-badge">UNIT 10</div>
+        <div class="opening-title-en">Who Used My Toothpaste?<br><span style="font-size:.65em;color:var(--text2)">Reading</span></div>
+        <div class="opening-title-ar">قراءة – الشكاوى</div>
+        <div class="opening-pages">📄 Pages 116 – 117</div>
+        <div class="term-badge">🗓 Second Term — الفصل الدراسي الثاني</div>
+        <div class="opening-book">Super Goal 3 · Third Intermediate</div>
+        <div class="opening-sub">Let's explore the world of <strong>complaints!</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 2: OBJECTIVES
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-2" data-title="Objectives">
+    <div class="slide-inner">
+      <div class="slide-title"><span class="slide-icon">🎯</span> Lesson Objectives</div>
+      <ul class="obj-list">
+        <li class="obj-item"><div class="obj-num">1</div> Read and understand a forum of complaints about irritating behaviors.</li>
+        <li class="obj-item"><div class="obj-num">2</div> Match two-word verbs (phrasal verbs) with their correct meanings.</li>
+        <li class="obj-item"><div class="obj-num">3</div> Identify expressions that mean <em>"to irritate."</em></li>
+        <li class="obj-item"><div class="obj-num">4</div> Determine whether statements about the forum are <strong>True</strong> or <strong>False</strong>.</li>
+        <li class="obj-item"><div class="obj-num">5</div> Discuss and share personal opinions about things that annoy you.</li>
+      </ul>
+      <div class="card" style="margin-top:20px">
+        <div class="card-title"><span class="icon">💡</span> Warm-Up – Before Reading</div>
+        <p style="font-size:14px;font-weight:600;color:var(--text2);line-height:1.7">
+          Think of <strong>three things</strong> that other people do that irritate you the most.<br>
+          Compare your list with a partner. What do you have in common?
+        </p>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+          <input class="practice-input" style="flex:1;min-width:180px" placeholder="Thing 1: e.g. talking loudly on the phone…" />
+          <input class="practice-input" style="flex:1;min-width:180px" placeholder="Thing 2: …" />
+          <input class="practice-input" style="flex:1;min-width:180px" placeholder="Thing 3: …" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 3: VOCABULARY
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-3" data-title="Vocabulary">
+    <div class="slide-inner">
+      <div class="slide-title"><span class="slide-icon">📖</span> Key Vocabulary</div>
+      <div class="vocab-grid">
+        <!-- 1 -->
+        <div class="vocab-card">
+          <div class="vocab-word">complaint</div>
+          <div class="vocab-meaning">A statement that something is wrong or unsatisfactory</div>
+          <div class="vocab-ar">شكوى</div>
+          <button class="tts-btn" onclick="speak('complaint')">🔊 Listen</button>
+        </div>
+        <!-- 2 -->
+        <div class="vocab-card">
+          <div class="vocab-word">irritate</div>
+          <div class="vocab-meaning">To annoy or bother someone</div>
+          <div class="vocab-ar">يزعج / يُضايق</div>
+          <button class="tts-btn" onclick="speak('irritate')">🔊 Listen</button>
+        </div>
+        <!-- 3 -->
+        <div class="vocab-card">
+          <div class="vocab-word">telemarketer</div>
+          <div class="vocab-meaning">Someone who sells products or services by phone</div>
+          <div class="vocab-ar">مسوّق عبر الهاتف</div>
+          <button class="tts-btn" onclick="speak('telemarketer')">🔊 Listen</button>
+        </div>
+        <!-- 4 -->
+        <div class="vocab-card">
+          <div class="vocab-word">escalator</div>
+          <div class="vocab-meaning">Moving stairs in a building</div>
+          <div class="vocab-ar">سلّم كهربائي متحرك</div>
+          <button class="tts-btn" onclick="speak('escalator')">🔊 Listen</button>
+        </div>
+        <!-- 5 -->
+        <div class="vocab-card">
+          <div class="vocab-word">assurance</div>
+          <div class="vocab-meaning">A promise or guarantee</div>
+          <div class="vocab-ar">ضمان / تطمين</div>
+          <button class="tts-btn" onclick="speak('assurance')">🔊 Listen</button>
+        </div>
+        <!-- 6 -->
+        <div class="vocab-card">
+          <div class="vocab-word">insane</div>
+          <div class="vocab-meaning">Causing someone to feel extremely frustrated</div>
+          <div class="vocab-ar">يُجنّن / مجنون</div>
+          <button class="tts-btn" onclick="speak('insane')">🔊 Listen</button>
+        </div>
+        <!-- 7 -->
+        <div class="vocab-card">
+          <div class="vocab-word">salespeople</div>
+          <div class="vocab-meaning">People whose job is to sell things</div>
+          <div class="vocab-ar">مندوبو المبيعات</div>
+          <button class="tts-btn" onclick="speak('salespeople')">🔊 Listen</button>
+        </div>
+        <!-- 8 -->
+        <div class="vocab-card">
+          <div class="vocab-word">interrupt</div>
+          <div class="vocab-meaning">To stop someone from speaking or doing something</div>
+          <div class="vocab-ar">يقاطع</div>
+          <button class="tts-btn" onclick="speak('interrupt')">🔊 Listen</button>
+        </div>
+      </div>
+      <!-- Phrasal Verbs -->
+      <div class="card" style="margin-top:20px">
+        <div class="card-title"><span class="icon">🔗</span> Two-Word Verbs (Phrasal Verbs)</div>
+        <div class="vocab-grid">
+          <div class="vocab-card">
+            <div class="vocab-word">let out</div>
+            <div class="vocab-meaning">to express yourself freely</div>
+            <div class="vocab-ar">يُعبّر عن نفسه بحرية</div>
+            <button class="tts-btn" onclick="speak('let out')">🔊 Listen</button>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">find out</div>
+            <div class="vocab-meaning">to learn / discover</div>
+            <div class="vocab-ar">يكتشف / يعلم</div>
+            <button class="tts-btn" onclick="speak('find out')">🔊 Listen</button>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">clean up</div>
+            <div class="vocab-meaning">to make things neat</div>
+            <div class="vocab-ar">يرتّب / ينظّف</div>
+            <button class="tts-btn" onclick="speak('clean up')">🔊 Listen</button>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">give back</div>
+            <div class="vocab-meaning">to return something</div>
+            <div class="vocab-ar">يُعيد</div>
+            <button class="tts-btn" onclick="speak('give back')">🔊 Listen</button>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">call up</div>
+            <div class="vocab-meaning">to phone</div>
+            <div class="vocab-ar">يتصل بالهاتف</div>
+            <button class="tts-btn" onclick="speak('call up')">🔊 Listen</button>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">give up</div>
+            <div class="vocab-meaning">to let someone have something</div>
+            <div class="vocab-ar">يتنازل / يتخلى</div>
+            <button class="tts-btn" onclick="speak('give up')">🔊 Listen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 4: EXPLANATION
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-4" data-title="Explanation">
+    <div class="slide-inner">
+      <div class="slide-title"><span class="slide-icon">💬</span> Reading Text — "Complaints" Forum</div>
+      <div class="card">
+        <div class="card-title"><span class="icon">📋</span> What Can't You Stand? What Drives You Crazy?</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:14px;font-weight:600">Below are real complaints shared on a forum. Read each one carefully.</p>
+
+        <div class="reading-item">Standing in line at checkout counters at the supermarket.</div>
+        <div class="reading-item">Listening to people talking on their cell phones in restaurants. It's annoying.</div>
+        <div class="reading-item">When people talk on their cell phones and drive.</div>
+        <div class="reading-item">People who use words like <em>cool</em> and <em>stuff</em> all the time. Also, people who use the word <em>like</em> all the time in conversation. The word takes the place of adjectives, nouns, and intelligence.</div>
+        <div class="reading-item">Rushing to the phone and finding out it's a telemarketer who's calling.</div>
+        <div class="reading-item">People who lost weight and now try to control what others eat.</div>
+        <div class="reading-item">People who are always late, and people who are late and don't apologize.</div>
+        <div class="reading-item">When salespeople try to talk you into buying something you don't want or need.</div>
+        <div class="reading-item">People who don't say "please" and "thank you."</div>
+        <div class="reading-item">When people enter a door or an elevator and don't hold it open for the person who is right behind them.</div>
+        <div class="reading-item">I can't stand people who chew with their mouths open.</div>
+        <div class="reading-item">It drives me insane when I call up a company and I get "Press 1 for A, 2 for B, 3 for C," and so on. Or the common assurance "Your call will be answered in the order it was received," and then you have to wait forever while they put you on hold.</div>
+        <div class="reading-item">When people don't give up their subway or bus seats to seniors or to those with disabilities.</div>
+        <div class="reading-item">People who stand in the way of others who want to use an escalator or doorway.</div>
+        <div class="reading-item">People who change the TV channel without asking when someone else is clearly watching.</div>
+        <div class="reading-item">People who stand in someone else's line of sight in front of the TV during the last 30 seconds of any show or game.</div>
+        <div class="reading-item">People who "borrow" stuff without asking and don't give it back.</div>
+        <div class="reading-item">When someone constantly interrupts you while you're speaking.</div>
+        <div class="reading-item">When people leave a pile of dirty dishes in the kitchen for others to clean up.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">🌟</span> Expressions Meaning "To Irritate"</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <span style="background:var(--primary);color:#fff;padding:7px 16px;border-radius:50px;font-size:14px;font-weight:800">can't stand</span>
+          <span style="background:var(--accent);color:#fff;padding:7px 16px;border-radius:50px;font-size:14px;font-weight:800">drives me insane</span>
+          <span style="background:var(--accent2);color:#fff;padding:7px 16px;border-radius:50px;font-size:14px;font-weight:800">gets under your skin</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 5: EXAMPLES
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-5" data-title="Examples">
+    <div class="slide-inner">
+      <div class="slide-title"><span class="slide-icon">✏️</span> Guided Examples — Phrasal Verbs in Context</div>
+
+      <!-- Example 1 -->
+      <div class="card">
+        <div class="card-title"><span class="icon">1️⃣</span> Using "let out"</div>
+        <p style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:10px">
+          The forum says: <em>"Do you have a complaint? <strong>Let it out.</strong> Here's your forum."</em>
+        </p>
+        <div class="reveal-wrap">
+          <button class="reveal-btn" onclick="revealAnswer('ex1')">👁️ Show Meaning</button>
+          <div class="answer-box" id="ex1">
+            <strong>"Let it out"</strong> = <em>express yourself freely</em> (تعبّر عن نفسك بحرية). It means stop holding your feelings inside and share them openly.
+            <br><button class="hide-btn" onclick="hideAnswer('ex1')">🙈 Hide</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example 2 -->
+      <div class="card">
+        <div class="card-title"><span class="icon">2️⃣</span> Using "find out"</div>
+        <p style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:10px">
+          <em>"Rushing to the phone and <strong>finding out</strong> it's a telemarketer who's calling."</em>
+        </p>
+        <div class="reveal-wrap">
+          <button class="reveal-btn" onclick="revealAnswer('ex2')">👁️ Show Meaning</button>
+          <div class="answer-box" id="ex2">
+            <strong>"Find out"</strong> = <em>to learn / discover</em> (يكتشف). Here it means the person discovered the caller was a telemarketer — very annoying!
+            <br><button class="hide-btn" onclick="hideAnswer('ex2')">🙈 Hide</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example 3 -->
+      <div class="card">
+        <div class="card-title"><span class="icon">3️⃣</span> Using "give up"</div>
+        <p style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:10px">
+          <em>"When people don't <strong>give up</strong> their subway or bus seats to seniors."</em>
+        </p>
+        <div class="reveal-wrap">
+          <button class="reveal-btn" onclick="revealAnswer('ex3')">👁️ Show Meaning</button>
+          <div class="answer-box" id="ex3">
+            <strong>"Give up"</strong> = <em>let someone have something</em> (يتنازل). Here it means letting an elderly person or disabled person have your seat.
+            <br><button class="hide-btn" onclick="hideAnswer('ex3')">🙈 Hide</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example 4 -->
+      <div class="card">
+        <div class="card-title"><span class="icon">4️⃣</span> Using "clean up"</div>
+        <p style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:10px">
+          <em>"When people leave a pile of dirty dishes in the kitchen for others to <strong>clean up</strong>."</em>
+        </p>
+        <div class="reveal-wrap">
+          <button class="reveal-btn" onclick="revealAnswer('ex4')">👁️ Show Meaning</button>
+          <div class="answer-box" id="ex4">
+            <strong>"Clean up"</strong> = <em>make things neat / tidy</em> (يرتّب، ينظّف). It means washing dishes and making the kitchen clean.
+            <br><button class="hide-btn" onclick="hideAnswer('ex4')">🙈 Hide</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- All answers together -->
+      <div class="all-answers-section">
+        <div class="all-answers-title">📋 All Example Meanings (Summary)</div>
+        <button class="reveal-btn" onclick="toggleAllAnswers('all-ex')">👁️ Show All</button>
+        <div class="all-answers-content" id="all-ex">
+          <div class="ans-row"><span class="ans-label">let out →</span> express yourself freely</div>
+          <div class="ans-row"><span class="ans-label">find out →</span> learn / discover</div>
+          <div class="ans-row"><span class="ans-label">give up →</span> let someone have something</div>
+          <div class="ans-row"><span class="ans-label">clean up →</span> make things neat</div>
+          <button class="hide-btn" style="margin-top:8px" onclick="toggleAllAnswers('all-ex')">🙈 Hide All</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 6: PRACTICE
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-6" data-title="Practice">
+    <div class="slide-inner">
+      <div class="slide-title"><span class="slide-icon">🏋️</span> Practice — Fill In</div>
+      <div class="card">
+        <div class="card-title"><span class="icon">✏️</span> Complete with the correct phrasal verb</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:16px;font-weight:600">Choose from: <strong>let out / find out / clean up / give back / call up / give up</strong></p>
+
+        <div class="practice-item">
+          <div class="practice-q">1. I need to ___ my feelings. I'm so frustrated!</div>
+          <input class="practice-input" placeholder="Type your answer…" id="p1" />
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="check-btn" onclick="checkPractice('p1','let out','pf1')">✔ Check</button>
+            <button class="reveal-btn" onclick="revealAnswer('pa1')">👁️ Answer</button>
+          </div>
+          <div class="mcq-feedback" id="pf1"></div>
+          <div class="answer-box" id="pa1"><strong>let out</strong><br><button class="hide-btn" onclick="hideAnswer('pa1')">🙈 Hide</button></div>
+        </div>
+
+        <div class="practice-item">
+          <div class="practice-q">2. Can you please ___ the money you borrowed?</div>
+          <input class="practice-input" placeholder="Type your answer…" id="p2" />
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="check-btn" onclick="checkPractice('p2','give back','pf2')">✔ Check</button>
+            <button class="reveal-btn" onclick="revealAnswer('pa2')">👁️ Answer</button>
+          </div>
+          <div class="mcq-feedback" id="pf2"></div>
+          <div class="answer-box" id="pa2"><strong>give back</strong><br><button class="hide-btn" onclick="hideAnswer('pa2')">🙈 Hide</button></div>
+        </div>
+
+        <div class="practice-item">
+          <div class="practice-q">3. Please ___ the kitchen after dinner. Don't leave dirty dishes!</div>
+          <input class="practice-input" placeholder="Type your answer…" id="p3" />
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="check-btn" onclick="checkPractice('p3','clean up','pf3')">✔ Check</button>
+            <button class="reveal-btn" onclick="revealAnswer('pa3')">👁️ Answer</button>
+          </div>
+          <div class="mcq-feedback" id="pf3"></div>
+          <div class="answer-box" id="pa3"><strong>clean up</strong><br><button class="hide-btn" onclick="hideAnswer('pa3')">🙈 Hide</button></div>
+        </div>
+
+        <div class="practice-item">
+          <div class="practice-q">4. I was so happy to ___ who won the competition!</div>
+          <input class="practice-input" placeholder="Type your answer…" id="p4" />
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="check-btn" onclick="checkPractice('p4','find out','pf4')">✔ Check</button>
+            <button class="reveal-btn" onclick="revealAnswer('pa4')">👁️ Answer</button>
+          </div>
+          <div class="mcq-feedback" id="pf4"></div>
+          <div class="answer-box" id="pa4"><strong>find out</strong><br><button class="hide-btn" onclick="hideAnswer('pa4')">🙈 Hide</button></div>
+        </div>
+
+        <!-- All Practice Answers -->
+        <div class="all-answers-section">
+          <div class="all-answers-title">📋 All Practice Answers</div>
+          <button class="reveal-btn" onclick="toggleAllAnswers('all-prac')">👁️ Show All</button>
+          <div class="all-answers-content" id="all-prac">
+            <div class="ans-row"><span class="ans-label">1. </span> let out</div>
+            <div class="ans-row"><span class="ans-label">2. </span> give back</div>
+            <div class="ans-row"><span class="ans-label">3. </span> clean up</div>
+            <div class="ans-row"><span class="ans-label">4. </span> find out</div>
+            <button class="hide-btn" style="margin-top:8px" onclick="toggleAllAnswers('all-prac')">🙈 Hide All</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 7: QUIZ
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-7" data-title="Quiz">
+    <div class="slide-inner">
+      <div class="slide-title"><span class="slide-icon">🧪</span> Interactive Quiz</div>
+      <div class="mcq-wrap">
+
+        <!-- Q1 -->
+        <div class="mcq-item">
+          <div class="mcq-q">1. What does "it drives me insane" mean?</div>
+          <div class="mcq-options">
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf1')">A. It makes me very happy</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'correct','qf1')">B. It really irritates me / annoys me</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf1')">C. It makes me feel sleepy</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf1')">D. It confuses me</button>
+          </div>
+          <div class="mcq-feedback" id="qf1"></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="mcq-item">
+          <div class="mcq-q">2. The phrasal verb "call up" means:</div>
+          <div class="mcq-options">
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf2')">A. return something</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf2')">B. make things neat</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'correct','qf2')">C. phone someone</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf2')">D. express yourself freely</button>
+          </div>
+          <div class="mcq-feedback" id="qf2"></div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="mcq-item">
+          <div class="mcq-q">3. According to the forum, people on a diet often try to:</div>
+          <div class="mcq-options">
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf3')">A. Cook meals for others</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'correct','qf3')">B. Control what other people eat</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf3')">C. Share healthy recipes</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf3')">D. Exercise in public</button>
+          </div>
+          <div class="mcq-feedback" id="qf3"></div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="mcq-item">
+          <div class="mcq-q">4. Which expression does NOT mean "to irritate"?</div>
+          <div class="mcq-options">
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf4')">A. can't stand</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf4')">B. gets under your skin</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'correct','qf4')">C. find out</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf4')">D. drives me insane</button>
+          </div>
+          <div class="mcq-feedback" id="qf4"></div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="mcq-item">
+          <div class="mcq-q">5. "Give up" means:</div>
+          <div class="mcq-options">
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf5')">A. to discover something</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'correct','qf5')">B. to let someone have something</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf5')">C. to phone someone</button>
+            <button class="mcq-opt" onclick="mcqCheck(this,'wrong','qf5')">D. to make things neat</button>
+          </div>
+          <div class="mcq-feedback" id="qf5"></div>
+        </div>
+
+      </div>
+
+      <!-- All quiz answers -->
+      <div class="all-answers-section" style="margin-top:20px">
+        <div class="all-answers-title">📋 All Quiz Answers</div>
+        <button class="reveal-btn" onclick="toggleAllAnswers('all-quiz')">👁️ Show All</button>
+        <div class="all-answers-content" id="all-quiz">
+          <div class="ans-row"><span class="ans-label">Q1: </span> B — It really irritates me / annoys me</div>
+          <div class="ans-row"><span class="ans-label">Q2: </span> C — phone someone</div>
+          <div class="ans-row"><span class="ans-label">Q3: </span> B — Control what other people eat</div>
+          <div class="ans-row"><span class="ans-label">Q4: </span> C — find out (this means to discover, not to irritate)</div>
+          <div class="ans-row"><span class="ans-label">Q5: </span> B — to let someone have something</div>
+          <button class="hide-btn" style="margin-top:8px" onclick="toggleAllAnswers('all-quiz')">🙈 Hide All</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 8: EXERCISES (FROM BOOK)
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-8" data-title="Exercises">
+    <div class="slide-inner">
+      <div class="slide-title"><span class="slide-icon">📝</span> After Reading — Book Exercises (pp. 116–117)</div>
+
+      <!-- EXERCISE A: MATCHING -->
+      <div class="ex-section card">
+        <div class="ex-title">📌 Exercise A — Match the two-word verbs with their meanings</div>
+
+        <div class="match-row">
+          <span class="match-num">1.</span>
+          <span class="match-word">let out</span>
+          <select class="match-select" id="m1" onchange="checkMatch('m1','d')">
+            <option value="">— choose —</option>
+            <option value="a">a. learn</option>
+            <option value="b">b. let someone have</option>
+            <option value="c">c. phone</option>
+            <option value="d">d. express yourself freely</option>
+            <option value="e">e. make things neat</option>
+            <option value="f">f. return</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <span class="match-num">2.</span>
+          <span class="match-word">find out</span>
+          <select class="match-select" id="m2" onchange="checkMatch('m2','a')">
+            <option value="">— choose —</option>
+            <option value="a">a. learn</option>
+            <option value="b">b. let someone have</option>
+            <option value="c">c. phone</option>
+            <option value="d">d. express yourself freely</option>
+            <option value="e">e. make things neat</option>
+            <option value="f">f. return</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <span class="match-num">3.</span>
+          <span class="match-word">clean up</span>
+          <select class="match-select" id="m3" onchange="checkMatch('m3','e')">
+            <option value="">— choose —</option>
+            <option value="a">a. learn</option>
+            <option value="b">b. let someone have</option>
+            <option value="c">c. phone</option>
+            <option value="d">d. express yourself freely</option>
+            <option value="e">e. make things neat</option>
+            <option value="f">f. return</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <span class="match-num">4.</span>
+          <span class="match-word">give back</span>
+          <select class="match-select" id="m4" onchange="checkMatch('m4','f')">
+            <option value="">— choose —</option>
+            <option value="a">a. learn</option>
+            <option value="b">b. let someone have</option>
+            <option value="c">c. phone</option>
+            <option value="d">d. express yourself freely</option>
+            <option value="e">e. make things neat</option>
+            <option value="f">f. return</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <span class="match-num">5.</span>
+          <span class="match-word">call up</span>
+          <select class="match-select" id="m5" onchange="checkMatch('m5','c')">
+            <option value="">— choose —</option>
+            <option value="a">a. learn</option>
+            <option value="b">b. let someone have</option>
+            <option value="c">c. phone</option>
+            <option value="d">d. express yourself freely</option>
+            <option value="e">e. make things neat</option>
+            <option value="f">f. return</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <span class="match-num">6.</span>
+          <span class="match-word">give up</span>
+          <select class="match-select" id="m6" onchange="checkMatch('m6','b')">
+            <option value="">— choose —</option>
+            <option value="a">a. learn</option>
+            <option value="b">b. let someone have</option>
+            <option value="c">c. phone</option>
+            <option value="d">d. express yourself freely</option>
+            <option value="e">e. make things neat</option>
+            <option value="f">f. return</option>
+          </select>
+        </div>
+
+        <!-- All answers A -->
+        <div class="all-answers-section" style="margin-top:16px">
+          <div class="all-answers-title">📋 Exercise A — All Answers</div>
+          <button class="reveal-btn" onclick="toggleAllAnswers('all-A')">👁️ Show All</button>
+          <div class="all-answers-content" id="all-A">
+            <div class="ans-row"><span class="ans-label">1. let out → </span> d. express yourself freely</div>
+            <div class="ans-row"><span class="ans-label">2. find out → </span> a. learn</div>
+            <div class="ans-row"><span class="ans-label">3. clean up → </span> e. make things neat</div>
+            <div class="ans-row"><span class="ans-label">4. give back → </span> f. return</div>
+            <div class="ans-row"><span class="ans-label">5. call up → </span> c. phone</div>
+            <div class="ans-row"><span class="ans-label">6. give up → </span> b. let someone have</div>
+            <button class="hide-btn" style="margin-top:8px" onclick="toggleAllAnswers('all-A')">🙈 Hide All</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXERCISE B: EXPRESSIONS -->
+      <div class="ex-section card">
+        <div class="ex-title">📌 Exercise B — Write three expressions that mean "to irritate"</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:14px;font-weight:600">These expressions appear in the reading text. Can you find them?</p>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-weight:900;color:var(--primary)">1.</span>
+            <input class="expr-input" style="margin-bottom:0" placeholder="First expression…" id="b1"/>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-weight:900;color:var(--primary)">2.</span>
+            <input class="expr-input" style="margin-bottom:0" placeholder="Second expression…" id="b2"/>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-weight:900;color:var(--primary)">3.</span>
+            <input class="expr-input" style="margin-bottom:0" placeholder="Third expression…" id="b3"/>
+          </div>
+        </div>
+
+        <div class="reveal-wrap" style="margin-top:14px">
+          <button class="reveal-btn" onclick="revealAnswer('ans-B')">👁️ Show Answers</button>
+          <div class="answer-box" id="ans-B">
+            <div class="ans-row"><span class="ans-label">1. </span> <strong>can't stand</strong> — (e.g., "I can't stand people who chew with their mouths open.")</div>
+            <div class="ans-row"><span class="ans-label">2. </span> <strong>drives me insane</strong> — (e.g., "It drives me insane when I call a company…")</div>
+            <div class="ans-row"><span class="ans-label">3. </span> <strong>gets under your skin</strong> — (mentioned in the forum header: "What really gets under your skin?")</div>
+            <br><button class="hide-btn" onclick="hideAnswer('ans-B')">🙈 Hide</button>
+          </div>
+        </div>
+
+        <!-- All B answers -->
+        <div class="all-answers-section" style="margin-top:14px">
+          <div class="all-answers-title">📋 Exercise B — All Answers</div>
+          <button class="reveal-btn" onclick="toggleAllAnswers('all-B')">👁️ Show All</button>
+          <div class="all-answers-content" id="all-B">
+            <div class="ans-row"><span class="ans-label">1. </span> can't stand</div>
+            <div class="ans-row"><span class="ans-label">2. </span> drives me insane</div>
+            <div class="ans-row"><span class="ans-label">3. </span> gets under your skin</div>
+            <button class="hide-btn" style="margin-top:8px" onclick="toggleAllAnswers('all-B')">🙈 Hide All</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXERCISE C: TRUE / FALSE -->
+      <div class="ex-section card">
+        <div class="ex-title">📌 Exercise C — Answer True or False about the complaints forum</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:14px;font-weight:600">In general, people disapprove of the following:</p>
+
+        <!-- C1 -->
+        <div class="tf-row">
+          <span class="tf-num">1.</span>
+          <div style="flex:1">
+            <div class="tf-q">People talking on cell phones in public places</div>
+            <div class="tf-btns">
+              <button class="tf-btn" onclick="tfCheck(this,'TRUE','tff1',true)">TRUE</button>
+              <button class="tf-btn" onclick="tfCheck(this,'FALSE','tff1',false)">FALSE</button>
+            </div>
+            <div class="tf-feedback" id="tff1"></div>
+            <div class="reveal-wrap" style="margin-top:6px">
+              <button class="reveal-btn" onclick="revealAnswer('tfa1')">👁️ Answer</button>
+              <div class="answer-box" id="tfa1"><strong>TRUE</strong> — The forum says listening to people on cell phones in restaurants is annoying, and driving while using a phone is also mentioned.<br><button class="hide-btn" onclick="hideAnswer('tfa1')">🙈 Hide</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- C2 -->
+        <div class="tf-row">
+          <span class="tf-num">2.</span>
+          <div style="flex:1">
+            <div class="tf-q">People on a diet</div>
+            <div class="tf-btns">
+              <button class="tf-btn" onclick="tfCheck(this,'FALSE','tff2',true)">TRUE</button>
+              <button class="tf-btn" onclick="tfCheck(this,'TRUE','tff2',false)">FALSE</button>
+            </div>
+            <div class="tf-feedback" id="tff2"></div>
+            <div class="reveal-wrap" style="margin-top:6px">
+              <button class="reveal-btn" onclick="revealAnswer('tfa2')">👁️ Answer</button>
+              <div class="answer-box" id="tfa2"><strong>FALSE</strong> — People don't complain about those who are on a diet. The complaint is about people who <em>lost weight and now try to control what others eat</em>, not people who are simply on a diet.<br><button class="hide-btn" onclick="hideAnswer('tfa2')">🙈 Hide</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- C3 -->
+        <div class="tf-row">
+          <span class="tf-num">3.</span>
+          <div style="flex:1">
+            <div class="tf-q">People who don't wait their turn</div>
+            <div class="tf-btns">
+              <button class="tf-btn" onclick="tfCheck(this,'TRUE','tff3',true)">TRUE</button>
+              <button class="tf-btn" onclick="tfCheck(this,'FALSE','tff3',false)">FALSE</button>
+            </div>
+            <div class="tf-feedback" id="tff3"></div>
+            <div class="reveal-wrap" style="margin-top:6px">
+              <button class="reveal-btn" onclick="revealAnswer('tfa3')">👁️ Answer</button>
+              <div class="answer-box" id="tfa3"><strong>TRUE</strong> — The forum mentions "Standing in line at checkout counters" and the frustration of waiting (like being put on hold on the phone).<br><button class="hide-btn" onclick="hideAnswer('tfa3')">🙈 Hide</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- C4 -->
+        <div class="tf-row">
+          <span class="tf-num">4.</span>
+          <div style="flex:1">
+            <div class="tf-q">People who do the dishes right after a meal</div>
+            <div class="tf-btns">
+              <button class="tf-btn" onclick="tfCheck(this,'FALSE','tff4',true)">TRUE</button>
+              <button class="tf-btn" onclick="tfCheck(this,'TRUE','tff4',false)">FALSE</button>
+            </div>
+            <div class="tf-feedback" id="tff4"></div>
+            <div class="reveal-wrap" style="margin-top:6px">
+              <button class="reveal-btn" onclick="revealAnswer('tfa4')">👁️ Answer</button>
+              <div class="answer-box" id="tfa4"><strong>FALSE</strong> — The complaint is about people who <em>leave</em> dirty dishes, NOT about people who clean up right away. Cleaning up right away is good behavior!<br><button class="hide-btn" onclick="hideAnswer('tfa4')">🙈 Hide</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- C5 -->
+        <div class="tf-row">
+          <span class="tf-num">5.</span>
+          <div style="flex:1">
+            <div class="tf-q">People using an escalator instead of the stairs</div>
+            <div class="tf-btns">
+              <button class="tf-btn" onclick="tfCheck(this,'FALSE','tff5',true)">TRUE</button>
+              <button class="tf-btn" onclick="tfCheck(this,'TRUE','tff5',false)">FALSE</button>
+            </div>
+            <div class="tf-feedback" id="tff5"></div>
+            <div class="reveal-wrap" style="margin-top:6px">
+              <button class="reveal-btn" onclick="revealAnswer('tfa5')">👁️ Answer</button>
+              <div class="answer-box" id="tfa5"><strong>FALSE</strong> — The complaint is about people who <em>stand in the way</em> of others on an escalator or doorway, NOT about using the escalator itself.<br><button class="hide-btn" onclick="hideAnswer('tfa5')">🙈 Hide</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- All C answers -->
+        <div class="all-answers-section" style="margin-top:16px">
+          <div class="all-answers-title">📋 Exercise C — All Answers</div>
+          <button class="reveal-btn" onclick="toggleAllAnswers('all-C')">👁️ Show All</button>
+          <div class="all-answers-content" id="all-C">
+            <div class="ans-row"><span class="ans-label">1. </span> <strong>TRUE</strong> — People disapprove of phone use in public</div>
+            <div class="ans-row"><span class="ans-label">2. </span> <strong>FALSE</strong> — Complaint is about controlling others' eating, not being on a diet</div>
+            <div class="ans-row"><span class="ans-label">3. </span> <strong>TRUE</strong> — Standing in line and waiting is mentioned</div>
+            <div class="ans-row"><span class="ans-label">4. </span> <strong>FALSE</strong> — Complaint is about leaving dirty dishes, NOT cleaning right away</div>
+            <div class="ans-row"><span class="ans-label">5. </span> <strong>FALSE</strong> — Complaint is about blocking the escalator, NOT using it</div>
+            <button class="hide-btn" style="margin-top:8px" onclick="toggleAllAnswers('all-C')">🙈 Hide All</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 9: SUMMARY
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-9" data-title="Summary">
+    <div class="slide-inner">
+      <div class="slide-title"><span class="slide-icon">📌</span> Lesson Summary</div>
+
+      <div class="summary-grid">
+        <div class="sum-card">
+          <div class="sum-icon">💬</div>
+          <div class="sum-label">Text Type</div>
+          Online Forum — Complaints
+        </div>
+        <div class="sum-card">
+          <div class="sum-icon">🔗</div>
+          <div class="sum-label">Phrasal Verbs</div>
+          let out, find out, clean up, give back, call up, give up
+        </div>
+        <div class="sum-card">
+          <div class="sum-icon">😤</div>
+          <div class="sum-label">Irritation Phrases</div>
+          can't stand · drives me insane · gets under your skin
+        </div>
+        <div class="sum-card">
+          <div class="sum-icon">📝</div>
+          <div class="sum-label">Skills Practiced</div>
+          Reading · Matching · True/False · Vocabulary
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <div class="card-title"><span class="icon">💡</span> Key Language Points</div>
+        <div class="reading-item">💡 <strong>Phrasal verbs</strong> are two-word verbs. The second word changes the meaning completely. Example: <em>give</em> vs <em>give up</em> vs <em>give back</em>.</div>
+        <div class="reading-item">💡 The text uses <strong>informal language</strong> like <em>cool</em>, <em>stuff</em>, and <em>like</em> — these are common in everyday speech but not in formal writing.</div>
+        <div class="reading-item">💡 A <strong>forum</strong> is an online space where people share opinions and ideas freely. The complaints forum is a great example of authentic English.</div>
+        <div class="reading-item">💡 To talk about things that annoy you, use: <em>"I can't stand…"</em> or <em>"It drives me crazy when…"</em></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 10: CHALLENGE
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-10" data-title="Challenge">
+    <div class="slide-inner">
+      <div class="slide-title"><span class="slide-icon">🚀</span> Challenge Question</div>
+
+      <div class="challenge-box">
+        <div class="ch-icon">🌟</div>
+        <h2>Think & Write!</h2>
+        <p>
+          Look at this sentence from the forum:<br>
+          <em>"People who use words like <strong>cool</strong> and <strong>stuff</strong> all the time. The word takes the place of adjectives, nouns, and intelligence."</em><br><br>
+          What does the writer mean by "takes the place of… <strong>intelligence</strong>"?<br>
+          Write your own complaint sentence using: <strong>"I can't stand…"</strong> or <strong>"It drives me insane when…"</strong>
+        </p>
+        <textarea class="challenge-input" rows="4" placeholder="Write your answer here… (e.g. I can't stand people who…)"></textarea>
+        <br>
+        <button class="ch-reveal-btn" onclick="revealChallenge()">👁️ See Model Answer</button>
+        <div class="ch-answer-box" id="ch-model">
+          <strong>🔑 Model Answer:</strong><br><br>
+          The writer humorously suggests that using vague words like <em>cool</em>, <em>stuff</em>, and <em>like</em> replaces real thinking and vocabulary — it shows a lack of intelligence because the speaker isn't choosing precise words.<br><br>
+          <strong>Example complaint sentences:</strong><br>
+          • "I can't stand people who chew with their mouths open in restaurants."<br>
+          • "It drives me insane when someone changes the TV channel while I'm watching!"<br>
+          • "I can't stand people who are always late and never apologize."
+        </div>
+      </div>
+
+      <!-- FOOTER — last slide only -->
+      <div class="footer-area">
+        <div class="footer-brand">eduvorra</div>
+        <div class="footer-name">عبدالحكيم صالح الحسون</div>
+        <div class="footer-love">صُنع بحب في بريدة 💚</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end slides-wrapper -->
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+
+<!-- NAVIGATION -->
+<div id="nav-bar">
+  <button class="nav-btn" id="prev-btn" onclick="navigate(-1)" disabled>← Prev</button>
+  <span id="slide-counter">1 / 10</span>
+  <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next →</button>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+//  STATE — in memory only, NO storage
+// ─────────────────────────────────────────────
+let currentSlide = 1;
+const totalSlides = 10;
+let isDark = false;
+
+const slideTitles = {
+  1: 'Opening', 2: 'Objectives', 3: 'Vocabulary',
+  4: 'Reading Text', 5: 'Examples', 6: 'Practice',
+  7: 'Quiz', 8: 'Exercises', 9: 'Summary', 10: 'Challenge'
+};
+
+// ─────────────────────────────────────────────
+//  NAVIGATION
+// ─────────────────────────────────────────────
+function navigate(dir) {
+  const next = currentSlide + dir;
+  if (next < 1 || next > totalSlides) return;
+  document.getElementById('slide-' + currentSlide).classList.remove('active');
+  currentSlide = next;
+  document.getElementById('slide-' + currentSlide).classList.add('active');
+  updateNav();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateNav() {
+  document.getElementById('prev-btn').disabled = currentSlide === 1;
+  document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+  document.getElementById('slide-counter').textContent = currentSlide + ' / ' + totalSlides;
+  document.getElementById('progress-bar').style.width = ((currentSlide / totalSlides) * 100) + '%';
+  document.getElementById('top-slide-title').textContent = slideTitles[currentSlide] || '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') navigate(1);
+  if (e.key === 'ArrowLeft') navigate(-1);
+});
+
+// ─────────────────────────────────────────────
+//  THEME
+// ─────────────────────────────────────────────
+function toggleTheme() {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : '');
+  document.getElementById('theme-btn').textContent = isDark ? '☀️' : '🌙';
+}
+
+// ─────────────────────────────────────────────
+//  REVEAL SYSTEM
+// ─────────────────────────────────────────────
+function revealAnswer(id) {
+  const box = document.getElementById(id);
+  if (box) box.classList.add('visible');
+}
+function hideAnswer(id) {
+  const box = document.getElementById(id);
+  if (box) box.classList.remove('visible');
+}
+function toggleAllAnswers(id) {
+  const box = document.getElementById(id);
+  if (box) box.classList.toggle('visible');
+}
+function revealChallenge() {
+  document.getElementById('ch-model').classList.add('visible');
+}
+
+// ─────────────────────────────────────────────
+//  MCQ
+// ─────────────────────────────────────────────
+function mcqCheck(btn, result, feedbackId) {
+  const parent = btn.closest('.mcq-item');
+  const opts = parent.querySelectorAll('.mcq-opt');
+  opts.forEach(o => { o.classList.remove('correct','wrong'); o.disabled = true; });
+  const fb = document.getElementById(feedbackId);
+  if (result === 'correct') {
+    btn.classList.add('correct');
+    fb.textContent = '✅ Correct! Well done!';
+    fb.className = 'mcq-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '❌ Try again! Look at the reading text.';
+    fb.className = 'mcq-feedback show no';
+    // Find and show correct
+    opts.forEach(o => {
+      if (o.getAttribute('onclick').includes("'correct'")) o.classList.add('correct');
+    });
+  }
+}
+
+// ─────────────────────────────────────────────
+//  TRUE / FALSE
+// ─────────────────────────────────────────────
+function tfCheck(btn, answer, feedbackId, isCorrect) {
+  const fb = document.getElementById(feedbackId);
+  const btns = btn.closest('.tf-btns').querySelectorAll('.tf-btn');
+  btns.forEach(b => b.disabled = true);
+  if (isCorrect) {
+    btn.classList.add('sel-correct');
+    fb.textContent = '✅ Correct!';
+    fb.style.color = 'var(--correct)';
+  } else {
+    btn.classList.add('sel-wrong');
+    fb.textContent = '❌ Incorrect — check the answer below.';
+    fb.style.color = 'var(--wrong)';
+  }
+  fb.classList.add('show');
+}
+
+// ─────────────────────────────────────────────
+//  MATCH SELECT
+// ─────────────────────────────────────────────
+function checkMatch(selectId, correctVal) {
+  const sel = document.getElementById(selectId);
+  sel.classList.remove('correct-sel','wrong-sel');
+  if (sel.value === correctVal) {
+    sel.classList.add('correct-sel');
+  } else if (sel.value !== '') {
+    sel.classList.add('wrong-sel');
+  }
+}
+
+// ─────────────────────────────────────────────
+//  PRACTICE CHECK
+// ─────────────────────────────────────────────
+function checkPractice(inputId, correctAnswer, feedbackId) {
+  const val = document.getElementById(inputId).value.trim().toLowerCase();
+  const fb = document.getElementById(feedbackId);
+  if (val === correctAnswer.toLowerCase()) {
+    fb.textContent = '✅ Correct!';
+    fb.className = 'mcq-feedback show ok';
+  } else {
+    fb.textContent = '❌ Not quite. Click "👁️ Answer" to see the correct answer.';
+    fb.className = 'mcq-feedback show no';
+  }
+}
+
+// ─────────────────────────────────────────────
+//  TEXT TO SPEECH
+// ─────────────────────────────────────────────
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-US';
+  utter.rate = 0.9;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+}
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+updateNav();
+</script>
+</body>
+</html>
